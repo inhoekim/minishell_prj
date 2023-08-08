@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "libft.h"
 #include "minishell.h"
+
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -23,11 +24,6 @@ void	init_parser()
 
 }
 
-t_bool  execute(t_node *ret)
-{
-		
-	return FALSE;
-}
 
 t_tokenizer	*get_token()
 {
@@ -40,7 +36,7 @@ t_tokenizer	*get_token()
 
 void	minishell_loop() 
 {
-	t_node *ret;
+	t_node *root;
 	char	*line;
 	t_bool check_exit;
 	t_tokenizer *token;
@@ -55,10 +51,10 @@ void	minishell_loop()
 			add_history();
 		// get_token을 통해 토큰 생성
 		token = get_token();
-		// parse를 통해 트리생성
-		ret = parse(token);
+		// parser를 통해 트리생성
+		root = parser(token);
 		// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
-		check_exit = execute(ret);
+		check_exit = execute(root);
 		// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
 		if (check_exit)
 			line = NULL;	
