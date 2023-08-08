@@ -50,8 +50,8 @@ typedef struct s_word
 typedef struct s_node
 {
     t_symbol	type;
-    char		*left;
-    char		*right;
+    t_node		*left;
+    t_node		*right;
     t_word		word;
 } t_node;
 
