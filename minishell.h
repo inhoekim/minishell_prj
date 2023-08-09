@@ -27,14 +27,14 @@ typedef enum e_nonterminal{
 // &&, ||, |, (),  <, >, <<, >>, word 
 typedef enum e_symbol
 {
-    WORD,
-    LESS,
-    GREAT,
-    DGREAT,
-    DLESS,
-    AND_IF,
-    OR_IF,
-    PIPE,
+	WORD,
+	LESS,
+	GREAT,
+	DGREAT,
+	DLESS,
+	AND_IF,
+	OR_IF,
+	PIPE,
 	SUBSHELL,
 	E0F,
 }   t_symbol;
@@ -49,16 +49,16 @@ typedef struct s_word
 /* binary tree */
 typedef struct s_node
 {
-    t_symbol	type;
-    t_node		*left;
-    t_node		*right;
-    t_word		word;
+	t_symbol	type;
+	t_node		*left;
+	t_node		*right;
+	t_word		word;
 } t_node;
 
 /* object that separate tokens */
 typedef struct s_tokenizer
 {
-    t_symbol	type;
+	t_symbol	type;
 	char		*current_token;
 	int			token_size;
 } t_tokenizer;

@@ -1,13 +1,22 @@
-#include "../minishell.h"
+// #include "../minishell.h"
 
-int main(int argc, char **argv, char **envp)
+#define PATH_MAX 4096
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+int main(int argc, char **argv, char **envp) 
 {
-	(void)argc;
-    (void)argv;
-    (void)envp;
-	
-	t_symbol val;
-	val= DLESS;
-	printf("%d\n", val);
-	
+  char path[PATH_MAX];
+  (void)argc;
+  (void)argv;
+
+  getcwd(path, PATH_MAX);
+//   printf("Current Directory: %s\n", path) ;
+  int idx = 0;
+  while (envp[idx])
+  {
+	printf("%s\n", envp[idx]);
+	idx++;
+  }
+  return 0 ;
 }
