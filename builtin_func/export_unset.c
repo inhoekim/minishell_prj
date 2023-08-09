@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_unset.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/09 17:43:23 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include "../libft/libft.h"
 # define PATH_MAX 1024
@@ -57,8 +69,8 @@ t_bool	ft_unset(t_node *node)
 // 노드 삭제 함수
 void	delete_node(t_list **head, t_list *node_to_delete)
 {
-    t_list	*current;
-    t_list	*prev;
+	t_list	*current;
+	t_list	*prev;
 
 	current = *head;
 	prev = NULL;
