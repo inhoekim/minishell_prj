@@ -43,10 +43,10 @@ typedef enum e_symbol
 /* binary tree */
 typedef struct s_node
 {
-    t_symbol	type;
-    t_node		*left;
-    t_node		*right;
-    char		**word;
+    t_symbol		type;
+	struct s_node	*left;
+    struct s_node	*right;
+    char			**word;
 } t_node;
 
 /* object that separate tokens */
