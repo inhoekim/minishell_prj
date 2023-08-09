@@ -81,3 +81,7 @@ t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token)
 	else
 		return (FALSE);
 }
+
+
+void	init_envp(char **envp);
+t_list	**get_envp(void);

@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "../libft/libft.h"
 # define PATH_MAX 1024
+
 // echo, cd, pwd, export, unset, env, exit
 t_bool	ft_echo(t_node *node)
 {
@@ -62,24 +63,24 @@ t_bool	ft_cd(t_node *node)
 }
 
 // 등록한 환경변수는 쉘이 종료됨에 따라 같이 환경변수에서 삭제되야함
-t_bool	ft_export(t_node *node, char **envp)
+t_bool	ft_export(t_node *node)
 {
 	char	**temp;
 	int		idx;
+	t_list	**env;
 
-	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
-	// 인자가 없으면 단순 환경변수들을 나열해줌
 	idx = -1;
+	env = get_envp();
 	if (!temp[1])
-		while (envp[++idx])
-			printf("declare -x %s\n", envp[idx]);
-	// 인자가 있으면 해당 인자들을 환경변수에 등록해야함
+		while ((*env)->next != NULL)
+			printf("declare -x %s\n", (*env)->content);
 	else
 	{
-		
+		env = get_envp();
+		while (temp[++idx])
+			ft_lstadd_back(env, ft_lstnew(ft_strdup(temp[idx])));
 	}
-	// 성공 시, 리턴코드 0 반환
 	return (FALSE);
 }
 
@@ -87,30 +88,33 @@ t_bool	ft_unset(t_node *node)
 {
 	char	**temp;
 	int		idx;
+	t_list	**env;
 
-	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
 	// 인자가 있으면 환경변수에 있는지 확인 후, 제거 / 이상한 인자가 들어오더라도 아무동작을 하지 않음
+	idx = -1;
 	if (temp[1])
 	{
-
+		env = get_envp();
+		while (temp[++idx])
+		{
+			if (ft_memcmp())
+			ft_lstdelone((*env),);
+		}
 	}
-	// 성공 시, 리턴코드 0 반환
 	return (FALSE);
 }
 
 // 환경변수를 어디선가 끌고와야함
-t_bool	ft_env(t_node *node, char **envp)
+t_bool	ft_env(t_node *node)
 {
 	int	idx;
+	t_list	**env;
 
 	idx = 0;
-	while (envp[idx])
-	{
-		printf("%s\n", envp[idx]);
-		idx++;
-	}
-	// 성공 시, 리턴코드 0 반환
+	env = get_envp();
+	while ((*env)->next != NULL)
+		printf("%s\n", (*env)->content);
 	return (FALSE);
 }
 

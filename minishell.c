@@ -22,6 +22,7 @@ void	init_envp(char **envp)
 
 	env = get_envp();
 	idx = 0;
+	ft_lstadd_back(env, NULL);
 	while (envp[idx])
 	{
 		ft_lstadd_back(env, ft_lstnew(ft_strdup(envp[idx])));
