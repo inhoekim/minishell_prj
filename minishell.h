@@ -59,8 +59,8 @@ typedef struct s_node
 typedef struct s_tokenizer
 {
     t_symbol	type;
-	char		*current_token;
-	int			token_size;
+	char		*start;
+	char		*end;
 } t_tokenizer;
 
 // t_symbol의 개수는 10개지만, table의 일차원 배열의 길이는 9개임. (word제외)
