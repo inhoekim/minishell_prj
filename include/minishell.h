@@ -28,14 +28,14 @@ typedef enum e_nonterminal{
 // &&, ||, |, (),  <, >, <<, >>, word 
 typedef enum e_symbol
 {
-    WORD,
-    LESS,
-    GREAT,
-    DGREAT,
-    DLESS,
-    AND_IF,
-    OR_IF,
-    PIPE,
+	WORD,
+	LESS,
+	GREAT,
+	DGREAT,
+	DLESS,
+	AND_IF,
+	OR_IF,
+	PIPE,
 	SUBSHELL,
 	E0F,
 }   t_symbol;
