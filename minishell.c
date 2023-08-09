@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "libft.h"
+#include "../libft/libft.h"
 #include "minishell.h"
 
 int main(int argc, char **argv, char **envp)
@@ -8,10 +8,32 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	init_tokenizer();
 	init_paser();
+	init_envp(envp);
 	minishell_loop();
 	free_parser();
 	free_tree();
 	set_exit_status();
+}
+
+void	init_envp(char **envp)
+{
+	t_list	**env;
+	int		idx;
+
+	env = get_envp();
+	idx = 0;
+	while (envp[idx])
+	{
+		ft_lstadd_back(env, ft_lstnew(ft_strdup(envp[idx])));
+		idx++;
+	}
+}
+
+t_list	**get_envp(void)
+{
+	static t_list	*env_list;
+
+	return (&env_list);
 }
 
 void	init_tokenizer()

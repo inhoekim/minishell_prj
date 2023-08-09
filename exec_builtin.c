@@ -21,10 +21,18 @@ t_bool	ft_echo(t_node *node)
 		idx = 0;
 	while (temp[++idx])
 	{
-		if (temp[idx + 1] != NULL)
-			printf("%s ", temp[idx]);
+		// 환경변수일 경우, 해당 문자열을 환경변수의 문자열로 변경해줘야함
+		if (temp[idx][0] == '$')
+		{
+
+		}
 		else
-			printf("%s", temp[idx]);
+		{
+			if (temp[idx + 1] != NULL)
+				printf("%s ", temp[idx]);
+			else
+				printf("%s", temp[idx]);
+		}
 	}
 	if (flag == 0)
 		printf("\n");
@@ -62,15 +70,10 @@ t_bool	ft_export(t_node *node, char **envp)
 	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
 	// 인자가 없으면 단순 환경변수들을 나열해줌
+	idx = -1;
 	if (!temp[1])
-	{
-		idx = 0;
-		while (envp[idx])
-		{
+		while (envp[++idx])
 			printf("declare -x %s\n", envp[idx]);
-			idx++;
-		}
-	}
 	// 인자가 있으면 해당 인자들을 환경변수에 등록해야함
 	else
 	{
