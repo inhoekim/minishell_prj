@@ -1,30 +1,33 @@
 #include "minishell.h"
+#include "../libft/libft.h"
 # define PATH_MAX 1024
 // echo, cd, pwd, export, unset, env, exit
 t_bool	ft_echo(t_node *node)
 {
 	char	**temp;
 	int		idx;
+	int		flag;
 
-	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
+	flag = 0;
 	if (!temp)
 		printf("\n");
-	// 2차원배열에서 idx가 1인 이유
-	// echo / ~~~~ 이런식으로 저장이 되어있다고 가정할 경우, 뒤의 문자열들만 출력을 해야함
-	if (temp[1][0] == '-' && temp[1][1] == 'n')
+	else if (temp[1][0] == '-' && temp[1][1] == 'n')
 	{
 		idx = 1;
-		while (temp[++idx])
-			printf("%s", temp[idx]);
+		flag = 1;
 	}
 	else
-	{
 		idx = 0;
-		while (temp[++idx])
-			printf("%s\n", temp[idx]);
+	while (temp[++idx])
+	{
+		if (temp[idx + 1] != NULL)
+			printf("%s ", temp[idx]);
+		else
+			printf("%s", temp[idx]);
 	}
-	// 성공 시, 리턴코드 0 반환
+	if (flag == 0)
+		printf("\n");
 	return (FALSE);
 }
 
@@ -34,7 +37,6 @@ t_bool	ft_pwd(t_node *node)
 
 	getcwd(path, PATH_MAX);
 	printf("%s\n", path);
-	// 성공 시, 리턴코드 0 반환
 	return (FALSE);
 }
 
@@ -52,7 +54,7 @@ t_bool	ft_cd(t_node *node)
 }
 
 // 등록한 환경변수는 쉘이 종료됨에 따라 같이 환경변수에서 삭제되야함
-t_bool	ft_export(t_node *node)
+t_bool	ft_export(t_node *node, char **envp)
 {
 	char	**temp;
 	int		idx;
@@ -62,7 +64,12 @@ t_bool	ft_export(t_node *node)
 	// 인자가 없으면 단순 환경변수들을 나열해줌
 	if (!temp[1])
 	{
-		
+		idx = 0;
+		while (envp[idx])
+		{
+			printf("declare -x %s\n", envp[idx]);
+			idx++;
+		}
 	}
 	// 인자가 있으면 해당 인자들을 환경변수에 등록해야함
 	else
@@ -80,13 +87,8 @@ t_bool	ft_unset(t_node *node)
 
 	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
-	// 인자가 없으면 아무 동작를 하지 않음
-	if (!temp[1])
-	{
-
-	}
 	// 인자가 있으면 환경변수에 있는지 확인 후, 제거 / 이상한 인자가 들어오더라도 아무동작을 하지 않음
-	else
+	if (temp[1])
 	{
 
 	}
@@ -112,19 +114,28 @@ t_bool	ft_env(t_node *node, char **envp)
 t_bool	ft_exit(t_node *node)
 {
 	char	**temp;
+	int		idx;
 
-	// 트리의 왼쪽가지에 2차원배열로 값이 들어가있어야함
 	temp = node->left->word.buf;
 	if (!temp[1])
 	{
-		printf("exit");
+		idx = 0;
+		while (temp[1][idx])
+		{
+			if (ft_isdigit(temp[1][idx]) == 0)
+			{
+				printf("exit: %s: numeric argument required", temp[1]);
+				exit(255);
+			}
+			idx++;
+		}
+		printf("exit\n");
 		exit(ft_atoi(temp[1]));
 	}
 	else
 	{
-		printf("exit");
+		printf("exit\n");
 		exit(0);
 	}
-	// 실패 시, 리턴코드 1반환
 	return (TRUE);
 }
