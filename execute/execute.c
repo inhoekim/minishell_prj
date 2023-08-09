@@ -180,7 +180,7 @@ void exec_append(t_node *node, t_ctx *p_ctx)
 
 void exec_word(t_node *node, t_ctx *p_ctx)
 {
-	if (ft_strchr(node->word.buf, '/') == NULL) {
+	if (ft_strchr(node->word[0], '/') == NULL) {
 		if (exec_builtin() == NULL) {
 			search_and_fork_exec();
 		}
@@ -193,13 +193,16 @@ void exec_word(t_node *node, t_ctx *p_ctx)
 void fork_exec(t_node *node, t_ctx *p_ctx)
 {
 	int		pid;
+	char	**envp;
 
 	dup2(p_ctx->fd[STDIN], STDIN);
 	dup2(p_ctx->fd[STDOUT], STDOUT);
 	pid = fork();
 	if (pid)
 	{
-		node->word.buf
-		execev();
+		// get_env(); 세연님한테 문의
+		if (execve(node->word[0], node->word, envp) == -1) {
+			
+		}
 	}
 }
