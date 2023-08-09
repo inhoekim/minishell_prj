@@ -45,17 +45,10 @@ typedef enum e_symbol
 /* binary tree */
 typedef struct s_node
 {
-<<<<<<< HEAD:minishell.h
-	t_symbol	type;
-	t_node		*left;
-	t_node		*right;
-	t_word		word;
-=======
     t_symbol	type;
     t_node		*left;
     t_node		*right;
     char		**word;
->>>>>>> release:include/minishell.h
 } t_node;
 
 /* object that separate tokens */

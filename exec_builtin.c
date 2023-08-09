@@ -89,20 +89,52 @@ t_bool	ft_unset(t_node *node)
 	char	**temp;
 	int		idx;
 	t_list	**env;
+	t_list	*check;
 
 	temp = node->left->word.buf;
-	// 인자가 있으면 환경변수에 있는지 확인 후, 제거 / 이상한 인자가 들어오더라도 아무동작을 하지 않음
 	idx = -1;
 	if (temp[1])
 	{
 		env = get_envp();
 		while (temp[++idx])
 		{
-			if (ft_memcmp())
-			ft_lstdelone((*env),);
+			check = *env;
+			while (check->next != NULL)
+			{
+				if (ft_memcmp(temp[idx], check->content, \
+				ft_strlen(temp[idx])) == 0)
+				{
+					delete_node((*env), check);
+					break ;
+				}
+				check = check->next;
+			}
 		}
 	}
 	return (FALSE);
+}
+// 노드 삭제 함수
+void	delete_node(t_list **head, t_list *node_to_delete)
+{
+    t_list	*current;
+    t_list	*prev;
+
+	current = *head;
+	prev = NULL;
+	while (current != NULL)
+	{
+		if (current == node_to_delete)
+		{
+			if (prev == NULL)
+				*head = current->next;
+			else
+				prev->next = current->next;
+			free(current);
+			break ;
+		}
+		prev = current;
+		current = current->next;
+	}
 }
 
 // 환경변수를 어디선가 끌고와야함
@@ -110,11 +142,16 @@ t_bool	ft_env(t_node *node)
 {
 	int	idx;
 	t_list	**env;
+	t_list	*temp;
 
 	idx = 0;
 	env = get_envp();
-	while ((*env)->next != NULL)
-		printf("%s\n", (*env)->content);
+	temp = *env;
+	while (temp->next != NULL)
+	{
+		printf("%s\n", temp->content);
+		temp = temp->next;
+	}
 	return (FALSE);
 }
 
