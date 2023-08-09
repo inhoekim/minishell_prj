@@ -28,6 +28,7 @@ void	init_envp(char **envp)
 		ft_lstadd_back(env, ft_lstnew(ft_strdup(envp[idx])));
 		idx++;
 	}
+	ft_lstadd_back(env, ft_lstnew(NULL));
 }
 
 t_list	**get_envp(void)
