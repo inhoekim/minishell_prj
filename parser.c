@@ -1,92 +1,100 @@
-#include "minishell.h"
+#include "tokenizer.h"
 
-t_node	*parse(t_tokenizer *token)
-{
-	t_node	*root;
+#define SYMBOLCHAR "<>&|() \t\n"
 
-	if (EOF)
-	{
-		//종료
-		return (NULL);
-	}
-	root = msh_grammer(token); //생성규칙 따라 트리 생성
-	if (token != EOF)
-	{
-		//syntax error
-		//free root
-		//종료
-		return (NULL);
-	}
-	return (root);
-}
+// t_node	*parse(t_tokenizer *token)
+// {
+// 	t_node	*root;
 
-#include "minishell.h";
+// 	if (EOF)
+// 	{
+// 		//종료
+// 		return (NULL);
+// 	}
+// 	root = msh_grammer(token); //생성규칙 따라 트리 생성
+// 	if (token != EOF)
+// 	{
+// 		//syntax error
+// 		//free root
+// 		//종료
+// 		return (NULL);
+// 	}
+// 	return (root);
+// }
 
 t_tokenizer	get_next_token(char *line)
 {
-	t_tokenizer token;
-	
-	token.type = E0F;
-	token.current_token = line;
-	token.token_size = 0;
+	t_tokenizer	token;
+	char		*start;
 
-    skip_whitespace();
-	char c = 포인터 하나;
-    if (c == EOF)
+	start = skip_whitespace(line);
+	token.current_token = start + 1;
+	token.token_size = 0;
+	token.type = E0F;
+
+	if (*start == EOF)
 	{
 		//종료
 	}
-	if (c == '(')
+	if (*start == '(')
 	{
-		make_token
+		while (*token.current_token != ')' || token.current_token)
+			token.current_token++;
+		if (match(&token, ')'))
+			return (make_token(start, &token, SUBSHELL));
 	}
-	if (c == ')')
-	{
-
-	}
+	return (scan_char_token(start, &token));
 }
 
-t_tokenizer	scan_char_token(t_tokenizer token, char c)
+t_tokenizer	scan_char_token(char *start, t_tokenizer *token)
 {
-	if (c == '<')
+	if (*start == '<')
 	{
-		if (match 함수 -> 다음 글자가 '<'일 때)
-			return (make_token(c, c + 1, DLESS))
-		return(make_token((c, c, LESS));
+		if (match(token, '<'))
+			return (make_token(start, token, DLESS));
+		return (make_token(start, token, LESS));
 	}
-	if (c == '>')
+	if (*start == '>')
 	{
-		if (match 함수 -> 다음 글자가 '>'일 때)
-			return (make_token(c, c + 1, DGREAT))
-		return(make_token(c, c, GREAT));
+		if (match(token, '>'))
+			return (make_token(start, token, DGREAT));
+		return (make_token(start, token, GREAT));
 	}
-	if (c == '&')
+	if (*start == '&')
 	{
-
+		if (match(token, '&'))
+			return (make_token(start, token, AND_IF));
 	}
-	if (c == '|')
+	if (*start == '|')
 	{
-
+		if (match(token, '|'))
+			return (make_token(start, token, OR_IF));
+		return (make_token(start, token, PIPE));
 	}
-	return (scan_word_token())
+	return (make_token(start, token, EOF));
 }
 
-t_tokenizer	scan_word_token(t_tokenizer token, char c)
-{
-	if (c == '\'' || c == '"' || c == '/')
-	{
-		if (안닫혔으면)
-			//error
-		
-	}
-}
+// t_tokenizer	scan_word_token(char *start, t_tokenizer *token)
+// {
+// 	while (!ft_strchr(SYMBOLCHAR, token->current_token))
+// 	{
+// 		if (start == '\'' || start == '"' || start == '/')
+// 		{
+// 			if (string_close(token, start) == FALSE)
+// 			{
+// 				//뭔가 동작함
+// 			}
+			
+// 		}
+// 		token->current_token++;
+// 	}
+// 	return (make_token(start, token, WORD));
+// }
 
-t_tokenizer	make_token(char *left_ptr, char *right_ptr, t_symbol type)
+t_tokenizer	make_token(char *start, t_tokenizer *token, t_symbol type)
 {
-	t_tokenizer	token;
-
-	token.type = type;
-	token.current_token = left_ptr;
-	token.token_size = right_ptr - left_ptr;
-	return (token);
+	token->type = type;
+	token->token_size = token->current_token - start;
+	token->current_token = start;
+	return (*token);
 }
