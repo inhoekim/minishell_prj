@@ -24,7 +24,7 @@ LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS);\
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ libft.a $(OBJS);\ 
 
 $(OBJS): %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ -c $<
