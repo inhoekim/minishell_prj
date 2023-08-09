@@ -3,6 +3,7 @@
 
 
 #include <stdio.h>
+#include <libft.h>
 
 typedef enum e_bool
 {
@@ -40,27 +41,29 @@ typedef enum e_symbol
 }   t_symbol;
 
 /* COMMAND or FILE_NAME */
-typedef struct s_word
-{
-	char	*buf;
-	int		len;
-}   t_word;
 
 /* binary tree */
 typedef struct s_node
 {
+<<<<<<< HEAD:minishell.h
 	t_symbol	type;
 	t_node		*left;
 	t_node		*right;
 	t_word		word;
+=======
+    t_symbol	type;
+    t_node		*left;
+    t_node		*right;
+    char		**word;
+>>>>>>> release:include/minishell.h
 } t_node;
 
 /* object that separate tokens */
 typedef struct s_tokenizer
 {
     t_symbol	type;
-	char		*start;
-	char		*end;
+	char		*current_token;
+	int			token_size;
 } t_tokenizer;
 
 // t_symbol의 개수는 10개지만, table의 일차원 배열의 길이는 9개임. (word제외)
