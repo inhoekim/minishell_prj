@@ -18,7 +18,10 @@ t_bool	match(t_tokenizer *token, char matchword)
 {
 	if (*(token->current_token) != matchword)
 		return (FALSE);
-	token->current_token++;
+	if (*(token->current_token) != NULL)
+		token->current_token++;
+	else
+		token->token_size = 1;
 	return (TRUE);
 }
 
@@ -35,7 +38,7 @@ t_bool	string_close(t_tokenizer *token, char c)
 #include <stdio.h>
 int main(void)
 {
-	char *line = "        (hello)    <<";
+	char *line = "<<";
 	t_tokenizer token1;
 	t_tokenizer token2;
 	
@@ -45,7 +48,7 @@ int main(void)
 	printf("token_size %d\n", token1.token_size);
 	printf("%u\n", token1.type);
 
-	token2 = get_next_token(token1.current_token + token1.token_size);
-	printf("token_size %d\n", token2.token_size);
-	printf("%u\n", token2.type);
+	// token2 = get_next_token(token1.current_token + token1.token_size);
+	// printf("token_size %d\n", token2.token_size);
+	// printf("%u\n", token2.type);
 }
