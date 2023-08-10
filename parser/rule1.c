@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
-// make_tree함수, make_leaf함수, make_and함수, make_or함수, syntax_error함수, check_first_set함수
 
 // msh_grammar ::= pipeline conditional
 t_node *msh_grammar(t_tokenizer tokenizer)
@@ -36,15 +35,15 @@ t_node *conditional(t_tokenizer tokenizer)
     {
 		pipe = pipeline();
 		parent = conditional();
-		child = make_node(AND_IF, NULL, pipe);
-		return (merge_node(parent, child));
+		child = make_tree(AND_IF, NULL, pipe);
+		return (merge_tree(parent, child));
     }
     else if (match_token(OR_IF))
     {
 		pipe = pipeline();
 		parent = conditional();
-		child = make_node(AND_IF, NULL, pipe);
-		return (merge_node(parent, child);
+		child = make_tree(AND_IF, NULL, pipe);
+		return (merge_tree(parent, child);
     }
     return (NULL);
 }
@@ -62,7 +61,7 @@ t_node  *pipeline(t_tokenizer tokenizer)
         {
             parent = piped_command();
             if (parent)
-                return (merge_node(parent, child));
+                return (merge_tree(parent, child));
         }
 		return (child);
     }
@@ -79,7 +78,7 @@ t_node  *piped_command(t_tokenizer tokenizer)
 	if (match_token(PIPE))
 	{
 		child = pipeline(tokenizer);
-		return (make_node(PIPE, NULL, child));
+		return (make_tree(PIPE, NULL, child));
 	}
 	return (NULL);
 }
