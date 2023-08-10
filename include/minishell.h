@@ -25,7 +25,7 @@ typedef enum e_nonterminal{
 	CONDITIONAL = 6,
 }   t_nonterminal;
 
-// &&, ||, |, (),  <, >, <<, >>, word 
+// &&, ||, |, (, ),  <, >, <<, >>, word
 typedef enum e_symbol
 {
 	WORD,
@@ -37,6 +37,8 @@ typedef enum e_symbol
 	OR_IF,
 	PIPE,
 	SUBSHELL,
+	SUBSHELL_LEFT,
+	SUBSHELL_RIGHT,
 	E0F,
 }   t_symbol;
 
