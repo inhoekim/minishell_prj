@@ -178,18 +178,76 @@ t_node *exec_node(t_node *node, t_ctx *p_ctx)
 
 void	exec_word(t_node *node, t_ctx *p_ctx)
 {
-	if (ft_strchr(node->word[0], '/') == NULL)
+	char	**argv;
+
+	argv = globbing(node->word);
+	if (ft_strchr(argv, '/') == NULL)
 	{
 		if (exec_builtin() == NULL) {
 			search_and_fork_exec();
 		}
 	}
 	else {
-		fork_exec(node, p_ctx);
+		fork_exec(argv, p_ctx);
 	}
 }
 
-void fork_exec(t_node *node, t_ctx *p_ctx)
+char	**globbing(char **word_arr)
+{
+	int		i;
+	t_list	*list;
+	t_list	*argv_list;
+	t_bool	glob_flag;
+
+	i = 0;
+	list = NULL;
+	argv_list = NULL;
+	while (word_arr[i])
+	{
+		//echo "123""456";
+		list = split_quote(word_arr[i]);
+		glob_flag = check_glob(list);
+		// parameter가 quotation(')안에 있으면 효력상실.
+		parameter_expansion(list);
+		unquote(list);
+		ft_lstadd_back(&argv_list, pathname_expansion(list, glob_flag));
+		ft_lstclear(&list, free);
+		i++;
+	}
+	return (list_to_arr(argv_list));
+}
+
+t_bool	check_glob(t_list *list)
+{
+	// globbing character가 quotation(', "")안에 있으면 효력상실.
+	return (has_pattern(list, '*') || has_pattern(list, '?'));
+}
+
+
+t_bool	has_pattern(t_list *list, char chr)
+{
+	char	*aux;
+	t_bool	pattern;
+
+	pattern = FALSE;
+	while (list)
+	{
+		aux = list->content;
+		if (ft_strchr(aux, chr))
+		{
+			if (!ft_strchr(aux, '"') && !ft_strchr(aux, '\''))
+				pattern = TRUE;
+		}
+		list = list->next;
+	}
+	return (pattern);
+}
+
+// parameter_expansion;
+// unquote;
+// pathname_expansion;
+
+void	fork_exec(t_node *node, t_ctx *p_ctx)
 {
 	int		pid;
 	char	**envp;
@@ -201,16 +259,14 @@ void fork_exec(t_node *node, t_ctx *p_ctx)
 	pid = fork();
 	if (pid)
 	{
-		env_strarr = env_to_strarr();
-		cmd_path = cmd_path_find(exec_arg[0], envp);
-		if (execve(node->word[0], node->word, env_strarr) == -1)
-		{
-			
-		}
+		env_strarr = list_to_arr();
+		cmd_path = cmd_path_find(node->word[0], envp);
+		execve(node->word[0], node->word, env_strarr);
+		
 	}
 }
 
-char	**env_to_strarr()
+char	**list_to_arr()
 {
 	t_list	**env;
 	t_list	*env_node;
@@ -221,7 +277,7 @@ char	**env_to_strarr()
 	i = 0;
 	env = get_envp();
 	env_node = *env;
-	len = list_len(env_node);
+	len = ft_lstsize(env_node);
 	env_strarr = malloc(sizeof(t_list) * (len + 1));
 	env_strarr[len] = NULL;
 	while (env_node != NULL)
@@ -231,20 +287,6 @@ char	**env_to_strarr()
 	}
 	return (env_strarr);
 }
-
-int	list_len(t_list	*env_node)
-{
-	int	i;
-
-	i = 0;
-	while (env_node != NULL)
-	{
-		i++;
-		env_node = env_node->next;
-	}
-	return (i);
-}
-
 
 char	*cmd_path_find(char *cmd, char **envp)
 {
