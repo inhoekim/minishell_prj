@@ -119,9 +119,9 @@ static char	*fft_substr(char const *s, unsigned int start, size_t len)
 
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
-	printf("%d\n", tokenizer->curr_token->len);
 	tokenizer->curr_token->type = type;
-	tokenizer->curr_token->len = tokenizer->end - tokenizer->start;
+	tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
+	tokenizer->curr_token->str = fft_substr(tokenizer->start, 0, tokenizer->curr_token->len);
 	return (tokenizer->curr_token);
 }
 

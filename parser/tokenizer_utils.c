@@ -15,6 +15,10 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {
 	tokenizer->start = line;
 	tokenizer->end = line;
+	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
+	// tokenizer->curr_token->len = 0;
+	// tokenizer->curr_token->str = "";
+	// tokenizer->curr_token->type = E0F;
 	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
@@ -52,25 +56,21 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 #include <stdio.h>
 int main(void)
 {
-	char *line = "<<  >>";
+	char *line = "'hell''o'  >>";
 	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 
-	tokenizer.start = line;
-	tokenizer.end = line;
-	tokenizer.curr_token->len = 0;
-	tokenizer.curr_token->str = 0;
-	tokenizer.curr_token->type = E0F;
-	//tokenizer.curr_token = get_next_token(&tokenizer);
-	//token1.curr_token->type = NULL;
-
-	tokenizer.curr_token = get_next_token(&tokenizer);
+	set_tokenizer(&tokenizer, line);
 	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
 	printf("start ptr: %s\n", tokenizer.start);
 	printf("ended ptr: %s\n\n", tokenizer.end);
 
 	tokenizer.curr_token = get_next_token(&tokenizer);
 	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
 	printf("start ptr: %s\n", tokenizer.start);
-	printf("ended ptr: %s\n", tokenizer.end);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 }
