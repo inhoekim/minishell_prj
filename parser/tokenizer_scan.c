@@ -39,7 +39,7 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 	return (scan_word_token(tokenizer));
 }
 
-staitc char	*fft_strchr(const char *s, int c)
+static char	*fft_strchr(const char *s, int c)
 {
 	while (*s)
 	{

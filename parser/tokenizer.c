@@ -14,7 +14,7 @@
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer)
 { 
    //현재 토큰이 매개변수와 같으면 match 성공
-   if(type == get_curr_token(tokenizer).type)
+   if(type == get_curr_token(tokenizer)->type)
    {
 		//다음토큰을 찾아놓음
 		get_next_token(tokenizer);
@@ -26,7 +26,7 @@ t_bool	match_token(t_symbol type, t_tokenizer *tokenizer)
 }
 
 t_token	*get_curr_token(t_tokenizer *tokenizer) {
-    return (&tokenizer->curr_token);
+    return (tokenizer->curr_token);
 }
 
 
@@ -78,6 +78,18 @@ static char	*make_empty_str(void)
 	return (res);
 }
 
+#include <string.h>
+
+static size_t	fft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
 static char	*fft_substr(char const *s, unsigned int start, size_t len)
 {
 	char			*res;
@@ -86,7 +98,7 @@ static char	*fft_substr(char const *s, unsigned int start, size_t len)
 
 	if (*s == 0)
 		return (make_empty_str());
-	s_len = (unsigned int)ft_strlen(s);
+	s_len = (unsigned int)fft_strlen(s);
 	if (s_len <= start)
 		len = 0;
 	i = 0;
@@ -107,9 +119,9 @@ static char	*fft_substr(char const *s, unsigned int start, size_t len)
 
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
-	tokenizer->curr_token->len = tokenizer->end - tokenizer->start;
-	tokenizer->curr_token->str = fft_substr(tokenizer->start, 0, tokenizer->curr_token->len);
+	printf("%d\n", tokenizer->curr_token->len);
 	tokenizer->curr_token->type = type;
+	tokenizer->curr_token->len = tokenizer->end - tokenizer->start;
 	return (tokenizer->curr_token);
 }
 

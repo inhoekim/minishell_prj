@@ -11,19 +11,16 @@
 /* ************************************************************************** */
 #include "../include/tokenizer.h"
 
-t_tokenizer	*set_tokenizer(char *line)
+void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {
-	t_tokenizer tokenizer;
-
 	tokenizer->start = line;
 	tokenizer->end = line;
-	tokenizer->curr_token = get_next_token(&tokenizer);
-    return (&tokenizer);
+	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
 {
-	if (tokenizer->type == SUBSHELL)
+	if (tokenizer->curr_token->type == SUBSHELL)
 		tokenizer->end++;
 	if (tokenizer->start != tokenizer->end)
 		tokenizer->end++;
@@ -55,17 +52,25 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hihihihi'>>";
-	t_tokenizer token1;
+	char *line = "<<  >>";
+	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 
-	token1.start = line;
-	token1.end = line;
-	token1.type = E0F;
+	tokenizer.start = line;
+	tokenizer.end = line;
+	tokenizer.curr_token->len = 0;
+	tokenizer.curr_token->str = 0;
+	tokenizer.curr_token->type = E0F;
+	//tokenizer.curr_token = get_next_token(&tokenizer);
+	//token1.curr_token->type = NULL;
 
-	token1 = get_next_token(&token1);
-	printf("str: %s\n", token1.curr_token->str);
+	tokenizer.curr_token = get_next_token(&tokenizer);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 
-	token1 = get_next_token(&token1);
-	printf("str: %s\n", token1.curr_token->str);
+	tokenizer.curr_token = get_next_token(&tokenizer);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n", tokenizer.end);
 }
