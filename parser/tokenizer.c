@@ -1,30 +1,15 @@
-#include "tokenizer.h"
-
-#define SYMBOLCHAR "<>&|() \t\n"
-
-t_tokenizer	make_tokenizer(char *line)
-{
-	t_tokenizer tokenizer;
-
-	tokenizer.type = E0F;
-	tokenizer.start = line;
-	tokenizer.end = line;
-	//tokenizer = get_next_token(tokenizer);
-    return (tokenizer);
-}
-
-static char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (0);
-}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/11 11:26:07 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "../include/tokenizer.h"
 
 t_bool  match_token(t_symbol token, t_tokenizer *tokenizer)
 { 
@@ -79,54 +64,17 @@ t_symbol	get_next_token(t_tokenizer *tokenizer)
 	return (scan_char_token(tokenizer));
 }
 
-t_symbol	scan_char_token(t_tokenizer *tokenizer)
-{
-	if (*tokenizer->start == '<')	{
-		if (match(tokenizer, '<'))
-			return (make_token(tokenizer, DLESS));
-		return (make_token(tokenizer, LESS));
-	}
-	if (*tokenizer->start == '>')
-	{
-		if (match(tokenizer, '>'))
-			return (make_token(tokenizer, DGREAT));
-		return (make_token(tokenizer, GREAT));
-	}
-	if (*tokenizer->start == '&')
-	{
-		if (match(tokenizer, '&'))
-			return (make_token(tokenizer, AND_IF));
-	}
-	if (*tokenizer->start == '|')
-	{
-		if (match(tokenizer, '|'))
-			return (make_token(tokenizer, OR_IF));
-		return (make_token(tokenizer, PIPE));
-	}
-	return (scan_word_token(tokenizer));
-}
-
-t_symbol	scan_word_token(t_tokenizer *tokenizer)
-{
-	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
-	{
-		if (*tokenizer->end == '\'' || *tokenizer->end == '"')
-		{
-			if (string_close(tokenizer, *tokenizer->end) == FALSE)
-			{
-				//syntax error 종료
-				printf("!!!!!!!!!syntax error!!!!!!!!!!!\n");
-			}
-			else
-				break;
-		}
-		tokenizer->end++;
-	}
-	return (make_token(tokenizer, WORD));
-}
-
 t_symbol	make_token(t_tokenizer *tokenizer, t_symbol type)
 {
 	tokenizer->type = type;
 	return (type);
 }
+
+//환경변수 replace
+//void	replace_env(t_tokenizer *tokenizer)
+//{
+//	char	*env;
+
+//	env = ft_substr(tokenizer->start, tokenizer->end - tokenizer->start);
+
+//}
