@@ -21,7 +21,7 @@ t_bool	ft_export(t_node *node)
 	int		idx;
 	t_list	**env;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	idx = -1;
 	env = get_envp();
 	if (!temp[1])
@@ -43,7 +43,7 @@ t_bool	ft_unset(t_node *node)
 	t_list	**env;
 	t_list	*check;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	idx = -1;
 	if (temp[1])
 	{

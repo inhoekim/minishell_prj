@@ -25,7 +25,7 @@ t_bool	ft_exit(t_node *node)
 	char	**temp;
 	int		idx;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	if (!temp[1])
 	{
 		idx = 0;
