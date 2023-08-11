@@ -194,15 +194,15 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	free_argv(argv);
 }
 
-void	free_strtab(char **argv)
+void	free_argv(char **argv)
 {
-	int	str;
+	int	i;
 
-	str = 0;
+	i = 0;
 	if (argv == NULL)
 		return ;
-	while (argv[str])
-		free(argv[str++]);
+	while (argv[i])
+		free(argv[i++]);
 	free(argv);
 }
 
@@ -225,7 +225,6 @@ int	*get_exit_status(void)
 // unquote;
 // pathname_expansion;
 
-
 char	**make_argv(char **word_arr)
 {
 	int		i;
@@ -245,7 +244,9 @@ char	**make_argv(char **word_arr)
 		// heredoc delimeter에 (',"")가 있었다면 그 내용은 효력상실.
 		// heredoc delimeter에 (',"")가 없었다면 그 내용은 expansion.
 		// heredoc delimeter는 효력상실.
-		parameter_expansion(list);
+		// ex. echo '$USER', echo "$USER"
+		// arg_expansion내부에서 cmd가 heredoc인지 판단해야함.
+		arg_expansion(list);
 		unquote(list);
 		ft_lstadd_back(&argv_list, pathname_expansion(list, glob_flag));
 		ft_lstclear(&list, free);
@@ -253,6 +254,147 @@ char	**make_argv(char **word_arr)
 	}
 	return (list_to_arr(argv_list));
 }
+
+void	arg_expansion(t_list *list)
+{
+	char	*content;
+
+	while (list)
+	{
+		content = list->content;
+		if (content[0] != '\'')
+		{
+			content = parameter_expansion(list->content);
+			free(list->content);
+			list->content = content;
+		}
+		list = list->next;
+	}
+}
+
+char	*parameter_expansion(char *str)
+{
+	char	*key;
+	char	*value;
+	char	*n_str;
+	t_list	*list;
+	t_list	*head;
+
+	str = ft_strdup(str);
+	n_str = str;
+	head = search_key(str);
+	list = head;
+	while (list)
+	{
+		key = list->content;
+		value = get_value(key);
+		n_str = str_replace(str, key, value);
+		free(str);
+		str = n_str;
+		list = list->next;
+	}
+	ft_lstclear(&head, free);
+	return (n_str);
+}
+
+char	*str_replace(char *str, char *oldw, char *neww)
+{
+	int		i;
+	int		neww_len;
+	int		oldw_len;
+	char	*result;
+
+	oldw_len = ft_strlen(oldw);
+	neww_len = ft_strlen(neww);
+	result = malloc(ft_strlen(str) + \
+			word_cnt(str, oldw) * (neww_len - oldw_len) + 1);
+	i = 0;
+	while (*str)
+	{
+		if (ft_strnstr(str, oldw, ft_strlen(str)) == str)
+		{
+			ft_strlcpy(&result[i], neww, neww_len + 1);
+			i += neww_len;
+			str += oldw_len;
+		}
+		else
+			result[i++] = *str++;
+	}
+	result[i] = '\0';
+	return (result);
+}
+
+int	word_cnt(char *str, char *word)
+{
+	int	pos;
+	int	cnt;
+	int	wordlen;
+
+	pos = 0;
+	cnt = 0;
+	wordlen = ft_strlen(word);
+	while (str[pos])
+	{
+
+		// ft_strncmp(&str[pos], word, ft_strlen(&str[pos]) && ft_strlen(word) == ft_strlen(&str[pos]))
+
+		if (ft_strnstr(&str[pos], word, ft_strlen(&str[pos])) == &str[pos])
+		{
+			cnt++;
+			pos += wordlen - 1;
+		}
+		pos++;
+	}
+	return (cnt);
+}
+
+char	*get_value(char *key)
+{
+	static char	status[4];
+	char		*value;
+
+	if (key[1] == '?')
+	{
+		value = ft_itoa(*get_exit_status());
+		ft_strlcpy(status, value, 4);
+		free(value);
+		return (status);
+	}
+	value = ft_getenv(&key[1]);
+	if (!value)
+		value = "";
+	return (value);
+}
+
+t_list	*search_key(char *str)
+{
+	int		base;
+	int		i;
+	t_list	*head;
+
+	base = 0;
+	i = 0;
+	head = NULL;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			base = i++;
+			if (str[i] == '?')
+				ft_lstadd_back(&head, ft_lstnew(ft_strdup("$?")));
+			else if (ft_isalpha(str[i]) || str[i] == '_')
+			{
+				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+					i++;
+				ft_lstadd_back(&head, ft_lstnew(ft_substr(str, base, i - base)));
+			}
+		}
+		else
+			i++;
+	}
+	return (head);
+}
+
 
 t_list	*split_quotes(char *str)
 {

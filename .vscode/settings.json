@@ -5,6 +5,7 @@
 		"_types.h": "c",
 		"errno.h": "c",
 		"stat.h": "c",
-		"system_error": "c"
+		"system_error": "c",
+		"bit": "c"
 	}
 }
