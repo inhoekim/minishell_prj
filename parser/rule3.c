@@ -10,7 +10,7 @@ t_node  *io_redirect_dg_after_simple_cmd(t_tokenizer tokenizer)
 
 	if (match_token(WORD))
 	{
-		child = make_node(WORD, tokenizer);
+		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
 		return (merge_tree(parent, child)); //만약 word-word가 만나면 child word + parent word = new word가 되어야함
 	}
@@ -41,7 +41,7 @@ t_node  *io_redirect(t_tokenizer tokenizer)
 
 	if (check_first_set(IO_FILE))
 		return (io_file(tokenizer));
-	else if (check_first_set(IO_HERE)
+	else if (check_first_set(IO_HERE))
 		return (io_here(tokenizer));
 	syntax_error("Not available grammar");
 	return (NULL);
@@ -53,11 +53,11 @@ t_node  *io_redirect(t_tokenizer tokenizer)
 t_node  *io_file(t_tokenizer tokenizer)
 {
 	if(match_token(LESS) && get_next_token(tokenizer) == WORD)
-		return (make_tree(LESS, make_node(WORD, tokenizer), NULL));
+		return (make_tree(LESS, make_leaf(tokenizer), NULL));
 	if(match_token(GREAT) && get_next_token(tokenizer) == WORD)
-		return (make_tree(GREAT, make_node(WORD, tokenizer), NULL));
+		return (make_tree(GREAT, make_leaf(tokenizer), NULL));
 	if(match_token(DGREAT) && get_next_token(tokenizer) == WORD)
-		return (make_tree(DGREAT, make_node(WORD, tokenizer), NULL));
+		return (make_tree(DGREAT, make_leaf(tokenizer), NULL));
 	syntax_error("Not available grammar");
 	return (NULL);
 }
@@ -66,7 +66,7 @@ t_node  *io_file(t_tokenizer tokenizer)
 t_node  *io_here(t_tokenizer tokenizer)
 {
 	if(match_token(LESS) && get_next_token(tokenizer) == WORD)
-		return (make_tree(DLESS, make_node(WORD, tokenizer), NULL));
+		return (make_tree(DLESS, make_leaf(tokenizer), NULL));
 	syntax_error("Not available grammar");
 	return (NULL);
 }

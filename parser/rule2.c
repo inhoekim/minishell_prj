@@ -51,7 +51,7 @@ t_node  *simple_cmd(t_tokenizer tokenizer)
 
 	if (match_token(WORD))
 	{
-		child = make_node(WORD, tokenizer);
+		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
 		if (child)
 			return (merge_tree(parent, child));
@@ -87,7 +87,7 @@ t_node  *io_redirect_or_word_star(t_tokenizer tokenizer)
 	}
 	else if (check_first_set(WORD))
 	{
-		child = make_node(WORD, tokenizer);
+		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
 		return (merge_tree(parent, child)); //만약 word-word가 만나면 child word + parent word = new word가 되어야함
 	}
