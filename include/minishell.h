@@ -25,7 +25,7 @@ typedef enum e_nonterminal{
 	CONDITIONAL = 6,
 }   t_nonterminal;
 
-// &&, ||, |, (),  <, >, <<, >>, word 
+// &&, ||, |, (, ),  <, >, <<, >>, word
 typedef enum e_symbol
 {
 	WORD,
@@ -37,6 +37,8 @@ typedef enum e_symbol
 	OR_IF,
 	PIPE,
 	SUBSHELL,
+	SUBSHELL_LEFT,
+	SUBSHELL_RIGHT,
 	E0F,
 }   t_symbol;
 
@@ -49,10 +51,17 @@ typedef struct s_node
     char			**word;
 } t_node;
 
+typedef struct s_token
+{
+	t_symbol	type;
+	char		*str;
+	int			len;
+}t_token;
+
 /* object that separate tokens */
 typedef struct s_tokenizer
 {
-    t_symbol	type;
+    t_token		*curr_token;
 	char		*start;
 	char		*end;
 } t_tokenizer;
