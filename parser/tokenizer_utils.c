@@ -15,14 +15,16 @@ t_tokenizer	*set_tokenizer(char *line)
 {
 	t_tokenizer *tokenizer;
 
-	tokenizer->type = E0F;
+	tokenizer = (t_tokenizer *)malloc(sizeof(t_tokenizer));
+	if (!tokenizer)
+		return (NULL);
+	tokenizer->type = NULL;
 	tokenizer->start = line;
 	tokenizer->end = line;
-	//tokenizer = get_next_token(tokenizer);
     return (tokenizer);
 }
 
-void	reset_tokenizer(t_tokenizer *tokenizer)
+void	reset_start_ptr(t_tokenizer *tokenizer)
 {
 	if (tokenizer->type == SUBSHELL)
 		tokenizer->end++;

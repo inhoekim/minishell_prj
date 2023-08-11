@@ -25,8 +25,8 @@ t_bool  match_token(t_symbol token, t_tokenizer *tokenizer)
 
 }
 
-t_symbol get_curr_token(t_tokenizer *tokenizer) {
-    return (tokenizer->type);
+t_token get_curr_token(t_tokenizer *tokenizer) {
+    return (tokenizer->current_token);
 }
 
 
@@ -37,9 +37,9 @@ t_symbol get_curr_token(t_tokenizer *tokenizer) {
 // 갱신되면 t_tokenizer는 다른 토큰(문자열)을 가리키게 된다
 
 //get_next_token() -> 원래 예전에 만들어놨던 t_tokenizer를 갱신.
-t_symbol	get_next_token(t_tokenizer *tokenizer)
+t_token	get_next_token(t_tokenizer *tokenizer)
 {
-	reset_tokenizer(tokenizer);
+	reset_start_ptr(tokenizer);
 	if (*tokenizer->end == '(')
 	{
 		tokenizer->start++;
@@ -52,23 +52,27 @@ t_symbol	get_next_token(t_tokenizer *tokenizer)
 		}
 		else
 		{
-			//syntax error 종료
-			printf("!!!!!!!!!syntax error!!!!!!!!!!!\n");
+			syntax_error("~~~");
+			//종료코드
 		}
 	}
 	if (*tokenizer->end == ')')
 	{
-		//syntax error 종료
-		printf("!!!!!!!!!syntax error!!!!!!!!!!!\n");
+		syntax_error("~~~");
+		//종료코드
 	}
 	return (scan_char_token(tokenizer));
 }
 
-t_symbol	make_token(t_tokenizer *tokenizer, t_symbol type)
+t_token	make_token(t_tokenizer *tokenizer, t_symbol type)
 {
 	tokenizer->type = type;
 	return (type);
 }
+
+// t_token 추가(한개, 계속 갱신)
+// 문자열비교할때 curr_token으로 비교
+// 
 
 //환경변수 replace
 //void	replace_env(t_tokenizer *tokenizer)

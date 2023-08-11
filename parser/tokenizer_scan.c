@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_scan.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/11 12:09:36 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../include/tokenizer.h"
 #define SYMBOLCHAR "<>&|() \t\n"
 
-t_symbol	scan_char_token(t_tokenizer *tokenizer)
+t_token	scan_char_token(t_tokenizer *tokenizer)
 {
 	if (*tokenizer->start == '<')	{
 		if (match(tokenizer, '<'))
@@ -28,9 +39,9 @@ t_symbol	scan_char_token(t_tokenizer *tokenizer)
 	return (scan_word_token(tokenizer));
 }
 
-t_symbol	scan_word_token(t_tokenizer *tokenizer)
+t_token	scan_word_token(t_tokenizer *tokenizer)
 {
-	if (*tokenizer->end == '\n')
+	if (*tokenizer->end == NULL)
 		return (make_token(tokenizer, E0F));
 	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
 	{
@@ -38,8 +49,8 @@ t_symbol	scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				//syntax error 종료
-				printf("!!!!!!!!!syntax error!!!!!!!!!!!\n");
+				syntax_error("~~~");
+				//종료코드
 			}
 			else
 				break;

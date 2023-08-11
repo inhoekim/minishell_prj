@@ -9,9 +9,9 @@
 /*   Updated: 2023/08/11 11:25:54 by naylee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "tokenizer.h"
+#include "../include/tokenizer.h"
 
- t_node	*parser(t_tokenizer *line)
+t_node	*parser(t_tokenizer *line)
  {
 	t_node		*node;
 	t_node 		*root;
