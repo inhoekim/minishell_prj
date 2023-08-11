@@ -4,7 +4,7 @@ NAME = test
 
 ## directory
 HEADERS = 
-SRCS = test1.c
+SRCS = test.c
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 
@@ -24,15 +24,18 @@ LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ libft.a $(OBJS);\ 
+	@make -C ../libft
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ ../libft/libft.a $(OBJS);\ 
 
 $(OBJS): %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	@rm -f $(OBJS)
+	@make clean -C ../libft
+	@rm -f $(OBJS) 
 
 fclean: clean
+	@make fclean -C ../libft
 	@rm -f $(NAME)
 
 re: fclean all

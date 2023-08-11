@@ -12,7 +12,7 @@ t_bool	ft_env(t_node *node)
 	idx = 0;
 	env = get_envp();
 	temp = *env;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
 		printf("%s\n", temp->content);
 		temp = temp->next;
@@ -25,7 +25,7 @@ t_bool	ft_exit(t_node *node)
 	char	**temp;
 	int		idx;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	if (!temp[1])
 	{
 		idx = 0;
