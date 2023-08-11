@@ -25,7 +25,7 @@ t_bool  match_token(t_symbol token, t_tokenizer *tokenizer)
 
 }
 
-t_token get_curr_token(t_tokenizer *tokenizer) {
+t_token	&get_curr_token(t_tokenizer *tokenizer) {
     return (tokenizer->current_token);
 }
 
@@ -37,8 +37,10 @@ t_token get_curr_token(t_tokenizer *tokenizer) {
 // 갱신되면 t_tokenizer는 다른 토큰(문자열)을 가리키게 된다
 
 //get_next_token() -> 원래 예전에 만들어놨던 t_tokenizer를 갱신.
-t_token	get_next_token(t_tokenizer *tokenizer)
+t_token	*get_next_token(t_tokenizer *tokenizer)
 {
+	t_token token;
+
 	reset_start_ptr(tokenizer);
 	if (*tokenizer->end == '(')
 	{
