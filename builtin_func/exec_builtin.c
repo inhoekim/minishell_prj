@@ -34,7 +34,7 @@ t_bool	ft_echo(t_node *node)
 
 t_bool	ft_pwd(t_node *node)
 {
-	char	*path[PATH_MAX];
+	char	path[PATH_MAX];
 
 	getcwd(path, PATH_MAX);
 	printf("%s\n", path);
@@ -50,7 +50,7 @@ t_bool	ft_pwd(t_node *node)
 // cd의 가장 마지막 위치는 '/' 의 위치로 이 이상으로는 아무 변화 없음
 t_bool	ft_cd(t_node *node)
 {
-	char	*path[PATH_MAX];
+	char	path[PATH_MAX];
 	t_list	**env;
 	char	*can_env;
 	char	*oldpwd;
@@ -89,7 +89,7 @@ char	*vaild_env(char **temp)
 	if (size > 2)
 		return (NULL);
 	//HOME 디렉토리 반환
-	else (size == 1)
+	else if (size == 1)
 		return (getenv("HOME"));
 	parameter = special_case(temp);
 	if (!parameter)
@@ -103,11 +103,11 @@ char	*special_case(char **temp)
 	char	*parameter;
 	char	path[PATH_MAX];
 
-	temp_len = ft_strlen(temp[1])
+	temp_len = ft_strlen(temp[1]);
 	parameter = 0;
 	//HOME 디렉토리 반환
 	if (temp_len == 1 && ft_strncmp(temp[1], "~", 1) == 0)
-		parameter =	getenv("HOME")
+		parameter =	getenv("HOME");
 	else if (temp_len == 1 && ft_strncmp(temp[1], ".", 1) == 0)
 	{
 		getcwd(path, PATH_MAX);
@@ -138,13 +138,15 @@ t_list	*getenv_list(char *pos, size_t pos_len, t_list **env)
 {
 	t_list	*temp;
 	t_list	*prev;
+	char	*var;
 
 	temp = *env;
 	while (temp != NULL)
 	{
+		var = temp->content;
 		if (ft_strncmp((char *)temp->content, pos, pos_len) == 0)
 		{
-			if ((char *)temp->content[pos_len] == "=")
+			if (var[pos_len] == '=')
 				return (temp);
 		}
 		prev = temp;
@@ -161,14 +163,15 @@ void	set_envp(char *pos, char *pwd)
 
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
+	env = 0;
 	// 없을 경우 추가
 	if (!temp)
 		ft_lstadd_back(get_envp(), temp);
 	// 있을 경우 삭제, 프리 하고 추가
 	else
 	{
-		env = getenv_list(pwd, ft_strlen(pwd), get_envp());
-		free((*env)->content)
+		*env = getenv_list(pwd, ft_strlen(pwd), get_envp());
+		free((*env)->content);
 		(*env)->content = ft_strdup(pwd);
 	}
 }
