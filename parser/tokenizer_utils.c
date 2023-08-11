@@ -13,15 +13,12 @@
 
 t_tokenizer	*set_tokenizer(char *line)
 {
-	t_tokenizer *tokenizer;
+	t_tokenizer tokenizer;
 
-	tokenizer = (t_tokenizer *)malloc(sizeof(t_tokenizer));
-	if (!tokenizer)
-		return (NULL);
-	tokenizer->type = NULL;
 	tokenizer->start = line;
 	tokenizer->end = line;
-    return (tokenizer);
+	tokenizer->curr_token = get_next_token(&tokenizer);
+    return (&tokenizer);
 }
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
@@ -67,18 +64,8 @@ int main(void)
 	token1.type = E0F;
 
 	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
+	printf("str: %s\n", token1.curr_token->str);
 
 	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
-
-	// token1 = get_next_token(&token1);
-	// printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	// printf("%u\n", token1.type);
-
-	// token2 = get_next_token(token1.current_token + token1.token_size);
-	// printf("token_size %d\n", token2.token_size);
-	// printf("%u\n", token2.type);
+	printf("str: %s\n", token1.curr_token->str);
 }
