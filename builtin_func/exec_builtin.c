@@ -64,13 +64,14 @@ t_bool	ft_cd(t_node *node)
 		printf("cd: Too many arguments\n");
 		return (TRUE);
 	}
+	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(can_env) != 0)
 	{
 		printf("cd : No such file or directory");
 		return (TRUE);
 	}
 	// getcwd로 현재 폴더의 경로를 가져옴
-	set_envp("OLDPWD", 0);
+	set_envp("OLDPWD", newpwd);
 	newpwd = getcwd(path, PATH_MAX);
 	set_envp("PWD", newpwd);
 	// 성공 시, 리턴코드 0 반환
@@ -88,7 +89,6 @@ char	*vaild_env(char **temp)
 		size++;
 	if (size > 2)
 		return (NULL);
-	//HOME 디렉토리 반환
 	else if (size == 1)
 		return (getenv("HOME"));
 	parameter = special_case(temp);
@@ -105,7 +105,6 @@ char	*special_case(char **temp)
 
 	temp_len = ft_strlen(temp[1]);
 	parameter = 0;
-	//HOME 디렉토리 반환
 	if (temp_len == 1 && ft_strncmp(temp[1], "~", 1) == 0)
 		parameter =	getenv("HOME");
 	else if (temp_len == 1 && ft_strncmp(temp[1], ".", 1) == 0)
@@ -144,7 +143,7 @@ t_list	*getenv_list(char *pos, size_t pos_len, t_list **env)
 	while (temp != NULL)
 	{
 		var = temp->content;
-		if (ft_strncmp((char *)temp->content, pos, pos_len) == 0)
+		if (ft_strncmp(var, pos, pos_len) == 0)
 		{
 			if (var[pos_len] == '=')
 				return (temp);
@@ -158,20 +157,53 @@ t_list	*getenv_list(char *pos, size_t pos_len, t_list **env)
 void	set_envp(char *pos, char *pwd)
 {
 	t_list	*temp;
-	t_list	**env;
 	size_t	pos_len;
+	char	*newpwd;
 
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
-	env = 0;
 	// 없을 경우 추가
 	if (!temp)
-		ft_lstadd_back(get_envp(), temp);
+	{
+		newpwd = ft_strnjoin(pos, pwd);
+		ft_lstadd_back(get_envp(), ft_lstnew(newpwd));
+		free(newpwd);
+	}
 	// 있을 경우 삭제, 프리 하고 추가
 	else
 	{
-		*env = getenv_list(pwd, ft_strlen(pwd), get_envp());
-		free((*env)->content);
-		(*env)->content = ft_strdup(pwd);
+		newpwd = ft_strnjoin(pos, pwd);
+		free(temp->content);
+		temp->content = ft_strdup(newpwd);
+		free(newpwd);
 	}
+}
+
+char	*ft_strnjoin(char const *s1, char const *s2)
+{
+	int		total;
+	char	*res;
+	int		i;
+
+	if (!s1 || !s2)
+		return (0);
+	total = ft_strlen(s1) + ft_strlen(s2) + 2;
+	res = (char *)malloc(sizeof(char) * total);
+	if (!res)
+		return (0);
+	res[total - 1] = '\0';
+	i = 0;
+	while (*s1)
+	{
+		res[i] = *s1;
+		s1++;
+		i++;
+	}
+	res[i] = '=';
+	while (*s2)
+	{
+		res[++i] = *s2;
+		s2++;
+	}
+	return (res);
 }

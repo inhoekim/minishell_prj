@@ -16,7 +16,7 @@ LIB_DIRS = /opt/homebrew/opt/readline/lib
 
 ## compile
 CC=	cc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -fsanitize=address
 LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline
 
 .PHONY: clean, fclean, re, all, bonus
