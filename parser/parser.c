@@ -10,23 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "../include/tokenizer.h"
+#include "../include/minishell.h"
 
 t_node	*parser(t_tokenizer *line)
  {
-	t_node		*node;
 	t_node 		*root;
 	t_tokenizer	*tokenizer;
 
 	tokenizer = set_tokenizer(line);
-	get_next_token(tokenizer); //최초 1회, 첫 토큰 가리킴
- 	while (tokenizer->type != E0F)
+	if (get_curr_token(tokenizer)->type == E0F)
+		return (NULL);
+	root = msh_grammar(tokenizer);
+	if (get_curr_token(tokenizer)->type != EOF)
 	{
-		node = msh_grammer(tokenizer);
-		if (!root) //head 노드를 root에 저장
-			root = node;
-		get_next_token(tokenizer);
-		//make_tree
-		//tree로 계속 붙이는 과정
+		syntex_error();
+		free_tree(root);
 	}
 	return (root);
  }
