@@ -297,66 +297,65 @@ char	*parameter_expansion(char *str)
 	return (n_str);
 }
 
-char	*str_replace(char *str, char *oldw, char *neww)
+char	*str_replace(char *str, char *old, char *new)
 {
 	int		i;
-	int		neww_len;
-	int		oldw_len;
-	char	*result;
+	int		new_len;
+	int		old_len;
+	char	*res;
 
-	oldw_len = ft_strlen(oldw);
-	neww_len = ft_strlen(neww);
-	result = malloc(ft_strlen(str) + \
-			word_cnt(str, oldw) * (neww_len - oldw_len) + 1);
+	old_len = ft_strlen(old);
+	new_len = ft_strlen(new);
+	res = malloc(ft_strlen(str) + \
+			word_cnt(str, old) * (new_len - old_len) + 1);
 	i = 0;
 	while (*str)
 	{
-		if (ft_strnstr(str, oldw, ft_strlen(str)) == str)
+		if (ft_strnstr(str, old, ft_strlen(str)) == str)
 		{
-			ft_strlcpy(&result[i], neww, neww_len + 1);
-			i += neww_len;
-			str += oldw_len;
+			ft_strlcpy(&res[i], new, new_len + 1);
+			i += new_len;
+			str += old_len;
 		}
 		else
-			result[i++] = *str++;
+			res[i++] = *str++;
 	}
-	result[i] = '\0';
-	return (result);
+	res[i] = '\0';
+	return (res);
 }
 
 int	word_cnt(char *str, char *word)
 {
-	int	pos;
+	int	i;
 	int	cnt;
-	int	wordlen;
+	int	len;
 
-	pos = 0;
+	i = 0;
 	cnt = 0;
-	wordlen = ft_strlen(word);
-	while (str[pos])
+	len = ft_strlen(word);
+	while (str[i])
 	{
-
-		// ft_strncmp(&str[pos], word, ft_strlen(&str[pos]) && ft_strlen(word) == ft_strlen(&str[pos]))
-
-		if (ft_strnstr(&str[pos], word, ft_strlen(&str[pos])) == &str[pos])
+		if (ft_strnstr(&str[i], word, ft_strlen(&str[i])) == &str[i])
 		{
 			cnt++;
-			pos += wordlen - 1;
+			i += len;
 		}
-		pos++;
+		else
+			i++;
 	}
 	return (cnt);
 }
 
 char	*get_value(char *key)
 {
-	static char	status[4];
+	// static char	status[4];
+	char	*status;
 	char		*value;
 
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
-		ft_strlcpy(status, value, 4);
+		ft_strlcpy(status, value, ft_strlen(value) + 1);
 		free(value);
 		return (status);
 	}
