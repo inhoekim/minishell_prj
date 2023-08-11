@@ -1,46 +1,32 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 
-t_node  *make_leaf(t_tokenizer *tokenizer)
+static char *make_node_word(char *src, int len);
+
+t_node	*make_leaf(t_tokenizer *tokenizer)
 {
-    t_node	node;
+    t_node	*node;
 	t_token	*token;
 
-    node.type = WORD;
-    node.left = NULL;
-    node.right = NULL;
+	node = (t_node *)malloc(sizeof(node));
+    node->type = WORD;
+    node->left = NULL;
+    node->right = NULL;
 	token = tokenizer->curr_token;
-    node.word = make_node_word(token->str, token->len);
-	return (&node);
+    node->word = make_node_word(token->str, token->len);
+	return (node);
 }
 
-t_node  *make_tree(t_symbol node_type, t_node left, t_node right)
+t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right)
 {
-	t_node	node;
+	t_node	*node;
 
-	node.type = node_type;
-	node.left = left;
-	node.right = right;
-	node.word = NULL;
-	return (&node);
-}
-
-t_node  *merge_tree(t_node parent, t_node child)
-{
-	if (!child)
-		return (parent);
-	if (!parent)
-		return (child);
-	if (parent && child)
-	{
-		
-	}
-	return (NULL);
-}
-
-static t_node	*tree()
-{
-	
+	node = (t_node *)malloc(sizeof(node));
+	node->type = node_type;
+	node->left = left;
+	node->right = right;
+	node->word = NULL;
+	return (node);
 }
 
 static char	*make_node_word(char *src, int len)
@@ -48,7 +34,7 @@ static char	*make_node_word(char *src, int len)
     char	**new_str;
 	int		idx;
 
-    new_str = (char **)malloc(sizeof(char *) * 2);
+	new_str = (char **)malloc(sizeof(char *) * 2);
 	new_str[0] = (char *)malloc(sizeof(char) * (len + 1));
 	idx = 0;
 	while (idx < len)
