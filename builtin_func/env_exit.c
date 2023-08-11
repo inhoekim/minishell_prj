@@ -12,7 +12,7 @@ t_bool	ft_env(t_node *node)
 	idx = 0;
 	env = get_envp();
 	temp = *env;
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
 		printf("%s\n", temp->content);
 		temp = temp->next;

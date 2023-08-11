@@ -6,12 +6,12 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 03:56:26 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/11 15:20:48 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/11 16:06:18 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
+
 t_list	*ft_lstlast(t_list *lst);
 
 void	ft_lstadd_back(t_list **lst, t_list *new)

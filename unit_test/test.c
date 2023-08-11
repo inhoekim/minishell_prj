@@ -52,7 +52,6 @@ void	init_envp(char **envp)
 		ft_lstadd_back(env, ft_lstnew(ft_strdup(envp[idx])));
 		idx++;
 	}
-	ft_lstadd_back(env, ft_lstnew(NULL));
 }
 
 t_list	**get_envp(void)
@@ -70,14 +69,12 @@ void	set_envp(char *pos, char *pwd)
 
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
-	// 없을 경우 추가
 	if (!temp)
 	{
 		newpwd = ft_strnjoin(pos, pwd);
-		ft_lstadd_back(get_envp(), ft_lstnew(newpwd));
+		ft_lstadd_back(get_envp(), ft_lstnew(ft_strdup(newpwd)));
 		free(newpwd);
 	}
-	// 있을 경우 삭제, 프리 하고 추가
 	else
 	{
 		newpwd = ft_strnjoin(pos, pwd);
@@ -117,7 +114,7 @@ void	ft_env(void)
 	idx = 0;
 	env = get_envp();
 	temp = *env;
-	while (temp->next != 0)
+	while (temp != 0)
 	{
 		printf("%s\n", temp->content);
 		temp = temp->next;
@@ -128,12 +125,13 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
+	
 	char *test = "test99";
 	char	*newpwd;
 	char	path[PATH_MAX];
 
 	init_envp(envp);
-	// ft_env();
+	ft_env();
 	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(test) != 0)
 	{

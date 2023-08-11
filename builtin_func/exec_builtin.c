@@ -53,7 +53,6 @@ t_bool	ft_cd(t_node *node)
 	char	path[PATH_MAX];
 	t_list	**env;
 	char	*can_env;
-	char	*oldpwd;
 	char	*newpwd;
 	char	**temp;
 
@@ -70,11 +69,9 @@ t_bool	ft_cd(t_node *node)
 		printf("cd : No such file or directory");
 		return (TRUE);
 	}
-	// getcwd로 현재 폴더의 경로를 가져옴
 	set_envp("OLDPWD", newpwd);
 	newpwd = getcwd(path, PATH_MAX);
 	set_envp("PWD", newpwd);
-	// 성공 시, 리턴코드 0 반환
 	return (FALSE);
 }
 
@@ -162,14 +159,12 @@ void	set_envp(char *pos, char *pwd)
 
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
-	// 없을 경우 추가
 	if (!temp)
 	{
 		newpwd = ft_strnjoin(pos, pwd);
-		ft_lstadd_back(get_envp(), ft_lstnew(newpwd));
+		ft_lstadd_back(get_envp(), ft_lstnew(ft_strdup(newpwd)));
 		free(newpwd);
 	}
-	// 있을 경우 삭제, 프리 하고 추가
 	else
 	{
 		newpwd = ft_strnjoin(pos, pwd);
