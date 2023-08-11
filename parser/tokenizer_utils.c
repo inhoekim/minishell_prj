@@ -1,6 +1,30 @@
-#include "tokenizer.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/11 11:25:45 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "../include/tokenizer.h"
 
-void	reset_tokenizer(t_tokenizer *tokenizer)
+t_tokenizer	*set_tokenizer(char *line)
+{
+	t_tokenizer *tokenizer;
+
+	tokenizer = (t_tokenizer *)malloc(sizeof(t_tokenizer));
+	if (!tokenizer)
+		return (NULL);
+	tokenizer->type = NULL;
+	tokenizer->start = line;
+	tokenizer->end = line;
+    return (tokenizer);
+}
+
+void	reset_start_ptr(t_tokenizer *tokenizer)
 {
 	if (tokenizer->type == SUBSHELL)
 		tokenizer->end++;
@@ -30,20 +54,11 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 	return (FALSE);
 }
 
-t_bool	string_close(t_tokenizer *tokenizer, char c)
-{
-	tokenizer->end++;
-	while (*tokenizer->end != '\0' && *tokenizer->end != c)
-		tokenizer->end++;
-	if (*tokenizer->end == '\0' || *tokenizer->end != c)
-		return (FALSE);
-	return (TRUE);
-}
 
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hihihihi''hello";
+	char *line = "'hihihihi'>>";
 	t_tokenizer token1;
 	//t_tokenizer token2;
 

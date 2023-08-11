@@ -1,4 +1,15 @@
-#include "include/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_util.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 11:44:24 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/11 11:44:24 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "../include/minishell.h"
 
 // t_symbol의 개수는 10개지만, table의 일차원 배열의 길이는 9개임. (word제외)
 t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token)
