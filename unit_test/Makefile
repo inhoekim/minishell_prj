@@ -4,7 +4,7 @@ NAME = test
 
 ## directory
 HEADERS = 
-SRCS = test.c
+SRCS = test5.c
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 

@@ -221,10 +221,6 @@ int	*get_exit_status(void)
 	return (&exit_status);
 }
 
-// parameter_expansion;
-// unquote;
-// pathname_expansion;
-
 char	**make_argv(char **word_arr)
 {
 	int		i;
@@ -237,10 +233,9 @@ char	**make_argv(char **word_arr)
 	argv_list = NULL;
 	while (word_arr[i])
 	{
-		//echo "123""456";
+		//ex. echo "123""456";
 		list = split_quotes(word_arr[i]);
 		glob_flag = check_glob(list);
-		// parameter가 quotation(')안에 있으면 효력상실.
 		// heredoc delimeter에 (',"")가 있었다면 그 내용은 효력상실.
 		// heredoc delimeter에 (',"")가 없었다면 그 내용은 expansion.
 		// heredoc delimeter는 효력상실.
@@ -248,11 +243,104 @@ char	**make_argv(char **word_arr)
 		// arg_expansion내부에서 cmd가 heredoc인지 판단해야함.
 		arg_expansion(list);
 		unquote(list);
-		ft_lstadd_back(&argv_list, pathname_expansion(list, glob_flag));
+		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
 		ft_lstclear(&list, free);
 		i++;
 	}
 	return (list_to_arr(argv_list));
+}
+
+// globbing character(*, ?)를 expansion해야 함.
+t_list	*filename_expansion(t_list *chunks, t_bool glob_flag)
+{
+	t_list	*list;
+	char	*pattern;
+
+	pattern = concatenate(chunks);
+	if(!pattern)
+		// exit_status = ENOMEM로 set하고 에러리턴.
+	if (glob_flag)
+	{
+		list = list_matches(pattern);
+		if (list)
+		{
+			free(pattern);
+			return (list);
+		}
+	}
+	return (ft_lstnew(pattern));
+}
+
+char	*concatenate(t_list *list)
+{
+	int		str_size;
+	char	*content;
+	char	*pattern;
+	t_list	*head;
+
+	head = list;
+	str_size = 0;
+	while (list)
+	{
+		str_size += ft_strlen(list->content);
+		list = list->next;
+	}
+	pattern = malloc(sizeof(char) * str_size + 1);
+	pattern[str_size] = '\0';
+	list = head;
+	while (list)
+	{
+		content = list->content;
+		ft_strlcat(pattern, content, str_size + 1);
+		list = list->next;
+	}
+	return (pattern);
+}
+
+#include <dirent.h>
+
+t_list	*list_matches(char *pattern)
+{
+	t_list			*matches;
+	DIR				*dp;
+	char			dirbuf[PATH_MAX];
+	struct dirent	*dir;
+
+	matches = NULL;
+	getcwd(dirbuf, PATH_MAX);
+	dp = opendir(dirbuf);
+	dir = readdir(dp);
+	while (dir != NULL)
+	{
+		dir = readdir(dp);
+		if (dir && dir->d_type == DT_REG && is_match(dir->d_name, pattern))
+			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
+	}
+	closedir(dp);
+	return (matches);
+}
+
+void	unquote(t_list *list)
+{
+	char	*content;
+
+	while (list)
+	{
+		content = list->content;
+		if (content[0] == '"')
+		{
+			content = ft_strtrim(content, "\"");
+			free(list->content);
+			list->content = content;
+		}
+		else if (content[0] == '\'')
+		{
+			content = ft_strtrim(content, "'");
+			free(list->content);
+			list->content = content;
+		}
+		list = list->next;
+	}
 }
 
 void	arg_expansion(t_list *list)
@@ -262,6 +350,7 @@ void	arg_expansion(t_list *list)
 	while (list)
 	{
 		content = list->content;
+		// parameter가 quotation(')안에 있으면 효력상실.
 		if (content[0] != '\'')
 		{
 			content = parameter_expansion(list->content);
@@ -359,9 +448,9 @@ char	*get_value(char *key)
 		free(value);
 		return (status);
 	}
-	value = ft_getenv(&key[1]);
+	value = getenv(&key[1]);
 	if (!value)
-		value = "";
+		value = ft_strdup("");
 	return (value);
 }
 
