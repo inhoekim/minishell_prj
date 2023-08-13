@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   merge_tree.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
+/*   Updated: 2023/08/14 07:49:40 by inhkim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 
@@ -15,7 +27,7 @@ t_node	*merge_tree(t_node *parent, t_node *child)
 static t_node	*insert_left(t_node *parent, t_node *child)
 {
 	t_node	*dock_node;
-	
+
 	dock_node = parent;
 	while (dock_node->left)
 		dock_node = dock_node->left;
