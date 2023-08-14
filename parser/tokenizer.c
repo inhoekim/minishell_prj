@@ -11,11 +11,15 @@
 /* ************************************************************************** */
 #include "../include/tokenizer.h"
 
-t_bool	match_token(t_symbol type, t_tokenizer *tokenizer)
+t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
 { 
    //현재 토큰이 매개변수와 같으면 match 성공
    if(type == get_curr_token(tokenizer)->type)
+   {
+		if (token_move == TRUE)
+			get_next_token(tokenizer);
 		return (TRUE);
+   }
    //현재 토큰이 매개변수와 다를때
    return (FALSE);
 
