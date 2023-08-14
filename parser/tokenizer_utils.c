@@ -1,8 +1,30 @@
-#include "tokenizer.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/11 11:25:45 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "../include/tokenizer.h"
 
-void	reset_tokenizer(t_tokenizer *tokenizer)
+void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {
-	if (tokenizer->type == SUBSHELL)
+	tokenizer->start = line;
+	tokenizer->end = line;
+	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
+	// tokenizer->curr_token->len = 0;
+	// tokenizer->curr_token->str = "";
+	// tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token = get_next_token(tokenizer);
+}
+
+void	reset_start_ptr(t_tokenizer *tokenizer)
+{
+	if (tokenizer->curr_token->type == SUBSHELL)
 		tokenizer->end++;
 	if (tokenizer->start != tokenizer->end)
 		tokenizer->end++;
@@ -30,40 +52,25 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 	return (FALSE);
 }
 
-t_bool	string_close(t_tokenizer *tokenizer, char c)
-{
-	tokenizer->end++;
-	while (*tokenizer->end != '\0' && *tokenizer->end != c)
-		tokenizer->end++;
-	if (*tokenizer->end == '\0' || *tokenizer->end != c)
-		return (FALSE);
-	return (TRUE);
-}
 
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hihihihi''hello";
-	t_tokenizer token1;
+	char *line = "'hell''o'  >>";
+	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 
-	token1.start = line;
-	token1.end = line;
-	token1.type = E0F;
+	set_tokenizer(&tokenizer, line);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 
-	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
-
-	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
-
-	// token1 = get_next_token(&token1);
-	// printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	// printf("%u\n", token1.type);
-
-	// token2 = get_next_token(token1.current_token + token1.token_size);
-	// printf("token_size %d\n", token2.token_size);
-	// printf("%u\n", token2.type);
+	tokenizer.curr_token = get_next_token(&tokenizer);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 }
