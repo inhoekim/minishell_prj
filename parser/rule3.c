@@ -68,11 +68,11 @@ t_node	*io_redirect(t_tokenizer *tokenizer)
 //io_file ::= DGREAT WORD
 t_node	*io_file(t_tokenizer *tokenizer)
 {
-	if (match_token(LESS, tokenizer, TRUE) && get_curr_token(tokenizer) == WORD)
+	if (match_token(LESS, tokenizer, TRUE) && get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(LESS, NULL, make_leaf(tokenizer)));
-	if (match_token(GREAT, tokenizer, TRUE) && get_curr_token(tokenizer) == WORD)
+	if (match_token(GREAT, tokenizer, TRUE) && get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(GREAT, NULL, make_leaf(tokenizer)));
-	if (match_token(DGREAT, tokenizer, TRUE) && get_curr_token(tokenizer) == WORD)
+	if (match_token(DGREAT, tokenizer, TRUE) && get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(DGREAT, NULL, make_leaf(tokenizer)));
 	syntax_error("Not available grammar");
 	return (NULL);
@@ -81,7 +81,7 @@ t_node	*io_file(t_tokenizer *tokenizer)
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
-	if (match_token(DLESS, tokenizer, TRUE) && get_curr_token(tokenizer) == WORD)
+	if (match_token(DLESS, tokenizer, TRUE) && get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(DLESS, NULL, make_leaf(tokenizer)));
 	syntax_error("Not available grammar");
 	return (NULL);
