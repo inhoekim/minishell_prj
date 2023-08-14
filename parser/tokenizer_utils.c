@@ -16,9 +16,9 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->start = line;
 	tokenizer->end = line;
 	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
-	// tokenizer->curr_token->len = 0;
-	// tokenizer->curr_token->str = "";
-	// tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->len = 0;
+	tokenizer->curr_token->str = "";
+	tokenizer->curr_token->type = E0F;
 	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
@@ -52,7 +52,7 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 	return (FALSE);
 }
 
-
+/*
 #include <stdio.h>
 int main(void)
 {
@@ -74,3 +74,4 @@ int main(void)
 	printf("start ptr: %s\n", tokenizer.start);
 	printf("ended ptr: %s\n\n", tokenizer.end);
 }
+*/
