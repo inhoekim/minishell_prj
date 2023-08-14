@@ -29,8 +29,15 @@ t_bool	ft_exit(t_node *node)
 	if (!temp[1])
 	{
 		idx = 0;
+		if (!temp[2])
+		{
+			printf("exit: Too many arguments\n");
+			exit(1);
+		}
 		while (temp[1][idx])
 		{
+			if (temp[1][idx] == "-" || temp[1][idx] == "+")
+				idx++;
 			if (ft_isdigit(temp[1][idx]) == 0)
 			{
 				printf("exit: %s: numeric argument required", temp[1]);

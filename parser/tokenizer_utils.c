@@ -11,22 +11,20 @@
 /* ************************************************************************** */
 #include "../include/tokenizer.h"
 
-t_tokenizer	*set_tokenizer(char *line)
+void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {
-	t_tokenizer *tokenizer;
-
-	tokenizer = (t_tokenizer *)malloc(sizeof(t_tokenizer));
-	if (!tokenizer)
-		return (NULL);
-	tokenizer->type = NULL;
 	tokenizer->start = line;
 	tokenizer->end = line;
-    return (tokenizer);
+	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
+	// tokenizer->curr_token->len = 0;
+	// tokenizer->curr_token->str = "";
+	// tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
 {
-	if (tokenizer->type == SUBSHELL)
+	if (tokenizer->curr_token->type == SUBSHELL)
 		tokenizer->end++;
 	if (tokenizer->start != tokenizer->end)
 		tokenizer->end++;
@@ -58,27 +56,21 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hihihihi'>>";
-	t_tokenizer token1;
+	char *line = "'hell''o'  >>";
+	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 
-	token1.start = line;
-	token1.end = line;
-	token1.type = E0F;
+	set_tokenizer(&tokenizer, line);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 
-	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
-
-	token1 = get_next_token(&token1);
-	printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	printf("%u\n", token1.type);
-
-	// token1 = get_next_token(&token1);
-	// printf("start ptr: %s\nended ptr: %s\n", token1.start, token1.end);
-	// printf("%u\n", token1.type);
-
-	// token2 = get_next_token(token1.current_token + token1.token_size);
-	// printf("token_size %d\n", token2.token_size);
-	// printf("%u\n", token2.type);
+	tokenizer.curr_token = get_next_token(&tokenizer);
+	printf("str: %s\n", tokenizer.curr_token->str);
+	printf("len: %d\n", tokenizer.curr_token->len);
+	printf("symbol: %d\n", tokenizer.curr_token->type);
+	printf("start ptr: %s\n", tokenizer.start);
+	printf("ended ptr: %s\n\n", tokenizer.end);
 }

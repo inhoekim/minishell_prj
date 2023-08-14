@@ -32,7 +32,6 @@ t_bool	ft_export(t_node *node)
 		env = get_envp();
 		while (temp[++idx])
 			ft_lstadd_back(env, ft_lstnew(ft_strdup(temp[idx])));
-		ft_lstadd_back(env, ft_lstnew(NULL));
 	}
 	return (FALSE);
 }
@@ -65,28 +64,4 @@ t_bool	ft_unset(t_node *node)
 		}
 	}
 	return (FALSE);
-}
-
-// 노드 삭제 함수
-void	delete_node(t_list **head, t_list *node_to_delete)
-{
-	t_list	*current;
-	t_list	*prev;
-
-	current = *head;
-	prev = NULL;
-	while (current != NULL)
-	{
-		if (current == node_to_delete)
-		{
-			if (prev == NULL)
-				*head = current->next;
-			else
-				prev->next = current->next;
-			free(current);
-			break ;
-		}
-		prev = current;
-		current = current->next;
-	}
 }

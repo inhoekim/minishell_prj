@@ -36,5 +36,7 @@ int	ft_atoi(const char *nptr)
 		}
 		res = res * 10 + nptr[i++] - '0';
 	}
+	if (nptr[i] != NULL)
+		return (0);
 	return ((int)sign * res);
 }
