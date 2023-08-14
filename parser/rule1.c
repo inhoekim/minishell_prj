@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
+#include "../include/rule.h"
 
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)
@@ -47,14 +48,14 @@ t_node	*conditional(t_tokenizer *tokenizer)
 	t_token	*tk;
 
 	tk = tokenizer->curr_token;
-	if (match_token(AND_IF, tokenizer))
+	if (match_token(AND_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
 	}
-	else if (match_token(OR_IF, tokenizer))
+	else if (match_token(OR_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
@@ -93,7 +94,7 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 {
 	t_node	*child;
 
-	if (match_token(PIPE, tokenizer))
+	if (match_token(PIPE, tokenizer, TRUE))
 	{
 		child = pipeline(tokenizer);
 		return (make_tree(PIPE, NULL, child));

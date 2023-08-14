@@ -13,19 +13,20 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 
-static char	**make_node_word(char *src, int len);
+static char	**make_first_word(char *src, int len);
 
 t_node	*make_leaf(t_tokenizer *tokenizer)
 {
 	t_node	*node;
 	t_token	*token;
 
-	node = (t_node *)malloc(sizeof(node));
+	node = (t_node *)malloc(sizeof(t_node));
 	node->type = WORD;
 	node->left = NULL;
 	node->right = NULL;
 	token = tokenizer->curr_token;
 	node->word = make_first_word(token->str, token->len);
+	get_next_token(tokenizer);
 	return (node);
 }
 
@@ -33,7 +34,7 @@ t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right)
 {
 	t_node	*node;
 
-	node = (t_node *)malloc(sizeof(node));
+	node = (t_node *)malloc(sizeof(t_node));
 	node->type = node_type;
 	node->left = left;
 	node->right = right;

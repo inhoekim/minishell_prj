@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
+#include "../include/rule.h"
 
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star
@@ -27,7 +28,7 @@ t_node	*command(t_tokenizer *tokenizer)
 		parent = simple_cmd(tokenizer);
 		return (parent);
 	}
-	else if (match_token(SUBSHELL_LEFT, tokenizer))
+	else if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
 	{
 		child = ssh(tokenizer);
 		if (child)
@@ -47,10 +48,10 @@ t_node	*ssh(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 
-	if (match_token(SUBSHELL_LEFT, tokenizer))
+	if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
 	{
 		parent = msh_grammar(tokenizer);
-		if (match_token(SUBSHELL_RIGHT, tokenizer))
+		if (match_token(SUBSHELL_RIGHT, tokenizer, TRUE))
 			return (make_tree(SUBSHELL, parent, NULL));
 	}
 	syntax_error("Not available grammar");
@@ -66,7 +67,7 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 	t_token	*tk;
 
 	tk = tokenizer->curr_token;
-	if (match_token(WORD, tokenizer))
+	if (match_token(WORD, tokenizer, FALSE))
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
@@ -77,12 +78,8 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 	else if (check_first_set(IO_REDIRECT, tk->type))
 	{
 		parent = io_redirect_dagger(tokenizer);
-		if (parent)
-		{
-			child = io_redirect_dg_after_simple_cmd(tokenizer);
-			if (child)
-				return (make_tree(parent, child));
-		}
+		child = io_redirect_dg_after_simple_cmd(tokenizer);
+		return (make_tree(tk->type, parent, child));
 	}
 	syntax_error("Not available grammar");
 	return (NULL);
@@ -104,7 +101,7 @@ t_node	*io_redirect_or_word_star(t_tokenizer *tokenizer)
 		child = io_redirect_or_word_star(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	else if (check_first_set(WORD, tk->type))
+	else if (match_token(WORD, tokenizer, FALSE))
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
