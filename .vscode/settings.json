@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+		"minishell.h": "c",
+		"fcntl.h": "c",
+		"_types.h": "c",
+		"errno.h": "c",
+		"stat.h": "c",
+		"system_error": "c",
+		"bit": "c"
+	}
+}
