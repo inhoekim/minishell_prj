@@ -22,7 +22,6 @@ t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
    }
    //현재 토큰이 매개변수와 다를때
    return (FALSE);
-
 }
 
 t_token	*get_curr_token(t_tokenizer *tokenizer) {
