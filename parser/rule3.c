@@ -36,10 +36,10 @@ t_node	*io_redirect_star(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(IO_REDIRECT, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(IO_REDIRECT, tk.type))
 	{
 		parent = io_redirect(tokenizer);
 		child = io_redirect_star(tokenizer);
@@ -52,12 +52,12 @@ t_node	*io_redirect_star(t_tokenizer *tokenizer)
 //io_redirect ::= io_here
 t_node	*io_redirect(t_tokenizer *tokenizer)
 {
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(IO_FILE, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(IO_FILE, tk.type))
 		return (io_file(tokenizer));
-	else if (check_first_set(IO_HERE, tk->type))
+	else if (check_first_set(IO_HERE, tk.type))
 		return (io_here(tokenizer));
 	syntax_error("Not available grammar");
 	return (NULL);

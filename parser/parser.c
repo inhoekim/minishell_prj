@@ -43,5 +43,9 @@ void	free_tree(t_node *root)
 
 int	main(void)
 {
-	parser("echo 1234 > a.txt");
+	t_node *test;
+	test = parser("< a.txt > b.txt > c.txt");
+	int a = 3;
+	a++;
+	return (0);
 }

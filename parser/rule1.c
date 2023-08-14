@@ -19,10 +19,10 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(PIPELINE, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(PIPELINE, tk.type))
 	{
 		child = pipeline(tokenizer);
 		if (child)
@@ -45,9 +45,7 @@ t_node	*conditional(t_tokenizer *tokenizer)
 	t_node	*pipe;
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
 
-	tk = tokenizer->curr_token;
 	if (match_token(AND_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
@@ -70,10 +68,10 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(COMMAND, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(COMMAND, tk.type))
 	{
 		child = command(tokenizer);
 		if (child)
