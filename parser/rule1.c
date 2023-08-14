@@ -55,10 +55,10 @@ t_node	*conditional(t_tokenizer *tokenizer)
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
     }
-    else if (match_token(OR_IF))
-    {
-		pipe = pipeline();
-		parent = conditional();
+	else if (match_token(OR_IF, tokenizer, TRUE))
+	{
+		pipe = pipeline(tokenizer);
+		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
 	}
