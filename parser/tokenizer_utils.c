@@ -26,8 +26,6 @@ void	reset_start_ptr(t_tokenizer *tokenizer)
 {
 	if (tokenizer->curr_token->type == SUBSHELL)
 		tokenizer->end++;
-	if (tokenizer->start != tokenizer->end)
-		tokenizer->end++;
 	skip_whitespace(tokenizer);
 	tokenizer->start = tokenizer->end;
 }
@@ -37,7 +35,8 @@ void	skip_whitespace(t_tokenizer *tokenizer)
 	while ((*tokenizer->end) && ((*tokenizer->end) == 32 || \
 		((*tokenizer->end) >= 9 && (*tokenizer->end) <= 13)))
 		tokenizer->end++;
-	tokenizer->start = tokenizer->end;
+	if (*(tokenizer->end) == '\0')
+        tokenizer->curr_token->type = E0F;
 }
 
 t_bool	match(t_tokenizer *tokenizer, char matchword)

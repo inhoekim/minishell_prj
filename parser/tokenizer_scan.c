@@ -64,7 +64,6 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				printf("syntax error\n");
 				//syntax_error("~~~");
 				//종료코드
 			}
@@ -73,8 +72,6 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		}
 		tokenizer->end++;
 	}
-	if (tokenizer->start != tokenizer->end)
-		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
 
