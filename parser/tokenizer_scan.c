@@ -58,6 +58,8 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		return (make_token(tokenizer, E0F));
 	while (!fft_strchr(SYMBOLCHAR, *tokenizer->end))
 	{
+		if (*tokenizer->end == '\0')
+			return (make_token(tokenizer, E0F));
 		if (*tokenizer->end == '\'' || *tokenizer->end == '"')
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
@@ -67,13 +69,12 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 				//종료코드
 			}
 			else
-			{
 				break;
-				tokenizer->curr_token->len++;
-			}
 		}
 		tokenizer->end++;
 	}
+	if (tokenizer->start != tokenizer->end)
+		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
 
