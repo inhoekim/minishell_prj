@@ -14,7 +14,7 @@
 
 t_node	*parser(char *line)
  {
-	t_node		*root;
+	t_node 		*root;
 	t_tokenizer	tokenizer;
 
 	set_tokenizer(&tokenizer, line);
@@ -26,6 +26,7 @@ t_node	*parser(char *line)
 		syntex_error();
 		free_tree(root);
 	}
+	free(tokenizer.curr_token);
 	return (root);
  }
 
