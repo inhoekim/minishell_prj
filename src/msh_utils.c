@@ -87,7 +87,7 @@ t_bool	*wildcard(char *name, char *pattern)
 	while (idx < len_n && idx < len_p && (pattern[idx] == "?" || pattern[idx] == name[idx]))
 		idx++;
 	if (len_p == idx)
-		return (TRUE);
+		return (len_n == idx);
 	if (pattern[idx] == "*")
 	{
 		flag = 0;
