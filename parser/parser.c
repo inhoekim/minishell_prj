@@ -12,15 +12,15 @@
 #include "../include/tokenizer.h"
 #include "../include/minishell.h"
 
-t_node	*parser(t_tokenizer *line)
+t_node	*parser(char *line)
  {
-	t_node 		*root;
+	t_node		*root;
 	t_tokenizer	tokenizer;
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 		return (NULL);
-	root = msh_grammar(tokenizer);
+	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != EOF)
 	{
 		syntex_error();

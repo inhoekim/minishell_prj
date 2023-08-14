@@ -39,6 +39,8 @@ t_token	*get_curr_token(t_tokenizer *tokenizer) {
 //get_next_token() -> 원래 예전에 만들어놨던 t_tokenizer를 갱신.
 t_token	*get_next_token(t_tokenizer *tokenizer)
 {
+	t_token token;
+
 	reset_start_ptr(tokenizer);
 	if (*tokenizer->end == '(')
 	{
