@@ -4,7 +4,7 @@ NAME = test
 
 ## directory
 HEADERS = 
-SRCS = 6_wildcard.c
+SRCS = 7_dir_wildcard_brute_recur.c
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 
@@ -16,7 +16,7 @@ LIB_DIRS = /opt/homebrew/opt/readline/lib ../libft
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -fsanitize=address
 LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft
 
 .PHONY: clean, fclean, re, all, bonus
