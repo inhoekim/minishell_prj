@@ -39,24 +39,11 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 	return (scan_word_token(tokenizer));
 }
 
-static char	*fft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (0);
-}
-
 t_token	*scan_word_token(t_tokenizer *tokenizer)
 {
 	if (*tokenizer->end == '\0')
 		return (make_token(tokenizer, E0F));
-	while (!fft_strchr(SYMBOLCHAR, *tokenizer->end))
+	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
 	{
 		if (*tokenizer->end == '\0')
 			return (make_token(tokenizer, E0F));
@@ -72,15 +59,19 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		}
 		tokenizer->end++;
 	}
+	if (ft_strchr(SYMBOLCHAR, *tokenizer->end))
+		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
 
 t_bool	string_close(t_tokenizer *tokenizer, char c)
 {
-	tokenizer->end++;
-	while (*tokenizer->end != '\0' && *tokenizer->end != c)
-		tokenizer->end++;
-	if (*tokenizer->end == '\0' || *tokenizer->end != c)
+	char	*end_ptr;
+
+	end_ptr = tokenizer->end;
+	while (*end_ptr != '\0' && *end_ptr != c)
+		end_ptr++;
+	if (*end_ptr == '\0' || *end_ptr != c)
 		return (FALSE);
 	return (TRUE);
 }

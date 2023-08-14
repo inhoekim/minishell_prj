@@ -24,7 +24,10 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
 {
-	if (tokenizer->curr_token->type == SUBSHELL)
+	//if (tokenizer->curr_token->type == SUBSHELL_LEFT ||
+	//	tokenizer->curr_token->type == SUBSHELL_RIGHT)
+	//	tokenizer->end++;
+	if (tokenizer->curr_token->type != E0F)
 		tokenizer->end++;
 	skip_whitespace(tokenizer);
 	tokenizer->start = tokenizer->end;
@@ -42,7 +45,8 @@ void	skip_whitespace(t_tokenizer *tokenizer)
 t_bool	match(t_tokenizer *tokenizer, char matchword)
 {
 	tokenizer->end++;
-	if (tokenizer->end && *(tokenizer->end) == matchword)
+	if (tokenizer->end && *tokenizer->end == matchword)
 		return (TRUE);
+	tokenizer->end--;
 	return (FALSE);
 }
