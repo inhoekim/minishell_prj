@@ -15,16 +15,16 @@
 
 t_node	*parser(char *line)
  {
-	t_node 		*root;
+	t_node		*root;
 	t_tokenizer	tokenizer;
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 		return (NULL);
-	root = msh_grammar(&tokenizer);
-	if (get_curr_token(&tokenizer)->type != E0F)
+	root = msh_grammar(tokenizer);
+	if (get_curr_token(&tokenizer)->type != EOF)
 	{
-		syntax_error("error");
+		syntex_error();
 		//free_tree(root);
 	}
 	free(tokenizer.curr_token);

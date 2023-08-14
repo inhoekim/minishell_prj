@@ -21,7 +21,11 @@ t_node	*io_redirect_dg_after_simple_cmd(t_tokenizer *tokenizer)
 	t_node	*parent;
 	t_node	*child;
 
+<<<<<<< HEAD
 	if (match_token(WORD, tokenizer, FALSE))
+=======
+	if (match_token(WORD, tokenizer))
+>>>>>>> 240_develop
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_star(tokenizer);

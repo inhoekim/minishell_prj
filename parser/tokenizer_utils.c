@@ -16,9 +16,9 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->start = line;
 	tokenizer->end = line;
 	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
-	// tokenizer->curr_token->len = 0;
-	// tokenizer->curr_token->str = "";
-	// tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->len = 0;
+	tokenizer->curr_token->str = "";
+	tokenizer->curr_token->type = E0F;
 	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
@@ -34,6 +34,7 @@ void	reset_start_ptr(t_tokenizer *tokenizer)
 		//종료
 	}
 	tokenizer->start = tokenizer->end;
+	tokenizer->curr_token->len = 0;
 }
 
 void	skip_whitespace(t_tokenizer *tokenizer)
@@ -56,7 +57,7 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hell''o'  >>";
+	char *line = "echo '1234 > a.out'";
 	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 

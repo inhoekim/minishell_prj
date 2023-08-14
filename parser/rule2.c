@@ -28,7 +28,11 @@ t_node	*command(t_tokenizer *tokenizer)
 		parent = simple_cmd(tokenizer);
 		return (parent);
 	}
+<<<<<<< HEAD
 	else if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
+=======
+	else if (match_token(SUBSHELL_LEFT, tokenizer))
+>>>>>>> 240_develop
 	{
 		child = ssh(tokenizer);
 		if (child)
@@ -48,10 +52,17 @@ t_node	*ssh(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 
+<<<<<<< HEAD
 	if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
 	{
 		parent = msh_grammar(tokenizer);
 		if (match_token(SUBSHELL_RIGHT, tokenizer, TRUE))
+=======
+	if (match_token(SUBSHELL_LEFT, tokenizer))
+	{
+		parent = msh_grammar(tokenizer);
+		if (match_token(SUBSHELL_RIGHT, tokenizer))
+>>>>>>> 240_develop
 			return (make_tree(SUBSHELL, parent, NULL));
 	}
 	syntax_error("Not available grammar");
@@ -67,7 +78,11 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 	t_token	*tk;
 
 	tk = tokenizer->curr_token;
+<<<<<<< HEAD
 	if (match_token(WORD, tokenizer, FALSE))
+=======
+	if (match_token(WORD, tokenizer))
+>>>>>>> 240_develop
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
@@ -101,7 +116,11 @@ t_node	*io_redirect_or_word_star(t_tokenizer *tokenizer)
 		child = io_redirect_or_word_star(tokenizer);
 		return (merge_tree(parent, child));
 	}
+<<<<<<< HEAD
 	else if (match_token(WORD, tokenizer, FALSE))
+=======
+	else if (check_first_set(WORD, tk->type))
+>>>>>>> 240_develop
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);

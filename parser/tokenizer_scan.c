@@ -67,7 +67,10 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 				//종료코드
 			}
 			else
+			{
 				break;
+				tokenizer->curr_token->len++;
+			}
 		}
 		tokenizer->end++;
 	}
