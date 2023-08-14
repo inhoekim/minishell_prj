@@ -23,7 +23,7 @@ t_node	*parser(char *line)
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != EOF)
 	{
-		syntex_error();
+		syntax_error();
 		free_tree(root);
 	}
 	free(tokenizer.curr_token);

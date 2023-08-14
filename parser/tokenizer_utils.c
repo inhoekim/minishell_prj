@@ -34,6 +34,7 @@ void	reset_start_ptr(t_tokenizer *tokenizer)
 		//종료
 	}
 	tokenizer->start = tokenizer->end;
+	tokenizer->curr_token->len = 0;
 }
 
 void	skip_whitespace(t_tokenizer *tokenizer)
@@ -52,11 +53,11 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 	return (FALSE);
 }
 
-/*
+
 #include <stdio.h>
 int main(void)
 {
-	char *line = "'hell''o'  >>";
+	char *line = "echo '1234 > a.out'";
 	t_tokenizer tokenizer;
 	//t_tokenizer token2;
 
@@ -74,4 +75,3 @@ int main(void)
 	printf("start ptr: %s\n", tokenizer.start);
 	printf("ended ptr: %s\n\n", tokenizer.end);
 }
-*/

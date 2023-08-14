@@ -15,11 +15,7 @@ t_bool	match_token(t_symbol type, t_tokenizer *tokenizer)
 { 
    //현재 토큰이 매개변수와 같으면 match 성공
    if(type == get_curr_token(tokenizer)->type)
-   {
-		//다음토큰을 찾아놓음
-		get_next_token(tokenizer);
 		return (TRUE);
-   }
    //현재 토큰이 매개변수와 다를때
    return (FALSE);
 
@@ -122,7 +118,9 @@ static char	*fft_substr(char const *s, unsigned int start, size_t len)
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
 	tokenizer->curr_token->type = type;
-	tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
+	tokenizer->curr_token->len = tokenizer->end - tokenizer->start;
+	if (*tokenizer->start == '\'' || *tokenizer->start == '"')
+		tokenizer->curr_token->len++;
 	tokenizer->curr_token->str = fft_substr(tokenizer->start, 0, tokenizer->curr_token->len);
 	return (tokenizer->curr_token);
 }
