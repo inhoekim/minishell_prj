@@ -17,17 +17,19 @@ void	syntax_error(t_tokenizer *tokenizer)
 	set_exit_status(STDERR_FD);
 }
 
-int stauts = set_exit_status(p_ctx->exit_status);
-if (stauts == 127)
+void	exec_error(t_context *p_ctx)
 {
-
-}
-else if (status == 126)
-{
+	int status;
 	
+	status = set_exit_status(p_ctx->exit_status);
+	if (status == 127)
+		ft_putstr_fd("minishell : Command not found ", STDERR_FD);
+	else if (status == 126)
+		ft_putstr_fd("minishell : Permision Denied ", STDERR_FD);
+	else
+	{
+		status += 128;
+		set_exit_status(status);
+		p_ctx->exit_status = status;
+	}
 }
-else
-{
-	status += 128;
-}
-//

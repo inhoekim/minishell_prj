@@ -32,7 +32,6 @@ t_bool	ft_export(t_node *node)
 		env = get_envp();
 		while (temp[++idx])
 			ft_lstadd_back(env, ft_lstnew(ft_strdup(temp[idx])));
-		ft_lstadd_back(env, ft_lstnew(NULL));
 	}
 	return (FALSE);
 }
