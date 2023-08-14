@@ -17,6 +17,9 @@
 		"string_view": "c",
 		"unordered_map": "c",
 		"vector": "c",
-		"readline.h": "c"
+		"readline.h": "c",
+		"__bit_reference": "c",
+		"chrono": "c",
+		"locale": "c"
 	}
 }
