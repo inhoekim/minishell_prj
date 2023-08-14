@@ -250,22 +250,21 @@ char	**make_argv(char **word_arr)
 	return (list_to_arr(argv_list));
 }
 
-// globbing character(*, ?)를 expansion해야 함.
-t_list	*filename_expansion(t_list *chunks, t_bool glob_flag)
+t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
-	t_list	*list;
+	t_list	*expanded_list;
 	char	*pattern;
 
-	pattern = concatenate(chunks);
+	pattern = concatenate(list);
 	if(!pattern)
 		// exit_status = ENOMEM로 set하고 에러리턴.
 	if (glob_flag)
 	{
-		list = list_matches(pattern);
-		if (list)
+		expanded_list = globbing(pattern);
+		if (expanded_list)
 		{
 			free(pattern);
-			return (list);
+			return (expanded_list);
 		}
 	}
 	return (ft_lstnew(pattern));
@@ -299,7 +298,7 @@ char	*concatenate(t_list *list)
 
 #include <dirent.h>
 
-t_list	*list_matches(char *pattern)
+t_list	*globbing(char *pattern)
 {
 	t_list			*matches;
 	DIR				*dp;
@@ -308,12 +307,14 @@ t_list	*list_matches(char *pattern)
 
 	matches = NULL;
 	getcwd(dirbuf, PATH_MAX);
+	// .
 	dp = opendir(dirbuf);
+	// ..
 	dir = readdir(dp);
 	while (dir != NULL)
 	{
 		dir = readdir(dp);
-		if (dir && dir->d_type == DT_REG && is_match(dir->d_name, pattern))
+		if (dir && dir->d_type == DT_REG && d(dir->d_name, pattern))
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 	}
 	closedir(dp);
