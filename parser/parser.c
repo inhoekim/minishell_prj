@@ -21,10 +21,10 @@ t_node	*parser(char *line)
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 		return (NULL);
-	root = msh_grammar(tokenizer);
-	if (get_curr_token(&tokenizer)->type != EOF)
+	root = msh_grammar(&tokenizer);
+	if (get_curr_token(&tokenizer)->type != E0F)
 	{
-		syntex_error();
+		syntax_error("error");
 		//free_tree(root);
 	}
 	free(tokenizer.curr_token);

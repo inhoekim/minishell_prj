@@ -48,25 +48,17 @@ t_node	*conditional(t_tokenizer *tokenizer)
 	t_token	*tk;
 
 	tk = tokenizer->curr_token;
-<<<<<<< HEAD
 	if (match_token(AND_IF, tokenizer, TRUE))
-=======
-	if (match_token(AND_IF, tokenizer))
->>>>>>> 240_develop
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
-	}
-<<<<<<< HEAD
-	else if (match_token(OR_IF, tokenizer, TRUE))
-=======
-	else if (match_token(OR_IF, tokenizer))
->>>>>>> 240_develop
-	{
-		pipe = pipeline(tokenizer);
-		parent = conditional(tokenizer);
+    }
+    else if (match_token(OR_IF))
+    {
+		pipe = pipeline();
+		parent = conditional();
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
 	}
@@ -102,11 +94,7 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 {
 	t_node	*child;
 
-<<<<<<< HEAD
 	if (match_token(PIPE, tokenizer, TRUE))
-=======
-	if (match_token(PIPE, tokenizer))
->>>>>>> 240_develop
 	{
 		child = pipeline(tokenizer);
 		return (make_tree(PIPE, NULL, child));

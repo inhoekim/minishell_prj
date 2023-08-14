@@ -3,8 +3,7 @@
 
 #include "minishell.h"
 
-
-t_bool		match_token(t_symbol type, t_tokenizer *tokenizer);
+t_bool	    match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move);
 t_token		*get_curr_token(t_tokenizer *tokenizer);
 t_token		*get_next_token(t_tokenizer *tokenizer);
 t_token		*make_token(t_tokenizer *tokenizer, t_symbol type);
