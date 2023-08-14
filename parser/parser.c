@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "../include/tokenizer.h"
 #include "../include/minishell.h"
+#include "../include/rule.h"
 
 t_node	*parser(char *line)
  {
@@ -21,12 +22,26 @@ t_node	*parser(char *line)
 	if (get_curr_token(&tokenizer)->type == E0F)
 		return (NULL);
 	root = msh_grammar(&tokenizer);
-	if (get_curr_token(&tokenizer)->type != EOF)
+	if (get_curr_token(&tokenizer)->type != E0F)
 	{
-		syntax_error();
-		free_tree(root);
+		syntax_error("error");
+		//free_tree(root);
 	}
 	free(tokenizer.curr_token);
 	return (root);
  }
 
+void	syntax_error(char * str)
+{
+	return ;
+}
+
+void	free_tree(t_node *root)
+{
+	return ;
+}
+
+int	main(void)
+{
+	parser("echo 1234 > a.txt");
+}
