@@ -42,9 +42,6 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 
 t_token	*scan_word_token(t_tokenizer *tokenizer)
 {
-	// int	flag;
-
-	// flag = 0;
 	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
 	{
 		if (*tokenizer->end == '\0')
@@ -59,15 +56,12 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 			{
 				while (*tokenizer->end != '\'' && *tokenizer->end != '"')
 					tokenizer->end++;
-				//flag++;
 			}
 		}
 		tokenizer->end++;
 	}
 	if (tokenizer->start != tokenizer->end && ft_strchr(SYMBOLCHAR, *tokenizer->end))
 		tokenizer->end--;
-	// if (flag)
-	// 	return (make_merge_word_token(tokenizer, flag));
 	return (make_token(tokenizer, WORD));
 }
 
