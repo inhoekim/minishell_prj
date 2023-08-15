@@ -3,29 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/14 12:47:22 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/15 18:10:37 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include "../include/rule.h"
+#include "../include/tokenizer.h"
 
 t_node	*parser(char *line)
  {
-	t_node 		*root;
+	t_node		*root;
 	t_tokenizer	tokenizer;
 
-	tokenizer = set_tokenizer(&tokenizer, line);
-	if (get_curr_token(tokenizer)->type == E0F)
+	set_tokenizer(&tokenizer, line);
+	if (get_curr_token(&tokenizer)->type == E0F)
 		return (NULL);
 	root = msh_grammar(&tokenizer);
-	if (get_curr_token(&tokenizer)->type != EOF)
+	if (get_curr_token(&tokenizer)->type != E0F)
 	{
-		syntex_error();
-		free_tree(root);
+		syntax_error("error");
+		//free_tree(root);
 	}
+	free(tokenizer.curr_token->str);
+	free(tokenizer.curr_token);
 	return (root);
  }
 
+void	syntax_error(char * str)
+{
+	return ;
+}
+
+void	free_tree(t_node *root)
+{
+	return ;
+}
+
+int	main(int argc, char **argv)
+{
+	t_node *test;
+	test = parser("ls | ls >a | \"l\"s");
+	int a = 3;
+	a++;
+	return (0);
+}

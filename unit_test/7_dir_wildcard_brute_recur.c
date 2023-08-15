@@ -139,7 +139,7 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
 	(void)envp;
     t_list  *test;
-    t_list  *list = ft_lstnew("?.tx?");
+    t_list  *list = ft_lstnew("*.a");
 	char *str;
     test = pathname_expansion(list, 1);
     while (test)
@@ -151,37 +151,181 @@ int main(int argc, char **argv, char **envp)
     return 0;
 }
 
+// int wildcard2(char *pattern, char *word) 
+// {
+// 	int len_p, len_w;
+// 	int **dp;
+// 	len_p = ft_strlen(pattern);
+// 	len_w = ft_strlen(word);
+// 	dp = allocate_dp(len_p, len_w);
+// 	dp[0][0] = 1;
+// 	if (pattern[0] == '*')
+// 		dp[1][0] = 1;
+// 	else
+// 		dp[1][0] = 0;
+// 	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+// 	{
+// 		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+// 		{
+// 			// 캐릭터가 일치하거나 '?'이면
+// 			if (pattern[pattern_idx - 1] == '?' || \
+// 					pattern[pattern_idx - 1] == word[word_idx - 1])
+// 			{
+// 				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
+// 			}
+// 			// 4. pattern의 현재 캐릭터가 '*'이면
+// 			else if (pattern[pattern_idx - 1] == '*') {
+// 				dp[pattern_idx][word_idx] = \
+// 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
+// //				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
+// //				-> 현재까지의 부분패턴과 word
+// 			}
+// 		}
+// 	}
+// 	return (dp[len_p][len_w]);
+// }
 
-int wildcard2(char *pattern, char *word) {
-	int len_p, len_w;
-	int **dp;
+int wildcard2(char *pattern, char *word) 
+{
+	int	len_p;
+	int	len_w;
+	int	**dp;
+	int	p_idx;
+	int	w_idx;
+
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);
 	dp = allocate_dp(len_p, len_w);
 	dp[0][0] = 1;
 	if (pattern[0] == '*')
 		dp[1][0] = 1;
-	else
-		dp[1][0] = 0;
-	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+	p_idx = 0;
+	while (++p_idx <= len_p)
 	{
-		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+		w_idx = 0;
+		while (++w_idx <= len_w)
 		{
-			// 캐릭터가 일치하거나 '?'이면
-			if (pattern[pattern_idx - 1] == '?' || \
-					pattern[pattern_idx - 1] == word[word_idx - 1])
-			{
-				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
-			}
-			// 4. pattern의 현재 캐릭터가 '*'이면
-			else if (pattern[pattern_idx - 1] == '*') {
-				dp[pattern_idx][word_idx] = \
-				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-//				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
-//				-> 현재까지의 부분패턴과 word
-			}
+			if (pattern[p_idx - 1] == '?' || (pattern[p_idx - 1] == word[w_idx - 1]))
+				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
+			else if (pattern[p_idx - 1] == '*')
+				dp[p_idx][w_idx] = (dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
 		}
+		if (dp[1][1] == 0)
+			return (FALSE);
 	}
-
 	return (dp[len_p][len_w]);
 }
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #define FALSE 0
+// char	*ppp(char *pattern);
+// int **allocate_dp(int row, int col) 
+// {
+// 	int **dp;
+// 	dp = calloc(row + 1, sizeof(int *));
+// 	for (int i = 0; i <= row; i++)
+// 	{
+// 		dp[i] = calloc(col + 1, sizeof(int));
+// 	}
+// 	return (dp);
+// }
+
+// int wildcard2(char *pattern, char *word) 
+// {
+// 	int	len_p;
+// 	int	len_w;
+// 	int	**dp;
+// 	int	p_idx;
+// 	int	w_idx;
+
+// 	pattern = ppp(pattern);
+// 	len_p = strlen(pattern);
+// 	len_w = strlen(word);
+// 	dp = allocate_dp(len_p, len_w);
+// 	dp[0][0] = 1;
+// 	p_idx = 0;
+// 	if (pattern[0] =='*')
+// 		dp[1][0] = 1;
+// 	p_idx = 0;
+// 	while (++p_idx <= len_p)
+// 	{
+// 		w_idx = 0;
+// 		while (++w_idx <= len_w)
+// 		{
+// 			if (pattern[p_idx - 1] == word[w_idx - 1])
+// 				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
+// 			else if (pattern[p_idx - 1] == '*')
+// 				dp[p_idx][w_idx] = (dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
+// 		}
+// 		// if (dp[1][1] == 0)
+// 		// 	return (FALSE);
+// 	}
+// 	return (dp[len_p][len_w]);
+// }
+
+// char	*ppp(char *pattern)
+// {
+// 	char	*new_pattern;
+// 	int		new_len;
+// 	int		idx;
+// 	int		flag;
+// 	int		new_idx;
+
+// 	new_len = 0;
+// 	idx = 0;
+// 	flag = 0;
+// 	while (pattern[idx])
+// 	{
+// 		while (pattern[idx] == '*')
+// 		{
+// 			if (flag == 0)
+// 			{
+// 				flag = 1;
+// 				new_len++;
+// 			}
+// 			idx++;
+// 		}
+// 		flag = 0;
+// 		new_len++;
+// 		idx++;
+// 	}
+// 	idx = -1;
+// 	new_pattern = calloc(new_len + 1, sizeof(char *));
+// 	new_idx = 0;
+// 	flag = 0;
+// 	while (pattern[++idx] && new_idx <= new_len)
+// 	{
+// 		if (pattern[idx] == '*' && flag == 0)
+// 		{
+// 			flag = 1;
+// 			new_pattern[new_idx] = '*';
+// 			new_idx++;
+// 		}
+// 		while (pattern[idx] == '*' && flag == 1)
+// 			idx++;
+// 		if (pattern[idx] != '*')
+// 			flag = 0;
+// 		new_pattern[new_idx] = pattern[idx];
+// 		new_idx++;
+// 	}
+// 	new_pattern[new_idx] = 0;
+// 	// free(pattern);
+// 	return (new_pattern);
+// }
+
+// int main()
+// {
+// 	char pattern[200];
+// 	char word[200];
+// 	int num;
+
+// 	scanf("%s", pattern);
+// 	scanf("%d", &num);
+// 	for (int i = 0; i < num; i++)
+// 	{
+// 		scanf("%s", word);
+// 		if (wildcard2(pattern, word))
+// 			printf("%s\n", word);
+// 	}
+// }

@@ -1,0 +1,10 @@
+
+# include <sys/stat.h>
+# include <errno.h>
+#include <dirent.h>
+
+t_list	*filename_expansion(t_list *list, t_bool glob_flag);
+char	*concatenate(t_list *list);
+t_list	*globbing(char *pattern);
+int is_match(char *pattern, char *word);
+void	msh_error(char *name, char *msg, int error);
