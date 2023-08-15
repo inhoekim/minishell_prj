@@ -240,7 +240,7 @@ char	**make_argv(char **word_arr)
 		// heredoc delimeter에 (',"")가 없었다면 그 내용은 expansion.
 		// heredoc delimeter는 효력상실.
 		// ex. echo '$USER', echo "$USER"
-		// arg_expansion내부에서 cmd가 heredoc인지 판단해야함.
+		// arg_expansion내부에서 cmd가 heredoc인지 판단해야 함.
 		arg_expansion(list);
 		unquote(list);
 		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
