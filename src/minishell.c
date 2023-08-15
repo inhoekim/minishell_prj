@@ -59,9 +59,9 @@ t_tokenizer	*get_token()
 
 void	minishell_loop() 
 {
-	t_node *root;
-	char	*line;
-	t_bool check_exit;
+	t_node		*root;
+	char		*line;
+	t_bool		check_exit;
 	t_tokenizer *token;
 
 	check_exit = TRUE;
@@ -80,4 +80,5 @@ void	minishell_loop()
 		if (check_exit)
 			line = NULL;	
 	}
+	printf("exit\n");
 }
