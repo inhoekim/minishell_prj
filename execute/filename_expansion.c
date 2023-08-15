@@ -76,7 +76,8 @@ t_list	*globbing(char *pattern)
 	return (matches);
 }
 
-int is_match(char *pattern, char *word) {
+int is_match(char *pattern, char *word)
+{
 	int len_p, len_w;
 	int **dp;
 
@@ -108,9 +109,6 @@ int is_match(char *pattern, char *word) {
 	}
 	return (dp[len_p][len_w]);
 }
-
-
-
 
 
 void	msh_error(char *name, char *msg, int error)

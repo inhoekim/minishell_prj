@@ -3,6 +3,9 @@
 #include "../include/exec_word_util.h"
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
+#include "../include/make_argv_util.h"
+
+static t_bool	can_access(char *filename, t_context *p_ctx);
 
 char	**make_argv(char **word_arr)
 {
