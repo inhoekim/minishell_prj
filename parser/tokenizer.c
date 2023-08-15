@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/11 11:26:07 by naylee           ###   ########.fr       */
+/*   Updated: 2023/08/14 12:47:11 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../include/tokenizer.h"
+
 
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer)
 { 
@@ -39,6 +39,8 @@ t_token	*get_curr_token(t_tokenizer *tokenizer) {
 //get_next_token() -> 원래 예전에 만들어놨던 t_tokenizer를 갱신.
 t_token	*get_next_token(t_tokenizer *tokenizer)
 {
+	t_token token;
+
 	reset_start_ptr(tokenizer);
 	if (*tokenizer->end == '(')
 	{

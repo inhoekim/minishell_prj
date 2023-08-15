@@ -1,0 +1,186 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include "../include/libft.h"
+#include <dirent.h>
+#include "../include/minishell.h"
+
+#define PATH_MAX 1024
+
+t_list	*pathname_expansion(t_list *list, t_bool glob_sliding);
+char	*make_pattern(t_list *list);
+t_list  *make_templist(char *dir, char *pattern);
+t_bool	wildcard(char *name, char *pattern);
+static int	fft_strlen(const char *s);
+int wildcard2(char *pattern, char *word);
+
+
+int **allocate_dp(int row, int col) {
+	int **dp;
+	dp = calloc(row + 1, sizeof(int *));
+	for (int i = 0; i <= row; i++)
+	{
+		dp[i] = calloc(col + 1, sizeof(int));
+	}
+	return (dp);
+}
+
+t_list	*pathname_expansion(t_list *list, t_bool glob_sliding)
+{
+	t_list		  	*temp_list;
+	char			path[PATH_MAX];
+	char			*dir;
+	char			*pattern;
+
+	pattern = make_pattern(list);
+	dir = getcwd(path, PATH_MAX);
+	if (glob_sliding)
+	{
+		temp_list = make_templist(dir, pattern);
+		free(pattern);
+		return (temp_list);
+	}
+	return (ft_lstnew(pattern));
+}
+
+char	*make_pattern(t_list *list)
+{
+	int		str_size;
+	char	*content;
+	char	*pattern;
+	t_list	*head;
+
+	head = list;
+	str_size = 0;
+	while (list)
+	{
+		str_size += ft_strlen(list->content);
+		list = list->next;
+	}
+	pattern = calloc(str_size + 1, sizeof(*pattern));
+	// pattern[str_size] = '\0';
+	list = head;
+	while (list)
+	{
+		content = list->content;
+		ft_strlcat(pattern, content, str_size + 1);
+		list = list->next;
+	}
+	return (pattern);
+}
+
+t_list  *make_templist(char *dir, char *pattern)
+{
+	DIR				*dir_ptr;
+	struct dirent	*file;
+	t_list			*temp;
+
+	temp = NULL;
+	// temp = ft_lstnew(ft_strdup(""));
+
+	// .
+	dir_ptr = opendir(dir);
+	// ..
+	file = readdir(dir_ptr);
+	while (file)
+	{
+		file = readdir(dir_ptr);
+		if (file && file->d_type == DT_REG && wildcard2(pattern, file->d_name))
+		// if (file && file->d_type == DT_REG && wildcard(file->d_name, pattern))
+			ft_lstadd_back(&temp, ft_lstnew(ft_strdup(file->d_name)));
+	}
+	closedir(dir_ptr);
+	return (temp);
+}
+
+static int	fft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	if(s == NULL)
+		return (0);
+	while (s[i])
+		i++;
+	return (i);
+}
+
+
+t_bool	wildcard(char *name, char *pattern)
+{
+	int len_n;
+	int	len_p;
+	int	idx;
+	int	sliding;
+
+	len_n = fft_strlen(name);	
+	len_p = fft_strlen(pattern);
+	idx = 0;
+	while (idx < len_n && idx < len_p && (pattern[idx] == '?' || pattern[idx] == name[idx]))
+		idx++;
+	if (len_p == idx)
+		return (len_n == idx);
+	if (pattern[idx] == '*')
+	{
+		sliding = 0;
+		while (sliding + idx <= len_n)
+		{
+			if (wildcard(pattern + idx + 1,  name + sliding + idx))
+				return (TRUE);
+			sliding++;
+		}
+	}
+	return (FALSE);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+    (void)argc;
+    (void)argv;
+	(void)envp;
+    t_list  *test;
+    t_list  *list = ft_lstnew("?.tx?");
+	char *str;
+    test = pathname_expansion(list, 1);
+    while (test)
+    {
+		str = test->content;
+        printf("%s\n", str);
+        test = test->next;
+    }
+    return 0;
+}
+
+int wildcard2(char *pattern, char *word) 
+{
+	int len_p, len_w;
+	int **dp;
+	len_p = ft_strlen(pattern);
+	len_w = ft_strlen(word);
+	dp = allocate_dp(len_p, len_w);
+	dp[0][0] = 1;
+	if (pattern[0] == '*')
+		dp[1][0] = 1;
+	else
+		dp[1][0] = 0;
+	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+	{
+		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+		{
+			// 캐릭터가 일치하거나 '?'이면
+			if (pattern[pattern_idx - 1] == '?' || \
+					pattern[pattern_idx - 1] == word[word_idx - 1])
+			{
+				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
+			}
+			// 4. pattern의 현재 캐릭터가 '*'이면
+			else if (pattern[pattern_idx - 1] == '*') {
+				dp[pattern_idx][word_idx] = \
+				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
+//				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
+//				-> 현재까지의 부분패턴과 word
+			}
+		}
+	}
+	return (dp[len_p][len_w]);
+}
