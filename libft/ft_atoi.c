@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 21:22:15 by dasong            #+#    #+#             */
-/*   Updated: 2023/03/20 21:23:49 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/15 10:23:15 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,5 @@ int	ft_atoi(const char *nptr)
 		}
 		res = res * 10 + nptr[i++] - '0';
 	}
-	if (nptr[i] != NULL)
-		return (0);
 	return ((int)sign * res);
 }
