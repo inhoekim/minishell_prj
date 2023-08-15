@@ -1,15 +1,14 @@
 #include "../include/minishell.h"
 #include "../libft/libft.h"
-# define PATH_MAX 1024
+#include "../include/execute.h"
 
-// echo, cd, pwd, export, unset, env, exit
 t_bool	ft_echo(t_node *node)
 {
 	char	**temp;
 	int		idx;
 	int		flag;
 
-	temp = node->right->word;
+	temp = node->left->word;
 	flag = 0;
 	if (!temp)
 		printf("\n");
@@ -40,4 +39,3 @@ t_bool	ft_pwd(t_node *node)
 	printf("%s\n", path);
 	return (FALSE);
 }
-

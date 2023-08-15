@@ -9,10 +9,7 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 
 	pattern = concatenate(list);
 	if (!pattern)
-	{
         set_exit_status(ENOMEM);
-		// 메모리 정리 후 에러 리턴
-	}
 	if (glob_flag)
 	{
 		expanded_list = globbing(pattern);
@@ -62,9 +59,7 @@ t_list	*globbing(char *pattern)
 
 	matches = NULL;
 	getcwd(dirbuf, PATH_MAX);
-	// .
 	dp = opendir(dirbuf);
-	// ..
 	dir = readdir(dp);
 	while (dir != NULL)
 	{
@@ -92,17 +87,14 @@ int is_match(char *pattern, char *word) {
 	{
 		for (int word_idx = 1; word_idx <= len_w; word_idx++)
 		{
-			// 캐릭터가 일치하거나 '?'이면
 			if (pattern[pattern_idx - 1] == '?' || \
 					pattern[pattern_idx - 1] == word[word_idx - 1])
 			{
 				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
 			}
-			// 4. pattern의 현재 캐릭터가 '*'이면
 			else if (pattern[pattern_idx - 1] == '*') {
 				dp[pattern_idx][word_idx] = \
 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-//				'*'을 포힘하지않는 패턴에 대한, word의 현재부분까지의 match결과(초기값) || '*'을 포함하는 패턴에 대한, word의 직전 부분까지의 match결과(일반적 경우)
 			}
 		}
 	}
