@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/14 07:51:13 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:03:32 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(PIPELINE, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(PIPELINE, tk.type) || \
+	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = pipeline(tokenizer);
 		if (child)
@@ -45,16 +46,14 @@ t_node	*conditional(t_tokenizer *tokenizer)
 	t_node	*pipe;
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
 
-	tk = tokenizer->curr_token;
 	if (match_token(AND_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
-	}
+    }
 	else if (match_token(OR_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
@@ -70,10 +69,11 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 {
 	t_node	*parent;
 	t_node	*child;
-	t_token	*tk;
+	t_token	tk;
 
-	tk = tokenizer->curr_token;
-	if (check_first_set(COMMAND, tk->type))
+	tk = *(tokenizer->curr_token);
+	if (check_first_set(COMMAND, tk.type) || \
+	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = command(tokenizer);
 		if (child)

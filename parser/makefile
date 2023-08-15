@@ -8,7 +8,7 @@ tokenizer_utils.c tokenizer.c tree.c
 all : $(NAME)
 
 $(NAME) : $(MAIN:.c=.o)
-	$(CC) $(CFLAGS) -L../libft -o $(NAME) $^ 
+	$(CC) $(CFLAGS) -L../libft -lft -o $(NAME) $^ 
 
 $(MAIN:.c=.o) : %.o : %.c
 	$(CC) $(CFLAGS) -c $^ -I../include

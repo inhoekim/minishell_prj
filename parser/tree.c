@@ -14,6 +14,8 @@
 #include "../include/tokenizer.h"
 
 static char	**make_first_word(char *src, int len);
+static char	**make_node_word(char *src, int len);
+static char	**make_first_word(char *src, int len);
 
 t_node	*make_leaf(t_tokenizer *tokenizer)
 {

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/11 11:25:54 by naylee           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:45:35 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../include/tokenizer.h"
+
 #include "../include/minishell.h"
 #include "../include/rule.h"
+#include "../include/tokenizer.h"
 
 t_node	*parser(char *line)
  {
@@ -42,7 +43,11 @@ void	free_tree(t_node *root)
 	return ;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	parser("echo 1234 > a.txt");
+	t_node *test;
+	test = parser("ls | ls >a | \"l\"s");
+	int a = 3;
+	a++;
+	return (0);
 }

@@ -3,6 +3,7 @@
 # define NONE -1
 # include <stdio.h>
 # include "libft.h"
+#include "execute.h"
 
 typedef enum e_bool
 {
