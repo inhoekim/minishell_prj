@@ -1,11 +1,10 @@
 #include "../include/minishell.h"
 #include "../libft/libft.h"
-# define PATH_MAX 1024
+#include "../include/execute.h"
 
-// 환경변수를 어디선가 끌고와야함
 t_bool	ft_env(t_node *node)
 {
-	int	idx;
+	int		idx;
 	t_list	**env;
 	t_list	*temp;
 
@@ -25,26 +24,16 @@ t_bool	ft_exit(t_node *node)
 	char	**temp;
 	int		idx;
 
-	temp = node->right->word;
+	temp = node->left->word;
 	if (!temp[1])
 	{
 		idx = 0;
-		if (!temp[2])
+		if (temp[2])
 		{
 			printf("exit: Too many arguments\n");
 			exit(1);
 		}
-		while (temp[1][idx])
-		{
-			if (temp[1][idx] == "-" || temp[1][idx] == "+")
-				idx++;
-			if (ft_isdigit(temp[1][idx]) == 0)
-			{
-				printf("exit: %s: numeric argument required", temp[1]);
-				exit(255);
-			}
-			idx++;
-		}
+		exit_utils(temp);
 		printf("exit\n");
 		exit(ft_atoi(temp[1]));
 	}
@@ -54,4 +43,22 @@ t_bool	ft_exit(t_node *node)
 		exit(0);
 	}
 	return (TRUE);
+}
+
+void	exit_utils(char **temp)
+{
+	int	idx;
+
+	idx = 0;
+	while (temp[1][idx])
+	{
+		if (temp[1][idx] == "-" || temp[1][idx] == "+")
+			idx++;
+		if (ft_isdigit(temp[1][idx]) == 0)
+		{
+			printf("exit: %s: numeric argument required", temp[1]);
+			exit(255);
+		}
+		idx++;
+	}
 }
