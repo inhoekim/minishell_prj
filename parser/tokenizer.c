@@ -6,10 +6,12 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 17:19:18 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:32:15 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
+#include "../include/tokenizer.h"
 
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
 {
