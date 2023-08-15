@@ -8,10 +8,10 @@ tokenizer_utils.c tokenizer.c tree.c
 all : $(NAME)
 
 $(NAME) : $(MAIN:.c=.o)
-	$(CC) $(CFLAGS) -L/Users/kim-inhoe/minishell/libft -lft -o $(NAME) $^ 
+	$(CC) $(CFLAGS) -L../libft -lft -o $(NAME) $^ 
 
 $(MAIN:.c=.o) : %.o : %.c
-	$(CC) $(CFLAGS) -c $^ -I/Users/kim-inhoe/minishell/include
+	$(CC) $(CFLAGS) -c $^ -I../include
 
 clean :
 	rm -f $(MAIN:.c=.o)

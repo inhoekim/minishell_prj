@@ -151,37 +151,65 @@ int main(int argc, char **argv, char **envp)
     return 0;
 }
 
+// int wildcard2(char *pattern, char *word) 
+// {
+// 	int len_p, len_w;
+// 	int **dp;
+// 	len_p = ft_strlen(pattern);
+// 	len_w = ft_strlen(word);
+// 	dp = allocate_dp(len_p, len_w);
+// 	dp[0][0] = 1;
+// 	if (pattern[0] == '*')
+// 		dp[1][0] = 1;
+// 	else
+// 		dp[1][0] = 0;
+// 	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+// 	{
+// 		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+// 		{
+// 			// 캐릭터가 일치하거나 '?'이면
+// 			if (pattern[pattern_idx - 1] == '?' || \
+// 					pattern[pattern_idx - 1] == word[word_idx - 1])
+// 			{
+// 				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
+// 			}
+// 			// 4. pattern의 현재 캐릭터가 '*'이면
+// 			else if (pattern[pattern_idx - 1] == '*') {
+// 				dp[pattern_idx][word_idx] = \
+// 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
+// //				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
+// //				-> 현재까지의 부분패턴과 word
+// 			}
+// 		}
+// 	}
+// 	return (dp[len_p][len_w]);
+// }
 
-int wildcard2(char *pattern, char *word) {
-	int len_p, len_w;
-	int **dp;
+int wildcard2(char *pattern, char *word) 
+{
+	int	len_p;
+	int	len_w;
+	int	**dp;
+	int	p_idx;
+	int	w_idx;
+
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);
 	dp = allocate_dp(len_p, len_w);
 	dp[0][0] = 1;
 	if (pattern[0] == '*')
 		dp[1][0] = 1;
-	else
-		dp[1][0] = 0;
-	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+	p_idx = 0;
+	while (++p_idx <= len_p)
 	{
-		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+		w_idx = 0;
+		while (++w_idx <= len_w)
 		{
-			// 캐릭터가 일치하거나 '?'이면
-			if (pattern[pattern_idx - 1] == '?' || \
-					pattern[pattern_idx - 1] == word[word_idx - 1])
-			{
-				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
-			}
-			// 4. pattern의 현재 캐릭터가 '*'이면
-			else if (pattern[pattern_idx - 1] == '*') {
-				dp[pattern_idx][word_idx] = \
-				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-//				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
-//				-> 현재까지의 부분패턴과 word
-			}
+			if (pattern[p_idx - 1] == '?' || (pattern[p_idx - 1] == word[w_idx - 1]))
+				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
+			else if (pattern[p_idx - 1] == '*')
+				dp[p_idx][w_idx] = (dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
 		}
 	}
-
 	return (dp[len_p][len_w]);
 }

@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/14 07:51:13 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:03:32 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
-	if (check_first_set(PIPELINE, tk.type))
+	if (check_first_set(PIPELINE, tk.type) || \
+	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = pipeline(tokenizer);
 		if (child)
@@ -71,7 +72,8 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
-	if (check_first_set(COMMAND, tk.type))
+	if (check_first_set(COMMAND, tk.type) || \
+	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = command(tokenizer);
 		if (child)

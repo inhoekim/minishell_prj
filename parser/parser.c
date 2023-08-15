@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
 /*   Updated: 2023/08/15 14:28:41 by dasong           ###   ########.fr       */
+=======
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/15 17:45:35 by inhkim           ###   ########.fr       */
+>>>>>>> release
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/rule.h"
+#include "../include/tokenizer.h"
 
 t_node	*parser(char *line)
  {
@@ -27,6 +35,7 @@ t_node	*parser(char *line)
 		syntax_error("error");
 		//free_tree(root);
 	}
+	free(tokenizer.curr_token->str);
 	free(tokenizer.curr_token);
 	return (root);
  }
@@ -41,10 +50,10 @@ void	free_tree(t_node *root)
 	return ;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_node *test;
-	test = parser("< a.txt > b.txt > c.txt");
+	test = parser("ls | ls >a | \"l\"s");
 	int a = 3;
 	a++;
 	return (0);
