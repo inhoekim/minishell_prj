@@ -27,6 +27,7 @@ t_node	*parser(char *line)
 		syntax_error("error");
 		//free_tree(root);
 	}
+	free(tokenizer.curr_token->str);
 	free(tokenizer.curr_token);
 	return (root);
  }
