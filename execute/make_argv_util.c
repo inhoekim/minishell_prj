@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include "../include/make_argv_util.h"
 
 t_list	*split_quotes(char *str)
 {
@@ -28,7 +29,6 @@ t_list	*split_quotes(char *str)
 	}
 	return (head);
 }
-
 
 t_list	*include_slice(char *str, int *i, char end)
 {

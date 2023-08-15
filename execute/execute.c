@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 #include "../include/execute.h"
-#include <fcntl.h>
+#include "../include/exec_node_util.h"
 
 t_bool	execute(t_node *root)
 {
@@ -9,7 +9,7 @@ t_bool	execute(t_node *root)
 	t_context	ctx;
 
 	ctx.fd_close = -1;
-	// exit함수 호출시, TRUE 
+	// exit함수 호출시, TRUE
 	check_exit = FALSE;
 	node = exec_node(root, &ctx);
 	if (node->type != E0F)

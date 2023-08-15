@@ -1,6 +1,11 @@
 
 #include "../include/minishell.h"
+#include "../include/execute.h"
+#include "../include/exec_node_util.h"
 #include "../include/exec_word_util.h"
+#include "../include/make_argv_util.h"
+
+// #include "../include/exec_word_util.h"
 
 // void	exec_subshell(t_node *node, t_ctx *p_ctx)
 // {

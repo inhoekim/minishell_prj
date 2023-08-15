@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 #include "../include/arg_expansion.h"
+#include "../include/execute_util.h"
 
 void	arg_expansion(t_list *list)
 {

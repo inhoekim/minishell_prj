@@ -24,6 +24,24 @@
 		"stdio.h": "c",
 		"execute.h": "c",
 		"exec_word_util.h": "c",
-		"expansion.h": "c"
+		"expansion.h": "c",
+		"exec_node_util.h": "c",
+		"execute_util.h": "c",
+		"filename_expansion.h": "c",
+		"arg_expansion.h": "c",
+		"__functional_base": "c",
+		"__node_handle": "c",
+		"algorithm": "c",
+		"atomic": "c",
+		"__memory": "c",
+		"functional": "c",
+		"iterator": "c",
+		"limits": "c",
+		"memory": "c",
+		"optional": "c",
+		"ratio": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"make_argv_util.h": "c"
 	}
 }
