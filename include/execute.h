@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/15 18:33:22 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/15 18:34:46 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define STDOUT 1
 # define PATH_MAX 1024
 
+#include "minishell.h"
 typedef struct s_context
 {
 	int	exit_status;
