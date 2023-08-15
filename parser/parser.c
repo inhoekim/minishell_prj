@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 16:56:30 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 17:06:31 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_tree(t_node *root)
 int	main(void)
 {
 	t_node *test;
-	test = parser("cat>a.txt");
+	test = parser("echo \"1234 1234\"'ok' 1234 > b.txt");
 	int a = 3;
 	a++;
 	return (0);
