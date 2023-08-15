@@ -1,15 +1,14 @@
-#define NONE -1
-
-
-#include <stdio.h>
-#include "libft.h"
-#include "execute.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
+# define NONE -1
+# include <stdio.h>
+# include "libft.h"
 
 typedef enum e_bool
 {
 	FALSE,
 	TRUE,
-}   t_bool;
+}t_bool;
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,
@@ -23,7 +22,7 @@ typedef enum e_nonterminal{
 	IO_REDIRECT_DAGGER = IO_REDIRECT,
 	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 5,
 	CONDITIONAL = 6,
-}   t_nonterminal;
+}t_nonterminal;
 
 // &&, ||, |, (, ),  <, >, <<, >>, word
 typedef enum e_symbol
@@ -40,16 +39,16 @@ typedef enum e_symbol
 	SUBSHELL_LEFT,
 	SUBSHELL_RIGHT,
 	E0F,
-}   t_symbol;
+}t_symbol;
 
 /* binary tree */
 typedef struct s_node
 {
-    t_symbol		type;
+	t_symbol		type;
 	struct s_node	*left;
-    struct s_node	*right;
-    char			**word;
-} t_node;
+	struct s_node	*right;
+	char			**word;
+}t_node;
 
 typedef struct s_token
 {
@@ -61,9 +60,11 @@ typedef struct s_token
 /* object that separate tokens */
 typedef struct s_tokenizer
 {
-    t_token		*curr_token;
-	char		*start;
-	char		*end;
-} t_tokenizer;
+	t_token	*curr_token;
+	char	*start;
+	char	*end;
+}t_tokenizer;
 
 t_list	**get_envp(void);
+
+#endif
