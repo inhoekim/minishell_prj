@@ -24,6 +24,7 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
 {
+	//이전 토큰 타입이 E0F가 아니라면(즉 첫번째로 보는 토큰이 아니라면)
 	if (tokenizer->curr_token->type != E0F)
 	{	
 		tokenizer->end++;
