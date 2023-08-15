@@ -347,8 +347,7 @@ int is_match(char *pattern, char *word) {
 			else if (pattern[pattern_idx - 1] == '*') {
 				dp[pattern_idx][word_idx] = \
 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-//				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
-//				-> 현재까지의 부분패턴과 word
+//				'*'을 포힘하지않는 패턴에 대한, word의 현재부분까지의 match결과(초기값) || '*'을 포함하는 패턴에 대한, word의 직전 부분의 match결과
 			}
 		}
 	}
