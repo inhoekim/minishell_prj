@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
 #include "../include/arg_expansion.h"
 #include "../include/execute_util.h"
+#include "../include/execute.h"
 
 void	arg_expansion(t_list *list)
 {
@@ -98,8 +99,9 @@ char	*get_value(char *key)
 {
 	// static char	status[4];
 	char	*status;
-	char		*value;
+	char	*value;
 
+	status = "";
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
@@ -107,7 +109,7 @@ char	*get_value(char *key)
 		free(value);
 		return (status);
 	}
-	value = getenv(&key[1]);
+	value = ft_getenv(&key[1]);
 	if (!value)
 		value = ft_strdup("");
 	return (value);

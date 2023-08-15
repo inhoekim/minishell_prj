@@ -5,7 +5,6 @@
 t_bool	ft_cd(t_node *node)
 {
 	char	path[PATH_MAX];
-	t_list	**env;
 	char	*can_env;
 	char	*newpwd;
 	char	**temp;
@@ -41,7 +40,7 @@ char	*vaild_env(char **temp)
 	if (size > 2)
 		return (NULL);
 	else if (size == 1)
-		return (getenv("HOME"));
+		return (ft_getenv("HOME"));
 	parameter = special_case(temp);
 	if (!parameter)
 		parameter = temp[1];
@@ -57,11 +56,11 @@ char	*special_case(char **temp)
 	temp_len = ft_strlen(temp[1]);
 	parameter = 0;
 	if (temp_len == 1 && ft_strncmp(temp[1], "~", 1) == 0)
-		parameter = getenv("HOME");
+		parameter = ft_getenv("HOME");
 	else if (temp_len == 1 && ft_strncmp(temp[1], ".", 1) == 0)
 	{
 		getcwd(path, PATH_MAX);
-		return (path);
+		return (ft_strdup(path));
 	}
 	else if (temp_len == 2 && ft_strncmp(temp[1], "..", 2) == 0)
 		parameter = "..";

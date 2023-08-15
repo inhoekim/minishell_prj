@@ -10,15 +10,14 @@ t_bool	ft_echo(t_node *node)
 
 	temp = node->left->word;
 	flag = 0;
-	if (!temp)
+	idx = 0;
+	if (!*temp)
 		printf("\n");
 	else if (temp[1][0] == '-' && temp[1][1] == 'n')
 	{
 		idx = 1;
 		flag = 1;
 	}
-	else
-		idx = 0;
 	while (temp[++idx])
 	{
 		if (temp[idx + 1] != NULL)
@@ -33,6 +32,7 @@ t_bool	ft_echo(t_node *node)
 
 t_bool	ft_pwd(t_node *node)
 {
+	(void)node;
 	char	path[PATH_MAX];
 
 	getcwd(path, PATH_MAX);

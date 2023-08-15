@@ -4,16 +4,15 @@
 
 t_bool	ft_env(t_node *node)
 {
-	int		idx;
+	(void)node;
 	t_list	**env;
 	t_list	*temp;
 
-	idx = 0;
 	env = get_envp();
 	temp = *env;
 	while (temp != NULL)
 	{
-		printf("%s\n", temp->content);
+		printf("%s\n", (char *)temp->content);
 		temp = temp->next;
 	}
 	return (FALSE);
@@ -22,12 +21,10 @@ t_bool	ft_env(t_node *node)
 t_bool	ft_exit(t_node *node)
 {
 	char	**temp;
-	int		idx;
 
 	temp = node->left->word;
 	if (!temp[1])
 	{
-		idx = 0;
 		if (temp[2])
 		{
 			printf("exit: Too many arguments\n");
@@ -52,7 +49,7 @@ void	exit_utils(char **temp)
 	idx = 0;
 	while (temp[1][idx])
 	{
-		if (temp[1][idx] == "-" || temp[1][idx] == "+")
+		if (temp[1][idx] == '-' || temp[1][idx] == '+')
 			idx++;
 		if (ft_isdigit(temp[1][idx]) == 0)
 		{

@@ -4,6 +4,7 @@
 #include "../include/exec_node_util.h"
 #include "../include/exec_word_util.h"
 #include "../include/make_argv_util.h"
+#include "../include/execute_util.h"
 
 // #include "../include/exec_word_util.h"
 
@@ -122,6 +123,15 @@
 // 	exec_word(lhs, p_ctx);
 // }
 
+
+void search_and_fork_exec() {
+
+}
+
+void *exec_builtin() {
+	return (NULL);
+}
+
 void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
@@ -129,7 +139,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	// node에 저장된 cmd line argument 배열 parsing
 	argv = make_argv(node->word);
 	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
-	if (ft_strchr(argv, '/') == NULL)
+	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		// 빌트인
 		if (exec_builtin() == NULL) {

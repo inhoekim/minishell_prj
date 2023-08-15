@@ -5,8 +5,6 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 
-static t_bool	can_access(char *filename, t_context *p_ctx);
-
 char	**make_argv(char **word_arr)
 {
 	int		i;
@@ -41,7 +39,6 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	int		pid;
 	t_list	*envl;
 	char	**envp;
-	char	*cmd_path;
 
 	envl = *get_envp();
 	pid = fork();
@@ -79,7 +76,7 @@ char	**list_to_arr(t_list *node)
 
 // S_IFMT	0170000	bitmask for the file type bitfields
 // S_IFDIR	0040000	directory
-static t_bool	can_access(char *filename, t_context *p_ctx)
+t_bool	can_access(char *filename, t_context *p_ctx)
 {
 	struct stat	buff;
 

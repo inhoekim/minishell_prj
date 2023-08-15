@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 #include "../include/exec_word_util.h"
+#include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
@@ -69,6 +70,17 @@ t_list	*globbing(char *pattern)
 	}
 	closedir(dp);
 	return (matches);
+}
+
+int **allocate_dp(int row, int col)
+{
+	int **dp;
+	dp = calloc(row + 1, sizeof(int *));
+	for (int i = 0; i <= row; i++)
+	{
+		dp[i] = calloc(col + 1, sizeof(int));
+	}
+	return (dp);
 }
 
 int is_match(char *pattern, char *word)

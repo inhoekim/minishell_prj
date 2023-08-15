@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/15 18:34:12 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:57:24 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_bool	ft_export(t_node *node)
 	env = get_envp();
 	if (!temp[1])
 		while ((*env)->next != NULL)
-			printf("declare -x %s\n", (*env)->content);
+			printf("declare -x %s\n", (char *)(*env)->content);
 	else
 	{
 		env = get_envp();
@@ -54,7 +54,7 @@ t_bool	ft_unset(t_node *node)
 			{
 				if (!ft_memcmp(temp[idx], check->content, ft_strlen(temp[idx])))
 				{
-					delete_node((*env), check);
+					delete_node(env, check);
 					break ;
 				}
 				check = check->next;
