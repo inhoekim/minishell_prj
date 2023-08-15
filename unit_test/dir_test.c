@@ -1,21 +1,16 @@
 #include <stdio.h>
-#include "../libft/libft.h"
-#include "../include/minishell.h"
-# define PATH_MAX 1024
+#include <unistd.h>
+#include <stdlib.h>
+#include "../include/libft.h"
 #include <dirent.h>
+#include "../include/minishell.h"
 
-void	syntax_error(t_tokenizer *tokenizer)
-{
-	t_token	token;
+#define PATH_MAX 1024
 
-	token = get_curr_token(tokenizer);
-	ft_putstr_fd("minishell : syntax error near unexpected token ", STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putstr_fd(token->str, STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putchar_fd("\n", STDERR_FILENO);
-	set_exit_status(STDERR_FILENO);
-}
+t_list	*pathname_expansion(t_list *list, t_bool glob_flag);
+char	*make_pattern(t_list *list);
+t_list  *make_templist(char *dir, char *pattern);
+t_bool	*wildcard(char *name, char *pattern);
 
 t_list	*pathname_expansion(t_list *list, t_bool glob_flag)
 {
@@ -73,7 +68,7 @@ t_list  *make_templist(char *dir, char *pattern)
 	return (*temp);
 }
 
-t_bool	*wildcard(char *name, char *pattern)
+t_bool	wildcard(char *name, char *pattern)
 {
 	int len_n;
 	int	len_p;
@@ -98,4 +93,18 @@ t_bool	*wildcard(char *name, char *pattern)
 		}
 	}
 	return (FALSE);
+}
+
+int main(void)
+{
+    t_list  *test;
+    t_list  *list = ft_lstnew("*.txt");
+
+    test = pathname_expansion(list, 1);
+    while (test)
+    {
+        printf("%s\n", test->content);
+        test = test->next;
+    }
+    return 0;
 }

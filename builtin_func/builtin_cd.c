@@ -21,13 +21,13 @@ t_bool	ft_cd(t_node *node)
 	can_env = vaild_env(temp);
 	if (!can_env)
 	{
-		printf("cd: Too many arguments\n");
+		write(STDERR_FILENO, "cd: Too many arguments\n", 24);
 		return (TRUE);
 	}
 	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(can_env) != 0)
 	{
-		printf("cd : No such file or directory");
+		write(STDERR_FILENO, "cd : No such file or directory\n", 32);
 		return (TRUE);
 	}
 	set_envp("OLDPWD", newpwd);

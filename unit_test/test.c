@@ -70,15 +70,12 @@ void	set_envp(char *pos, char *pwd)
 
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
-	// 없을 경우 추가
 	if (!temp)
 	{
 		newpwd = ft_strnjoin(pos, pwd);
-		// newpwd = OLDPWD=/qwdgsjghskjdhg/aeoghaeghaeghigauhuih
 		ft_lstadd_back(get_envp(), ft_lstnew(newpwd));
 		free(newpwd);
 	}
-	// 있을 경우 삭제, 프리 하고 추가
 	else
 	{
 		newpwd = ft_strnjoin(pos, pwd);
@@ -118,12 +115,31 @@ void	ft_env(void)
 	idx = 0;
 	env = get_envp();
 	temp = *env;
-	while (temp->next != 0)
-	{
-		printf("%s\n", temp->content);
-		temp = temp->next;
-	}
+	// while (temp->next != 0)
+	// {
+	// 	printf("%s\n", temp->content);
+	// 	temp = temp->next;
+	// }
 }
+
+char	**list_to_arr(t_list *node)
+{
+	char	**arr;
+	int		i;
+	int		len;
+
+	i = 0;
+	len = ft_lstsize(node);
+	arr = malloc(sizeof(t_list) * (len + 1));
+	arr[len] = NULL;
+	while (node)
+	{
+		arr[i++] = node->content;
+		node = node->next;
+	}
+	return (arr);
+}
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -132,6 +148,9 @@ int main(int argc, char **argv, char **envp)
 	char *test = "test99";
 	char	*newpwd;
 	char	path[PATH_MAX];
+	t_list	**list;
+	char	**temp_envp;
+	char *ls[] = {"/bin/ls", "-al", NULL};
 
 	init_envp(envp);
 	// ft_env();
@@ -145,4 +164,7 @@ int main(int argc, char **argv, char **envp)
 	newpwd = getcwd(path, PATH_MAX);
 	set_envp("PWD", newpwd); // 수정파트 -> 동작O
 	ft_env(); // -> PWD가 갱신된것을 확인 / OLDPWD가 없음 -> 추가 -> (NULL)
+	list = get_envp();
+	temp_envp = list_to_arr(*list);
+	execve("/bin/ls", ls, temp_envp);
 }
