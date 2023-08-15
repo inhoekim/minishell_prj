@@ -1,0 +1,25 @@
+{
+    "files.associations": {
+		"minishell.h": "c",
+		"fcntl.h": "c",
+		"_types.h": "c",
+		"errno.h": "c",
+		"stat.h": "c",
+		"system_error": "c",
+		"bit": "c",
+		"libft.h": "c",
+		"__hash_table": "c",
+		"__split_buffer": "c",
+		"array": "c",
+		"bitset": "c",
+		"initializer_list": "c",
+		"string": "c",
+		"string_view": "c",
+		"unordered_map": "c",
+		"vector": "c",
+		"readline.h": "c",
+		"__bit_reference": "c",
+		"chrono": "c",
+		"locale": "c"
+	}
+}

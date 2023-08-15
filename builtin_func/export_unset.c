@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_unset.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/09 17:43:23 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include "../libft/libft.h"
 # define PATH_MAX 1024
@@ -9,7 +21,7 @@ t_bool	ft_export(t_node *node)
 	int		idx;
 	t_list	**env;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	idx = -1;
 	env = get_envp();
 	if (!temp[1])
@@ -31,7 +43,7 @@ t_bool	ft_unset(t_node *node)
 	t_list	**env;
 	t_list	*check;
 
-	temp = node->left->word;
+	temp = node->right->word;
 	idx = -1;
 	if (temp[1])
 	{
@@ -52,28 +64,4 @@ t_bool	ft_unset(t_node *node)
 		}
 	}
 	return (FALSE);
-}
-
-// 노드 삭제 함수
-void	delete_node(t_list **head, t_list *node_to_delete)
-{
-    t_list	*current;
-    t_list	*prev;
-
-	current = *head;
-	prev = NULL;
-	while (current != NULL)
-	{
-		if (current == node_to_delete)
-		{
-			if (prev == NULL)
-				*head = current->next;
-			else
-				prev->next = current->next;
-			free(current);
-			break ;
-		}
-		prev = current;
-		current = current->next;
-	}
 }

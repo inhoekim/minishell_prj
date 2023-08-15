@@ -1,19 +1,21 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 
-// command ::= simple_cmd
-// command ::= ssh io_redirect_star
-t_node *command(t_tokenizer tokenizer)
+//command ::= simple_cmd
+//command ::= ssh io_redirect_star
+t_node *command(t_tokenizer *tokenizer)
 {
 	t_node  *parent;
 	t_node  *child;
+    t_token *tk;
 
-	if (check_first_set(SIMPLE_CMD))
+    tk = tokenizer->curr_token;
+	if (check_first_set(SIMPLE_CMD, tk->type))
 	{
 		parent = simple_cmd(tokenizer);
 		return (parent);
 	}
-	else if (match_token(SUBSHELL_LEFT))
+	else if (match_token(SUBSHELL_LEFT, tokenizer))
 	{
 		child = ssh(tokenizer);
 		if (child)
@@ -28,15 +30,15 @@ t_node *command(t_tokenizer tokenizer)
 	return (NULL);
 }
 
-// ssh ::= LBRACE msh_grammar RBRACE
-t_node  *ssh(t_tokenizer tokenizer)
+//ssh ::= LBRACE msh_grammar RBRACE
+t_node  *ssh(t_tokenizer *tokenizer)
 {
 	t_node  *parent;
 
-	if (match_token(SUBSHELL_LEFT))
+	if (match_token(SUBSHELL_LEFT, tokenizer))
 	{
 		parent = msh_grammar(tokenizer);
-		if (match_token(SUBSHELL_RIGHT))
+		if (match_token(SUBSHELL_RIGHT, tokenizer))
 			return (make_tree(SUBSHELL, parent, NULL));
 	}
 	syntax_error("Not available grammar");
@@ -44,12 +46,14 @@ t_node  *ssh(t_tokenizer tokenizer)
 }
 //simple_cmd ::= WORD io_redirect_or_word_star
 //simple_cmd ::= io_redirect_dagger io_redirect_dg_after_simple_cmd
-t_node  *simple_cmd(t_tokenizer tokenizer)
+t_node  *simple_cmd(t_tokenizer *tokenizer)
 {
 	t_node  *parent;
 	t_node  *child;
+    t_token *tk;
 
-	if (match_token(WORD))
+    tk = tokenizer->curr_token;
+	if (match_token(WORD, tokenizer))
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
@@ -57,7 +61,7 @@ t_node  *simple_cmd(t_tokenizer tokenizer)
 			return (merge_tree(parent, child));
 		return (parent);
 	}
-	else if (check_first_set(IO_REDIRECT))
+	else if (check_first_set(IO_REDIRECT, tk->type))
 	{
 		parent = io_redirect_dagger(tokenizer);
 		if (parent)
@@ -74,18 +78,20 @@ t_node  *simple_cmd(t_tokenizer tokenizer)
 //io_redirect_or_word_star ::= io_redirect io_redirect_or_word_star
 //io_redirect_or_word_star ::= WORD io_redirect_or_word_star
 //io_redirect_or_word_star ::= empty
-t_node  *io_redirect_or_word_star(t_tokenizer tokenizer)
+t_node  *io_redirect_or_word_star(t_tokenizer *tokenizer)
 {
 	t_node  *parent;
 	t_node  *child;
+    t_token *tk;
 
-	if (check_first_set(IO_REDIRECT))
+    tk = tokenizer->curr_token;
+	if (check_first_set(IO_REDIRECT, tk->type))
 	{
 		parent = io_redirect(tokenizer);
 		child = io_redirect_or_word_star(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	else if (check_first_set(WORD))
+	else if (check_first_set(WORD, tk->type))
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
@@ -94,12 +100,15 @@ t_node  *io_redirect_or_word_star(t_tokenizer tokenizer)
 	return (NULL);
 }
 
-// io_redirect_dagger ::= io_redirect io_redirect_star
-t_node  *io_redirect_dagger(t_tokenizer tokenizer)
+//io_redirect_dagger ::= io_redirect io_redirect_star
+t_node  *io_redirect_dagger(t_tokenizer *tokenizer)
 {
 	t_node  *parent;
 	t_node  *child;
-	if (check_first_set(IO_REDIRECT))
+    t_token *tk;
+
+    tk = tokenizer->curr_token;
+	if (check_first_set(IO_REDIRECT, tk->type))
 	{
 		parent = io_redirect(tokenizer);
 		child = io_redirect_star(tokenizer);
