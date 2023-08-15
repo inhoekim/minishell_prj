@@ -4,7 +4,7 @@ NAME = test
 
 ## directory
 HEADERS = 
-SRCS = 7_dir_wildcard_brute_recur.c
+SRCS = 8_wild_card.cpp
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 
