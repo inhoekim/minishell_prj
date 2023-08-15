@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 14:20:49 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 16:56:30 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_node	*parser(char *line)
 		syntax_error("error");
 		//free_tree(root);
 	}
+	free(tokenizer.curr_token->str);
 	free(tokenizer.curr_token);
 	return (root);
  }
