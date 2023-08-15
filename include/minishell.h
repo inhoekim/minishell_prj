@@ -65,4 +65,7 @@ typedef struct s_tokenizer
 	char	*start;
 	char	*end;
 }t_tokenizer;
+
+t_list	**get_envp(void);
+
 #endif
