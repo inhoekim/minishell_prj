@@ -16,61 +16,38 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->start = line;
 	tokenizer->end = line;
 	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
-	// tokenizer->curr_token->len = 0;
-	// tokenizer->curr_token->str = "";
-	// tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->len = 0;
+	tokenizer->curr_token->str = "";
+	tokenizer->curr_token->type = E0F;
 	tokenizer->curr_token = get_next_token(tokenizer);
 }
 
 void	reset_start_ptr(t_tokenizer *tokenizer)
 {
-	if (tokenizer->curr_token->type == SUBSHELL)
+	//이전 토큰 타입이 E0F가 아니라면(즉 첫번째로 보는 토큰이 아니라면)
+	if (tokenizer->curr_token->type != E0F)
+	{	
 		tokenizer->end++;
-	if (tokenizer->start != tokenizer->end)
-		tokenizer->end++;
-	skip_whitespace(tokenizer);
-	if (*tokenizer->end == '\0')
-	{
-		//종료
+		free(tokenizer->curr_token->str);
 	}
+	skip_whitespace(tokenizer);
 	tokenizer->start = tokenizer->end;
 }
 
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
-	while ((*tokenizer->end) == 32 || \
-		((*tokenizer->end) >= 9 && (*tokenizer->end) <= 13))
+	while ((*tokenizer->end) && ((*tokenizer->end) == 32 || \
+		((*tokenizer->end) >= 9 && (*tokenizer->end) <= 13)))
 		tokenizer->end++;
-	tokenizer->start = tokenizer->end;
+	if (*(tokenizer->end) == '\0')
+        tokenizer->curr_token->type = E0F;
 }
 
 t_bool	match(t_tokenizer *tokenizer, char matchword)
 {
 	tokenizer->end++;
-	if (tokenizer->end && *(tokenizer->end) == matchword)
+	if (tokenizer->end && *tokenizer->end == matchword)
 		return (TRUE);
+	tokenizer->end--;
 	return (FALSE);
-}
-
-
-#include <stdio.h>
-int main(void)
-{
-	char *line = "'hell''o'  >>";
-	t_tokenizer tokenizer;
-	//t_tokenizer token2;
-
-	set_tokenizer(&tokenizer, line);
-	printf("str: %s\n", tokenizer.curr_token->str);
-	printf("len: %d\n", tokenizer.curr_token->len);
-	printf("symbol: %d\n", tokenizer.curr_token->type);
-	printf("start ptr: %s\n", tokenizer.start);
-	printf("ended ptr: %s\n\n", tokenizer.end);
-
-	tokenizer.curr_token = get_next_token(&tokenizer);
-	printf("str: %s\n", tokenizer.curr_token->str);
-	printf("len: %d\n", tokenizer.curr_token->len);
-	printf("symbol: %d\n", tokenizer.curr_token->type);
-	printf("start ptr: %s\n", tokenizer.start);
-	printf("ended ptr: %s\n\n", tokenizer.end);
 }
