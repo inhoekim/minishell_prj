@@ -136,18 +136,16 @@ void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	// node에 저장된 cmd line argument 배열 parsing
 	argv = make_argv(node->word);
-	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
-		// 빌트인
+		// not make builtin func
+		printf("not make builtin check func\n");
+		exit(1);
 		if (exec_builtin() == NULL) {
-			// PATH(argv에 경로를 붙혀서 실행해야하는 경우), 현재 디렉토리 search
 			search_and_fork_exec();
 		}
 	}
-	// 경로가 명시된 경우(상대경로 or 절대경로)
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
 	set_exit_status(p_ctx->exit_status);

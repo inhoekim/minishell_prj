@@ -37,10 +37,9 @@ char	*concatenate(t_list *list)
 		str_size += ft_strlen(list->content);
 		list = list->next;
 	}
-	pattern = malloc(sizeof(char) * str_size + 1);
-    if (!pattern)
-        return (NULL);
-	pattern[str_size] = '\0';
+	pattern = calloc(str_size + 1, sizeof(char));
+	if (!pattern)
+		return (NULL);
 	list = head;
 	while (list)
 	{
@@ -74,7 +73,8 @@ t_list	*globbing(char *pattern)
 
 int **allocate_dp(int row, int col)
 {
-	int **dp;
+	int	**dp;
+
 	dp = calloc(row + 1, sizeof(int *));
 	for (int i = 0; i <= row; i++)
 	{

@@ -11,7 +11,10 @@ void	syntax_error(t_tokenizer *tokenizer)
 	token = tokenizer->curr_token;
 	ft_putstr_fd("minishell : syntax error near unexpected token ", STDERR_FILENO);
 	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putstr_fd(token->str, STDERR_FILENO);
+	if (token->type == E0F)
+		ft_putstr_fd("newline", STDERR_FD);
+	else
+		ft_putstr_fd(token->str, STDERR_FD);
 	ft_putchar_fd('\'', STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);
 	set_exit_status(STDERR_FILENO);
