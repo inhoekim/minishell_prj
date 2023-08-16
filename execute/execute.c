@@ -12,12 +12,12 @@ t_bool	execute(t_node *root)
 	// exit함수 호출시, TRUE
 	check_exit = FALSE;
 	node = exec_node(root, &ctx);
-	if (!node && node->type != E0F)
-	{
-		printf("node error\n");
-		exit(1);
-		// syntax_error();
-	}
+	// if (!node && node->type != E0F)
+	// {
+	// 	printf("node error\n");
+	// 	exit(1);
+	// 	// syntax_error();
+	// }
 	return (check_exit);
 }
 

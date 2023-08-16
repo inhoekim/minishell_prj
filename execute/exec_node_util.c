@@ -137,9 +137,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	char	**argv;
 
 	// node에 저장된 cmd line argument 배열 parsing
-	printf("root word %s\n", node->word[0]);
 	argv = make_argv(node->word);
-	printf("argv word %s\n", node->word[0]);
 	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
