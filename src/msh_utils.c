@@ -3,20 +3,6 @@
 #include "../include/minishell.h"
 #include "../include/execute_util.h"
 
-
-void	syntax_error(t_tokenizer *tokenizer)
-{
-	t_token	*token;
-
-	token = tokenizer->curr_token;
-	ft_putstr_fd("minishell : syntax error near unexpected token ", STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putstr_fd(token->str, STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
-	set_exit_status(STDERR_FILENO);
-}
-
 // t_list	*pathname_expansion(t_list *list, t_bool glob_flag)
 // {
 // 	t_list		  	*temp_list;

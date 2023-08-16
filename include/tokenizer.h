@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 16:12:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 12:52:51 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 13:01:18 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ t_bool		match(t_tokenizer *tokenizer, char matchword);
 t_token		*scan_char_token(t_tokenizer *tokenizer);
 t_token		*scan_word_token(t_tokenizer *tokenizer);
 t_bool		string_close(t_tokenizer *tokenizer, char c);
-
+void		free_token(t_tokenizer *tokenizer);
 #endif

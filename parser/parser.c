@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 12:52:02 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 13:10:59 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_node	*parser(char *line)
 	{
 		free_token(&tokenizer);
 		return (NULL);
+	}
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
 	{
@@ -34,6 +35,12 @@ t_node	*parser(char *line)
 	}
 	free_token(&tokenizer);
 	return (root);
+}
+
+void	free_tree(t_node *root)
+{
+	(void)root;
+	return ;
 }
 
 void	syntax_error(t_tokenizer *tokenizer)
@@ -49,19 +56,16 @@ void	syntax_error(t_tokenizer *tokenizer)
 		ft_putchar_fd('\'', STDERR_FD);
 		ft_putchar_fd("\n", STDERR_FD);
 	*/
-}
-
-void	free_tree(t_node *root)
-{
-	(void)root;
 	return ;
 }
 
-int	main(int argc, char **argv)
-{
-	t_node *test;
-	test = parser("ls | ls >a | \"l\"s");
-	int a = 3;
-	a++;
-	return (0);
-}
+// int	main(void)
+// {
+// 	t_node	*test;
+// 	int		a;
+
+// 	test = parser("ls > a.txt");
+// 	a = 3;
+// 	a++;
+// 	return (0);
+// }
