@@ -124,12 +124,19 @@
 // }
 
 
-void search_and_fork_exec() {
+void search_and_fork_exec() 
+{
 
 }
 
-void *exec_builtin() {
-	return (NULL);
+t_bool exec_builtin(char **argv) 
+{
+	t_bool	can_builtin;
+	(void)argv;
+	can_builtin = FALSE;
+	
+
+	return (can_builtin);
 }
 
 void	exec_word(t_node *node, t_context *p_ctx)
@@ -142,7 +149,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 		// not make builtin func
 		printf("not make builtin check func\n");
 		exit(1);
-		if (exec_builtin() == NULL) {
+		if (exec_builtin(argv) == FALSE) {
 			search_and_fork_exec();
 		}
 	}
