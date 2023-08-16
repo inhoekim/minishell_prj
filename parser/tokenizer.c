@@ -32,7 +32,7 @@ t_token	*get_curr_token(t_tokenizer *tokenizer)
 t_token	*get_next_token(t_tokenizer *tokenizer)
 {
 	reset_start_ptr(tokenizer);
-	if (*tokenizer->end == '\0')
+	if (!tokenizer->end || !ft_strlen(tokenizer->end))
 		return (make_token(tokenizer, E0F));
 	if (*tokenizer->end == '(')
 	{
@@ -53,8 +53,10 @@ t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 	if (type == E0F)
 		tokenizer->curr_token->len = 0;
 	else
+	{
 		tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
-	tokenizer->curr_token->str = ft_substr(tokenizer->start, 0, tokenizer->curr_token->len);
+		tokenizer->curr_token->str = ft_substr(tokenizer->start, 0, tokenizer->curr_token->len);
+	}
 	return (tokenizer->curr_token);
 }
 

@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 18:18:34 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 12:19:52 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ t_node	*parser(char *line)
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
+	{
+		//free_token(&tokenizer);
 		return (NULL);
+	}
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
 	{
@@ -30,8 +33,7 @@ t_node	*parser(char *line)
 		free_tree(root);
 		root = NULL;
 	}
-	free(tokenizer.curr_token->str);
-	free(tokenizer.curr_token);
+	free_token(&tokenizer);
 	return (root);
 }
 
@@ -52,6 +54,11 @@ void	free_tree(t_node *root)
 {
 	return ;
 }
+
+// static void	test_exit()
+// {
+// 	system("leaks --list -- parser_test");
+// }
 
 int	main(int argc, char **argv)
 {
