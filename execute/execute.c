@@ -12,6 +12,7 @@ t_bool	execute(t_node *root)
 	// exit함수 호출시, TRUE
 	check_exit = FALSE;
 	node = exec_node(root, &ctx);
+	// exec_node에서 항상 NULL이 리턴되는데 그 이유? -> seykim 8/16
 	// if (!node && node->type != E0F)
 	// {
 	// 	printf("node error\n");

@@ -10,7 +10,6 @@ void	arg_expansion(t_list *list)
 	while (list)
 	{
 		content = list->content;
-		// parameter가 quotation(')안에 있으면 효력상실.
 		if (content[0] != '\'')
 		{
 			content = parameter_expansion(list->content);
@@ -97,7 +96,6 @@ int	word_cnt(char *str, char *word)
 
 char	*get_value(char *key)
 {
-	// static char	status[4];
 	char	*status;
 	char	*value;
 
@@ -105,6 +103,7 @@ char	*get_value(char *key)
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
+		printf("check value %s\n", value);
 		ft_strlcpy(status, value, ft_strlen(value) + 1);
 		free(value);
 		return (status);
