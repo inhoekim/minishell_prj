@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:44:24 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/11 11:44:24 by naylee           ###   ########.fr       */
+/*   Updated: 2023/08/16 14:33:09 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 // t_symbol의 개수는 10개지만, table의 일차원 배열의 길이는 9개임. (word제외)
 t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token)
 {
-	static int table[7][9] = {
+	static int	table[7][9] = {
 	[PIPELINE] = {WORD, LESS, GREAT, DGREAT, DLESS, NONE, NONE, NONE, NONE}, // pipeline, command, simple_cmd
 	[IO_REDIRECT] = {NONE, LESS, GREAT, DGREAT, DLESS, NONE, NONE, NONE, NONE}, // io_redirect, io_redirect_star, io_redirect_dagger, 
 	[CONDITIONAL] = {NONE, NONE, NONE, NONE, NONE, AND_IF, OR_IF, NONE, NONE},

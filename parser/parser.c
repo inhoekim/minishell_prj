@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 13:10:59 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 14:17:19 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,12 @@ void	syntax_error(t_tokenizer *tokenizer)
 	t_token	*token;
 
 	token = tokenizer->curr_token;
-	/*
-		ft_putstr_fd("minishell : ", STDERR_FD);
-		ft_putstr_fd("syntax error near unexpected token ", STDERR_FD);
-		ft_putchar_fd('\'', STDERR_FD);
-		ft_putstr_fd(token->str, STDERR_FD);
-		ft_putchar_fd('\'', STDERR_FD);
-		ft_putchar_fd("\n", STDERR_FD);
-	*/
+	ft_putstr_fd("minishell : ", STDERR_FD);
+	ft_putstr_fd("syntax error near unexpected token ", STDERR_FD);
+	ft_putchar_fd('\'', STDERR_FD);
+	ft_putstr_fd(token->str, STDERR_FD);
+	ft_putchar_fd('\'', STDERR_FD);
+	ft_putchar_fd('\n', STDERR_FD);
 	return ;
 }
 
