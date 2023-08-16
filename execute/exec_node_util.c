@@ -1,10 +1,10 @@
-
 #include "../include/minishell.h"
 #include "../include/execute.h"
 #include "../include/exec_node_util.h"
 #include "../include/exec_word_util.h"
 #include "../include/make_argv_util.h"
 #include "../include/execute_util.h"
+#include "../include/filename_expansion.h"
 
 // #include "../include/exec_word_util.h"
 
@@ -123,10 +123,59 @@
 // 	exec_word(lhs, p_ctx);
 // }
 
+char	*make_order(char **path, char **argv, t_context *p_ctx)
+{
+	int		idx;
+	int		total;
+	char	*order;
+
+	idx = 0;
+	order = 0;
+	while (path[idx])
+	{
+		total = ft_strlen(argv[0]) + ft_strlen(path[idx]) + 1;
+		order = (char *)malloc(sizeof(char) * total + 1);
+		if (!order)
+			return (0);
+		order = ft_strjoin(path[idx], argv[0]);
+		if (access(order, X_OK) != -1)
+		{
+			if (can_access(order, p_ctx))
+				break ;
+		}
+		free(order);
+		order = 0;
+		idx++;
+	}
+	return (order);
+}
+
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
-	(void)argv;
-	(void)p_ctx;
+	char	*order;
+	char	**path;
+	pid_t	pid;
+
+	path = ft_split2(ft_getenv("PATH"), ':');
+	order = make_order(path, argv, p_ctx);
+	if (!order)
+		p_ctx->exit_status = 127;
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(p_ctx->fd[STDIN], STDIN);
+		dup2(p_ctx->fd[STDOUT], STDOUT);
+		if (p_ctx->fd_close >= 0)
+		{
+			close(p_ctx->fd_close);
+			p_ctx->fd_close = -1;
+		}
+		if (!order)
+			msh_error(argv[0], "command not found", 0);
+		execve(order, argv, list_to_arr(*get_envp()));
+		exit(1);
+	}
+	waitpid(pid, 0, 0);
 }
 
 t_bool	exec_builtin(char **argv)
@@ -138,7 +187,7 @@ t_bool	exec_builtin(char **argv)
 	builtin_func = check_builtin(argv[0]);
 	if (builtin_func)
 	{
-		printf("not make builtin_func build");
+		printf("not make builtin_func build\n");
 		exit(1);
 	}
 	return (can_builtin);
@@ -166,10 +215,8 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	argv = make_argv(node->word);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
-		// not make builtin func
-		if (exec_builtin(argv) == FALSE) {
+		if (exec_builtin(argv) == FALSE)
 			search_and_fork_exec(argv, p_ctx);
-		}
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);

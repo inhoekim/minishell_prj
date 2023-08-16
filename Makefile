@@ -24,7 +24,7 @@ HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h mi
 SRCS = minishell.c msh_utils.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
 SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
 SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c
-SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c
+SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

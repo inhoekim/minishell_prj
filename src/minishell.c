@@ -71,8 +71,9 @@ void	minishell_loop()
 		// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
 		check_exit = execute(root);
 		// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
+		free(line);
 		if (check_exit)
-			line = NULL;	
+			line = NULL;
 	}
 	printf("exit\n");
 }
