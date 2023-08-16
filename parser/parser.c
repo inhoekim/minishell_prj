@@ -22,8 +22,6 @@ t_node	*parser(char *line)
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
-	{
-		//free_token(&tokenizer);
 		return (NULL);
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
@@ -36,22 +34,20 @@ t_node	*parser(char *line)
 	return (root);
 }
 
-void	free_token(t_tokenizer *tokenizer)
+void	syntax_error(t_tokenizer *tokenizer)
 {
-	// if (tokenizer->curr_token->str)
-	// 	free(tokenizer->curr_token->str);
-	free(tokenizer->curr_token);
-}
+	t_token	*token;
 
 	token = tokenizer->curr_token;
-	/*
-		ft_putstr_fd("minishell : ", STDERR_FD);
-		ft_putstr_fd("syntax error near unexpected token ", STDERR_FD);
-		ft_putchar_fd('\'', STDERR_FD);
+	ft_putstr_fd("minishell : ", STDERR_FD);
+	ft_putstr_fd("syntax error: near unexpected token ", STDERR_FD);
+	ft_putchar_fd('\'', STDERR_FD);
+	if (token->type == E0F)
+		ft_putstr_fd("newline", STDERR_FD);
+	else
 		ft_putstr_fd(token->str, STDERR_FD);
-		ft_putchar_fd('\'', STDERR_FD);
-		ft_putchar_fd("\n", STDERR_FD);
-	*/
+	ft_putchar_fd('\'', STDERR_FD);
+	ft_putchar_fd('\n', STDERR_FD);
 }
 
 void	free_tree(t_node *root)
@@ -60,21 +56,14 @@ void	free_tree(t_node *root)
 	return ;
 }
 
-// int	main(int argc, char **argv)
-// {
-// 	t_node *test;
-// 	test = parser("ls | ls >a | \"l\"s");
-// 	int a = 3;
-// 	a++;
-// 	return (0);
-// }
-
 int	main(int argc, char **argv)
 {
 	//atexit(test_exit);
 	t_node *test;
-	test = parser("cat >> a");
+	test = parser("cat | >");
 	int a = 3;
 	a++;
 	return (0);
 }
+
+
