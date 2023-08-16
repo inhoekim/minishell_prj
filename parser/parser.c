@@ -15,23 +15,33 @@
 #include "../include/tokenizer.h"
 
 t_node	*parser(char *line)
- {
+{
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
+	{
+		//free_token(&tokenizer);
 		return (NULL);
+	}
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
 	{
+		free_token(&tokenizer);
 		syntax_error("error");
 		//free_tree(root);
 	}
-	free(tokenizer.curr_token->str);
-	free(tokenizer.curr_token);
+	free_token(&tokenizer);
 	return (root);
- }
+}
+
+void	free_token(t_tokenizer *tokenizer)
+{
+	// if (tokenizer->curr_token->str)
+	// 	free(tokenizer->curr_token->str);
+	free(tokenizer->curr_token);
+}
 
 void	syntax_error(char * str)
 {
@@ -43,10 +53,16 @@ void	free_tree(t_node *root)
 	return ;
 }
 
+// static void	test_exit()
+// {
+// 	system("leaks --list -- parser_test");
+// }
+
 int	main(int argc, char **argv)
 {
+	//atexit(test_exit);
 	t_node *test;
-	test = parser("ls | ls >a | \"l\"s");
+	test = parser("cat >> a");
 	int a = 3;
 	a++;
 	return (0);
