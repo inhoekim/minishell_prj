@@ -17,14 +17,8 @@ char	**make_argv(char **word_arr)
 	argv_list = NULL;
 	while (word_arr[i])
 	{
-		//ex. echo "123""456";
 		list = split_quotes(word_arr[i]);
 		glob_flag = check_glob(list);
-		// heredoc delimeter에 (',"")가 있었다면 그 내용은 효력상실.
-		// heredoc delimeter에 (',"")가 없었다면 그 내용은 expansion.
-		// heredoc delimeter는 효력상실.
-		// ex. echo '$USER', echo "$USER"
-		// arg_expansion내부에서 cmd가 heredoc인지 판단해야함.
 		arg_expansion(list);
 		unquote(list);
 		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
@@ -42,18 +36,23 @@ void	fork_exec(char **argv, t_context *p_ctx)
 
 	envl = *get_envp();
 	pid = fork();
-	if (pid)
+	// 부모에서 실행되서 종료되므로, 프롬포트가 종료되어서 세그가 발생
+	// 따라서 자식프로세스에서 실행하고 자식프로세스가 종료될 때까지 대기하도록
+	// pid == 0 && waitpid(pid, 0, 0)작성 -> seykim 8/16
+	if (pid == 0)
 	{
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		envp = list_to_arr(envl);
-		if (p_ctx->fd_close >= 0) {
+		if (p_ctx->fd_close >= 0) 
+		{
 			close(p_ctx->fd_close);
 			p_ctx->fd_close = -1;
 		}
 		execve(argv[0], argv, envp);
 		printf("execve error\n");
 	}
+	waitpid(pid, 0, 0);
 }
 
 char	**list_to_arr(t_list *node)

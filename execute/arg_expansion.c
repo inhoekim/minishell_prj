@@ -10,7 +10,6 @@ void	arg_expansion(t_list *list)
 	while (list)
 	{
 		content = list->content;
-		// parameter가 quotation(')안에 있으면 효력상실.
 		if (content[0] != '\'')
 		{
 			content = parameter_expansion(list->content);
@@ -97,11 +96,12 @@ int	word_cnt(char *str, char *word)
 
 char	*get_value(char *key)
 {
-	// static char	status[4];
 	char	*status;
 	char	*value;
 
-	status = "";
+	// status가 할당이 안되어있어서 여기서 strlcpy에서 한자리 이상을 참조하면서 에러 발생
+	// 따라서 255이상의 값이 나올 수 없으므로 status에 4칸짜리 calloc 배열 생성 -> seykim 8/16
+	status = calloc(4, sizeof(char *));
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
