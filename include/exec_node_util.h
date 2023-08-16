@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 14:38:34 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/16 17:33:07 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/16 18:45:52 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ void		exec_input(t_node *node, t_context *p_ctx);
 void		exec_heredoc(t_node *node, t_context *p_ctx);
 void		exec_output(t_node *node, t_context *p_ctx);
 void		exec_append(t_node *node, t_context *p_ctx);
-
+void		check_env(char **argv, t_list **env);
+char		*make_temp(char *s1);
 #endif
