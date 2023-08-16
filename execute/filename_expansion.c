@@ -126,8 +126,11 @@ void	msh_error(char *name, char *msg, int error)
 		perror(name);
 		return ;
 	}
-	ft_putstr_fd(name, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
+	if (name)
+	{
+		ft_putstr_fd(name, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
 	if (msg)
 		ft_putendl_fd(msg, STDERR_FILENO);
 	else if (error)

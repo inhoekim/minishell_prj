@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 13:23:47 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/17 01:44:44 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	syntax_error(t_tokenizer *tokenizer)
 	ft_putstr_fd("minishell : ", STDERR_FILENO);
 	ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
 	ft_putchar_fd('\'', STDERR_FILENO);
+	// @ 문법에러인경우, token내부의 str을 출력하는 이유는?
+	// @ str에 에러메세지를 담는 token을 사용하지않으므로 필요없어 보임.
 	ft_putstr_fd(token->str, STDERR_FILENO);
 	ft_putchar_fd('\'', STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);

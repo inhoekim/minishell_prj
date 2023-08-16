@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rule1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/16 19:10:15 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/16 23:00:48 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임
 	if (check_first_set(PIPELINE, tk.type) || \
 	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
@@ -73,6 +74,7 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임
 	if (check_first_set(COMMAND, tk.type) || \
 	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{

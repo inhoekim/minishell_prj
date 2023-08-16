@@ -29,6 +29,7 @@ t_node	*command(t_tokenizer *tokenizer)
 		parent = simple_cmd(tokenizer);
 		return (parent);
 	}
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임. ssh는 무조건 실행하면 될 거같음
 	else if (match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = ssh(tokenizer);
@@ -76,6 +77,8 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 			return (merge_tree(parent, child));
 		return (parent);
 	}
+	// @ io_redirect_dagger로 바꿔야할 것같음
+	// 	else if (check_first_set(IO_REDIRECT_DAGGER, tk.type))
 	else if (check_first_set(IO_REDIRECT, tk.type))
 	{
 		parent = io_redirect_dagger(tokenizer);
@@ -119,6 +122,7 @@ t_node	*io_redirect_dagger(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// ex. cat < a.txt > b.txt < c.txt > d.txt
 	if (check_first_set(IO_REDIRECT, tk.type))
 	{
 		parent = io_redirect(tokenizer);

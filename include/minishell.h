@@ -67,6 +67,9 @@ typedef struct s_tokenizer
 	t_token	*curr_token;
 	char	*start;
 	char	*end;
+	// @ heredoc operator 개수 제한을 위해 추가됨
+	int		heredoc_file_idx;
+	char	**heredoc_file_name;
 }t_tokenizer;
 
 void	init_envp(char **envp);
