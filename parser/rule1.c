@@ -6,13 +6,14 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/15 17:03:32 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 12:42:37 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 #include "../include/rule.h"
+#include "../include/parser.h"
 
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)
@@ -34,7 +35,7 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -53,7 +54,7 @@ t_node	*conditional(t_tokenizer *tokenizer)
 		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
-    }
+	}
 	else if (match_token(OR_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
@@ -84,7 +85,7 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 

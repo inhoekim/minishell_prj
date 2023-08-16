@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/18 04:00:19 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/15 18:10:38 by dasong           ###   ########.fr       */
+/*   Created: 2023/08/16 12:33:04 by inhkim            #+#    #+#             */
+/*   Updated: 2023/08/16 12:34:50 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef PARSER_H
+# define PARSER_H
+# include "minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
-{
-	del(lst->content);
-	free(lst);
-}
+t_node	*parser(char *line);
+t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token);
+void	free_tree(t_node *root);
+void	syntax_error(t_tokenizer *tokenizer);
+#endif

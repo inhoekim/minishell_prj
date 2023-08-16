@@ -16,15 +16,15 @@ OBJ_FILES = $(OBJS) $(BONUS_OBJS)
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	ar rsc $@ $^
+	@ar rsc $@ $^
 
 $(OBJ_FILES): %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	rm -f $(OBJ_FILES)
+	@rm -f $(OBJ_FILES)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
