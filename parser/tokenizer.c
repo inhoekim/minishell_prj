@@ -51,7 +51,10 @@ t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
 	tokenizer->curr_token->type = type;
 	if (type == E0F)
+	{
 		tokenizer->curr_token->len = 0;
+		tokenizer->curr_token->str = "";
+	}
 	else
 	{
 		tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;

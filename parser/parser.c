@@ -22,7 +22,7 @@ t_node	*parser(char *line)
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
-		//free_token(&tokenizer);
+		free_token(&tokenizer);
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
@@ -38,8 +38,8 @@ t_node	*parser(char *line)
 
 void	free_token(t_tokenizer *tokenizer)
 {
-	// if (tokenizer->curr_token->str)
-	// 	free(tokenizer->curr_token->str);
+	if (tokenizer->curr_token->str)
+		free(tokenizer->curr_token->str);
 	free(tokenizer->curr_token);
 }
 
@@ -62,7 +62,7 @@ int	main(int argc, char **argv)
 {
 	//atexit(test_exit);
 	t_node *test;
-	test = parser("cat >> a");
+	test = parser("     ");
 	int a = 3;
 	a++;
 	return (0);
