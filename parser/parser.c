@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 12:19:52 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 12:20:18 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ t_node	*parser(char *line)
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
-	{
-		//free_token(&tokenizer);
 		return (NULL);
-	}
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
 	{
