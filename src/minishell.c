@@ -1,18 +1,21 @@
 #include <stdio.h>
 #include "../libft/libft.h"
-#include "minishell.h"
+#include "../include/minishell.h"
+#include "../include/parser.h"
+#include "../include/execute.h"
+
 
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	init_tokenizer();
-	init_paser();
+	// init_tokenizer();
+	// init_paser();
 	init_envp(envp);
 	minishell_loop();
-	free_parser();
-	free_tree();
-	set_exit_status();
+	// free_parser();
+	// free_tree();
+	// set_exit_status();
 }
 
 void	init_envp(char **envp)
@@ -48,30 +51,21 @@ void	init_parser()
 }
 
 
-t_tokenizer	*get_token()
-{
-	t_tokenizer *temp_token;
-
-
-	return (temp_token);
-}
-
-
 void	minishell_loop() 
 {
 	t_node		*root;
 	char		*line;
 	t_bool		check_exit;
-	t_tokenizer *token;
+	// t_tokenizer *token;
 
 	check_exit = TRUE;
 	line = ft_strdup("");
 	while (line)
 	{
-		line = readline("prompt >");
+		line = readline("prompt> ");
 		// 히스토리 기록 -> readline의 함수
 		if (line)
-			add_history();
+			add_history(line);
 		// parser를 통해 트리생성
 		root = parser(line);
 		// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단

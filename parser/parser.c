@@ -3,26 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 14:28:41 by dasong           ###   ########.fr       */
-=======
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/15 17:45:35 by inhkim           ###   ########.fr       */
->>>>>>> release
+/*   Updated: 2023/08/15 22:59:55 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/rule.h"
 #include "../include/tokenizer.h"
+#include "../include/parser.h"
 
 t_node	*parser(char *line)
- {
+{
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
@@ -40,21 +34,17 @@ t_node	*parser(char *line)
 	return (root);
  }
 
-void	syntax_error(char * str)
-{
-	return ;
-}
-
 void	free_tree(t_node *root)
 {
+	(void)root;
 	return ;
 }
 
-int	main(int argc, char **argv)
-{
-	t_node *test;
-	test = parser("ls | ls >a | \"l\"s");
-	int a = 3;
-	a++;
-	return (0);
-}
+// int	main(int argc, char **argv)
+// {
+// 	t_node *test;
+// 	test = parser("ls | ls >a | \"l\"s");
+// 	int a = 3;
+// 	a++;
+// 	return (0);
+// }

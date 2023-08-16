@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/14 08:06:52 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/15 22:46:48 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../include/tokenizer.h"
 
 static char	**make_first_word(char *src, int len);
-static char	**make_node_word(char *src, int len);
+// static char	**make_node_word(char *src, int len);
 static char	**make_first_word(char *src, int len);
 
 t_node	*make_leaf(t_tokenizer *tokenizer)

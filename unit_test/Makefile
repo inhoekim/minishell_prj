@@ -3,29 +3,26 @@
 NAME = test
 
 ## directory
-HEADERS = 
-SRCS = 8_wild_card.cpp
+# HEADERS = 
+SRCS = test6.c
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 
 INC_DIRS = /opt/homebrew/opt/readline/include
 LIB_DIRS = /opt/homebrew/opt/readline/lib ../libft
 
-# INC_DIRS = /Users/dasong/.brew/opt/readline/include
-# LIB_DIRS = /Users/dasong/.brew/opt/readline/lib
-
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) # -fsanitize=address
 LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft
 
-.PHONY: clean, fclean, re, all, bonus
+.PHONY: clean, fclean, re, all
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C ../libft
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS);\ 
+	$(CC) $(LDFLAGS) -o $@ $(OBJS)
 
 $(OBJS): %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -o $@ -c $<
