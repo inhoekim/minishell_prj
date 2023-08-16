@@ -34,21 +34,21 @@ t_node	*parser(char *line)
 	return (root);
 }
 
-// void	syntax_error(t_tokenizer *tokenizer)
-// {
-// 	t_token	*token;
+void	syntax_error(t_tokenizer *tokenizer)
+{
+	t_token	*token;
 
-// 	token = tokenizer->curr_token;
-// 	ft_putstr_fd("minishell : ", STDERR_FD);
-// 	ft_putstr_fd("syntax error: near unexpected token ", STDERR_FD);
-// 	ft_putchar_fd('\'', STDERR_FD);
-// 	if (token->type == E0F)
-// 		ft_putstr_fd("newline", STDERR_FD);
-// 	else
-// 		ft_putstr_fd(token->str, STDERR_FD);
-// 	ft_putchar_fd('\'', STDERR_FD);
-// 	ft_putchar_fd('\n', STDERR_FD);
-// }
+	token = tokenizer->curr_token;
+	ft_putstr_fd("minishell : syntax error near unexpected token ", STDERR_FILENO);
+	ft_putchar_fd('\'', STDERR_FILENO);
+	if (token->type == E0F)
+		ft_putstr_fd("newline", STDERR_FD);
+	else
+		ft_putstr_fd(token->str, STDERR_FD);
+	ft_putchar_fd('\'', STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+	set_exit_status(STDERR_FILENO);
+}
 
 void	free_tree(t_node *root)
 {

@@ -62,29 +62,3 @@ t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 	}
 	return (tokenizer->curr_token);
 }
-
-t_token	*make_merge_word_token(t_tokenizer *tokenizer, int flag)
-{
-	char	*ptr;
-	char	*str;
-	int		len;
-	int		i;
-
-	len = tokenizer->end - tokenizer->start - (flag * 2) + 1;
-	str = (char *)malloc(sizeof(char) * (len + 1));
-	ptr = tokenizer->start;
-	i = 0;
-	while (ptr <= tokenizer->end)
-	{
-		if (*ptr != '\'' && *ptr != '"')
-		{
-			str[i] = *ptr;
-			i++;
-		}
-		ptr++;
-	}
-	tokenizer->curr_token->type = WORD;
-	tokenizer->curr_token->len = len;
-	tokenizer->curr_token->str = str;
-	return (tokenizer->curr_token);
-}

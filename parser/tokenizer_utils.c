@@ -34,7 +34,6 @@ void	reset_start_ptr(t_tokenizer *tokenizer)
 	if (tokenizer->end)
 		tokenizer->start = tokenizer->end;
 }
-
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
 	if (!tokenizer->end || !ft_strlen(tokenizer->end))
