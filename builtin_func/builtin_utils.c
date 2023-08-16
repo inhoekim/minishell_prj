@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 #include "../libft/libft.h"
-# define PATH_MAX 1024
+#include "../include/execute.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {
@@ -31,7 +31,6 @@ char	*ft_strnjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-// 노드 삭제 함수
 void	delete_node(t_list **head, t_list *node_to_delete)
 {
 	t_list	*current;
@@ -55,7 +54,7 @@ void	delete_node(t_list **head, t_list *node_to_delete)
 	}
 }
 
-char	*getenv(char *pos)
+char	*ft_getenv(char *pos)
 {
 	size_t	pos_len;
 	t_list	*cur_env;
@@ -74,7 +73,7 @@ char	*getenv(char *pos)
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env)
 {
 	t_list	*temp;
-	t_list	*prev;
+	// t_list	*prev;
 	char	*var;
 
 	temp = *env;
@@ -86,7 +85,7 @@ t_list	*getenv_list(char *pos, size_t pos_len, t_list **env)
 			if (var[pos_len] == '=')
 				return (temp);
 		}
-		prev = temp;
+		// prev = temp;
 		temp = temp->next;
 	}
 	return (NULL);

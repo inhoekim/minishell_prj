@@ -6,13 +6,14 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 12:20:18 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 12:26:56 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/rule.h"
 #include "../include/tokenizer.h"
+#include "../include/parser.h"
 #define STDERR_FD 2
 
 t_node	*parser(char *line)
@@ -49,19 +50,15 @@ void	syntax_error(t_tokenizer *tokenizer)
 
 void	free_tree(t_node *root)
 {
+	(void)root;
 	return ;
 }
 
-// static void	test_exit()
+// int	main(int argc, char **argv)
 // {
-// 	system("leaks --list -- parser_test");
+// 	t_node *test;
+// 	test = parser("ls | ls >a | \"l\"s");
+// 	int a = 3;
+// 	a++;
+// 	return (0);
 // }
-
-int	main(int argc, char **argv)
-{
-	t_node	*test;
-	test = parser("ls | ls >a | \"l\"s");
-	int a = 3;
-	a++;
-	return (0);
-}
