@@ -46,7 +46,6 @@ void	skip_whitespace(t_tokenizer *tokenizer)
 		((*tokenizer->end) >= 9 && (*tokenizer->end) <= 13)))
 		tokenizer->end++;
 }
-
 t_bool	match(t_tokenizer *tokenizer, char matchword)
 {
 	tokenizer->end++;
@@ -54,4 +53,10 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 		return (TRUE);
 	tokenizer->end--;
 	return (FALSE);
+}
+void	free_token(t_tokenizer *tokenizer)
+{
+	// if (tokenizer->curr_token->str)
+	// 	free(tokenizer->curr_token->str);
+	free(tokenizer->curr_token);
 }
