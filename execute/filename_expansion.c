@@ -10,7 +10,7 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 
 	pattern = concatenate(list);
 	if (!pattern)
-        set_exit_status(ENOMEM);
+		set_exit_status(ENOMEM);
 	if (glob_flag)
 	{
 		expanded_list = globbing(pattern);
@@ -64,7 +64,9 @@ t_list	*globbing(char *pattern)
 	while (dir != NULL)
 	{
 		dir = readdir(dp);
-		if (dir && dir->d_type == DT_REG && is_match(pattern, dir->d_name))
+		// change is_match func argv : p_idx, w_idx add seykim 8/16
+		if (dir && dir->d_type == DT_REG && \
+		is_match(pattern, dir->d_name, 0, 0))
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 	}
 	closedir(dp);
@@ -74,22 +76,24 @@ t_list	*globbing(char *pattern)
 int **allocate_dp(int row, int col)
 {
 	int	**dp;
+	int	idx;
 
 	dp = calloc(row + 1, sizeof(int *));
-	for (int i = 0; i <= row; i++)
+	idx = 0;
+	while (idx <= row)
 	{
-		dp[i] = calloc(col + 1, sizeof(int));
+		dp[idx] = calloc(col + 1, sizeof(int));
+		idx++;
 	}
 	return (dp);
 }
 
-int is_match(char *pattern, char *word) 
+// change is_match func : for -> while & delete dp[1][1] check seykim 8/16
+int is_match(char *pattern, char *word, int p_idx, int w_idx)
 {
 	int	len_p;
 	int	len_w;
 	int	**dp;
-	int	p_idx;
-	int	w_idx;
 
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);
@@ -97,19 +101,18 @@ int is_match(char *pattern, char *word)
 	dp[0][0] = 1;
 	if (pattern[0] == '*')
 		dp[1][0] = 1;
-	p_idx = 0;
 	while (++p_idx <= len_p)
 	{
 		w_idx = 0;
 		while (++w_idx <= len_w)
 		{
-			if (pattern[p_idx - 1] == '?' || (pattern[p_idx - 1] == word[w_idx - 1]))
+			if (pattern[p_idx - 1] == '?' \
+			|| (pattern[p_idx - 1] == word[w_idx - 1]))
 				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
 			else if (pattern[p_idx - 1] == '*')
-				dp[p_idx][w_idx] = (dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
+				dp[p_idx][w_idx] = \
+				(dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
 		}
-		if (dp[1][1] == 0)
-			return (FALSE);
 	}
 	return (dp[len_p][len_w]);
 }
