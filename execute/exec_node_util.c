@@ -176,7 +176,18 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		execve(order, argv, list_to_arr(*get_envp()));
 		exit(1);
 	}
-	waitpid(pid, 0, 0);
+	set_ctx_status(p_ctx, pid, 0);
+}
+
+void	set_ctx_status(t_context *p_ctx, pid_t pid, int flag)
+{
+	waitpid(pid, &flag, 0);
+	if (flag != 0)
+	// 이거 왜 안되는지 모르겠음
+	// if (WIFSIGNALED(flag))
+		p_ctx->exit_status = 1;
+	else
+		p_ctx->exit_status = 0;
 }
 
 t_bool	exec_builtin(char **argv)

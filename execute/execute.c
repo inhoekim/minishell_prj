@@ -34,8 +34,8 @@ t_node *exec_node(t_node *node, t_context *p_ctx)
 		exec_output(node, p_ctx);
 	else if(node->type == DGREAT)
 		exec_append(node, p_ctx);
-	else if(node->type == DLESS)
-		exec_heredoc(node, p_ctx);
+	// else if(node->type == DLESS)
+	// 	exec_heredoc(node, p_ctx);
 	else if(node->type == AND_IF)
 		exec_and(node, p_ctx);
 	else if(node->type == OR_IF)

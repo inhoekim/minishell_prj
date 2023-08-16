@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rule1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/16 12:42:37 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 19:10:15 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_node	*conditional(t_tokenizer *tokenizer)
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
-		child = make_tree(AND_IF, NULL, pipe);
+		child = make_tree(OR_IF, NULL, pipe);
 		return (merge_tree(parent, child));
 	}
 	return (NULL);
