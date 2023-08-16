@@ -36,13 +36,6 @@ t_node	*parser(char *line)
 	return (root);
 }
 
-void	free_token(t_tokenizer *tokenizer)
-{
-	if (tokenizer->curr_token->str)
-		free(tokenizer->curr_token->str);
-	free(tokenizer->curr_token);
-}
-
 void	syntax_error(char * str)
 {
 	return ;
@@ -60,9 +53,9 @@ void	free_tree(t_node *root)
 
 int	main(int argc, char **argv)
 {
-	//atexit(test_exit);
+	// atexit(test_exit);
 	t_node *test;
-	test = parser("     ");
+	test = parser("s");
 	int a = 3;
 	a++;
 	return (0);
