@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/15 16:12:07 by naylee            #+#    #+#             */
+/*   Updated: 2023/08/15 16:12:09 by naylee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef TOKNIZER_H
 # define TOKNIZER_H
 
@@ -10,7 +21,7 @@ t_token		*make_token(t_tokenizer *tokenizer, t_symbol type);
 void	    set_tokenizer(t_tokenizer *tokenizer, char *line);
 void		reset_start_ptr(t_tokenizer *tokenizer);
 void		skip_whitespace(t_tokenizer *tokenizer);
-void	    syntax_error(char * str);
+void	    syntax_error(char *str);
 t_bool		match(t_tokenizer *tokenizer, char matchword);
 t_token	    *scan_char_token(t_tokenizer *tokenizer);
 t_token	    *scan_word_token(t_tokenizer *tokenizer);
