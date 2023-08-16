@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/15 22:51:08 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/16 14:55:56 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ typedef struct s_context
 t_bool	execute(t_node *root);
 t_node *exec_node(t_node *node, t_context *p_ctx);
 
-t_bool	ft_cd(t_node *node);
-t_bool	ft_echo(t_node *node);
-t_bool	ft_pwd(t_node *node);
-t_bool	ft_env(t_node *node);
-t_bool	ft_exit(t_node *node);
-t_bool	ft_export(t_node *node);
-t_bool	ft_unset(t_node *node);
+t_bool	ft_cd(char **argv);
+t_bool	ft_echo(char **argv);
+t_bool	ft_pwd(char **argv);
+t_bool	ft_env(char **argv);
+t_bool	ft_exit(char **argv);
+t_bool	ft_export(char **argv);
+t_bool	ft_unset(char **argv);
 void	exit_utils(char **temp);
 char	*vaild_env(char **temp);
 char	*special_case(char **temp);

@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"bitset": "c"
+		"bitset": "c",
+		"minishell.h": "c"
 	}
 }

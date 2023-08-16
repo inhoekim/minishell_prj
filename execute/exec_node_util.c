@@ -123,20 +123,40 @@
 // 	exec_word(lhs, p_ctx);
 // }
 
-
-void search_and_fork_exec() 
+void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
-
+	(void)argv;
+	(void)p_ctx;
 }
 
-t_bool exec_builtin(char **argv) 
+t_bool	exec_builtin(char **argv)
 {
-	t_bool	can_builtin;
-	(void)argv;
-	can_builtin = FALSE;
-	
+	t_bool		can_builtin;
+	t_builtin	builtin_func;
 
+	can_builtin = FALSE;
+	builtin_func = check_builtin(argv[0]);
+	if (builtin_func)
+	{
+		printf("not make builtin_func build");
+		exit(1);
+	}
 	return (can_builtin);
+}
+
+t_builtin	check_builtin(char *argv)
+{
+	if (argv[0] == 'c')
+		return (ft_cd);
+	else if (argv[0] == 'e')
+	{
+		return (ft_echo);
+	}
+	else if (argv[0] == 'p')
+		return (ft_pwd);
+	else if (argv[0] == 'u')
+		return (ft_unset);
+	return (NULL);
 }
 
 void	exec_word(t_node *node, t_context *p_ctx)
@@ -147,10 +167,8 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		// not make builtin func
-		printf("not make builtin check func\n");
-		exit(1);
 		if (exec_builtin(argv) == FALSE) {
-			search_and_fork_exec();
+			search_and_fork_exec(argv, p_ctx);
 		}
 	}
 	else if (can_access(argv[0], p_ctx))
