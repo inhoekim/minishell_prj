@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 12:40:48 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 15:54:47 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ t_node	*parser(char *line)
 
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
+	{
+		free_token(&tokenizer);
 		return (NULL);
+	}
 	root = msh_grammar(&tokenizer);
 	if (get_curr_token(&tokenizer)->type != E0F)
 	{
@@ -34,36 +37,40 @@ t_node	*parser(char *line)
 	return (root);
 }
 
-void	syntax_error(t_tokenizer *tokenizer)
-{
-	t_token	*token;
-
-	token = tokenizer->curr_token;
-	ft_putstr_fd("minishell : syntax error near unexpected token ", STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	if (token->type == E0F)
-		ft_putstr_fd("newline", STDERR_FD);
-	else
-		ft_putstr_fd(token->str, STDERR_FD);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
-	set_exit_status(STDERR_FILENO);
-}
-
 void	free_tree(t_node *root)
 {
 	(void)root;
 	return ;
 }
 
-// int	main(int argc, char **argv)
+void	syntax_error(t_tokenizer *tokenizer)
+{
+	t_token	*token;
+
+	token = tokenizer->curr_token;
+	if (token->type != SYNTAX_ERR)
+	{	
+		ft_putstr_fd("minishell : ", STDERR_FILENO);
+		ft_putstr_fd("syntax error: near unexpected token ", STDERR_FILENO);
+		ft_putchar_fd('\'', STDERR_FILENO);
+		if (token->type == E0F)
+			ft_putstr_fd("newline", STDERR_FILENO);
+		else
+			ft_putstr_fd(token->str, STDERR_FILENO);
+		ft_putchar_fd('\'', STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
+		tokenizer->curr_token->type = SYNTAX_ERR;
+	}
+	return ;
+}
+
+// int	main(void)
 // {
-// 	//atexit(test_exit);
-// 	t_node *test;
-// 	test = parser("cat | >");
-// 	int a = 3;
+// 	t_node	*test;
+// 	int		a;
+
+// 	test = parser("ls > a.txt");
+// 	a = 3;
 // 	a++;
 // 	return (0);
 // }
-
-

@@ -72,10 +72,10 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	if (match_token(LESS, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(LESS, NULL, make_leaf(tokenizer)));
-	if (match_token(GREAT, tokenizer, TRUE) \
+	else if (match_token(GREAT, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(GREAT, NULL, make_leaf(tokenizer)));
-	if (match_token(DGREAT, tokenizer, TRUE) \
+	else if (match_token(DGREAT, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 		return (make_tree(DGREAT, NULL, make_leaf(tokenizer)));
 	syntax_error(tokenizer);

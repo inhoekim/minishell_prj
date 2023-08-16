@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/16 12:42:37 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 15:52:21 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 	if (match_token(PIPE, tokenizer, TRUE))
 	{
 		child = pipeline(tokenizer);
-		return (make_tree(PIPE, NULL, child));
 	}
 	return (NULL);
 }

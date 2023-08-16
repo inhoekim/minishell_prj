@@ -6,16 +6,19 @@ RESET := \033[0m
 LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
-INC_DIRS = /opt/homebrew/opt/readline/include 
+## seykim readline 설정 8/16
+# INC_DIRS = /opt/homebrew/opt/readline/include
+INC_DIRS = /Users/seykim/.brew/opt/readline/include
 INC_DIRS += include
-LIB_DIRS = /opt/homebrew/opt/readline/lib libft
+LIB_DIRS = //Users/seykim/.brew/opt/readline/lib libft
+# LIB_DIRS = /opt/homebrew/opt/readline/lib libft
 SRC_DIRS = src builtin_func execute parser
 
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 ## file
-HEADERS = arg_expansion.h execute.h libft.h rule.h exec_node_util.h execute_util.h 
+HEADERS = arg_expansion.h execute.h libft.h rule.h exec_node_util.h execute_util.h parser.h 
 HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h minishell.h
 
 SRCS = minishell.c msh_utils.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
@@ -27,8 +30,8 @@ OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3 #-fsanitize=address
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3 #-fsanitize=address
 
 .PHONY: clean, fclean, re, all
 

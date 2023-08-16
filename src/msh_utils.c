@@ -3,7 +3,6 @@
 #include "../include/minishell.h"
 #include "../include/execute_util.h"
 
-
 // t_list	*pathname_expansion(t_list *list, t_bool glob_flag)
 // {
 // 	t_list		  	*temp_list;
