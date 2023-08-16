@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # define NONE -1
+# define STDERR_FD 2
 # include <stdio.h>
 # include "libft.h"
 # include <readline/readline.h>

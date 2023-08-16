@@ -13,6 +13,7 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 #include "../include/rule.h"
+#include "../include/parser.h"
 
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star
@@ -39,7 +40,7 @@ t_node	*command(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -54,7 +55,7 @@ t_node	*ssh(t_tokenizer *tokenizer)
 		if (match_token(SUBSHELL_RIGHT, tokenizer, TRUE))
 			return (make_tree(SUBSHELL, parent, NULL));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -81,7 +82,7 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 		child = io_redirect_dg_after_simple_cmd(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -105,7 +106,7 @@ t_node	*io_redirect_or_word_star(t_tokenizer *tokenizer)
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
-		return (merge_tree(parent, child)); //만약 word-word가 만나면 child word + parent word = new word가 되어야함
+		return (merge_tree(parent, child));
 	}
 	return (NULL);
 }
@@ -124,6 +125,6 @@ t_node	*io_redirect_dagger(t_tokenizer *tokenizer)
 		child = io_redirect_star(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }

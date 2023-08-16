@@ -31,18 +31,21 @@ void	reset_start_ptr(t_tokenizer *tokenizer)
 		free(tokenizer->curr_token->str);
 	}
 	skip_whitespace(tokenizer);
-	tokenizer->start = tokenizer->end;
+	if (tokenizer->end)
+		tokenizer->start = tokenizer->end;
 }
 
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
+	if (!tokenizer->end || !ft_strlen(tokenizer->end))
+	{
+        tokenizer->curr_token->type = E0F;
+		return ;
+	}
 	while ((*tokenizer->end) && ((*tokenizer->end) == 32 || \
 		((*tokenizer->end) >= 9 && (*tokenizer->end) <= 13)))
 		tokenizer->end++;
-	if (*(tokenizer->end) == '\0')
-        tokenizer->curr_token->type = E0F;
 }
-
 t_bool	match(t_tokenizer *tokenizer, char matchword)
 {
 	tokenizer->end++;
@@ -50,4 +53,10 @@ t_bool	match(t_tokenizer *tokenizer, char matchword)
 		return (TRUE);
 	tokenizer->end--;
 	return (FALSE);
+}
+void	free_token(t_tokenizer *tokenizer)
+{
+	// if (tokenizer->curr_token->str)
+	// 	free(tokenizer->curr_token->str);
+	free(tokenizer->curr_token);
 }
