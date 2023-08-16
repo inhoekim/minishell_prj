@@ -6,7 +6,7 @@ t_bool	ft_env(char **argv)
 {
 	t_list	**env;
 	t_list	*temp;
-	
+
 	(void)argv;
 	env = get_envp();
 	temp = *env;
@@ -20,9 +20,9 @@ t_bool	ft_env(char **argv)
 
 t_bool	ft_exit(char **argv)
 {
-	if (!argv[1])
+	if (argv[1] != 0)
 	{
-		if (argv[2])
+		if (argv[2] != 0)
 		{
 			printf("exit: Too many arguments\n");
 			exit(1);

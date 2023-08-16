@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"bitset": "c",
-		"minishell.h": "c",
-		"execute_util.h": "c",
-		"make_argv_util.h": "c"
-	}
-}

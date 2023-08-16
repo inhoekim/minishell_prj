@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/16 14:56:05 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/16 18:15:32 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@ t_bool	ft_export(char **argv)
 	int		idx;
 	t_list	**env;
 
-	idx = -1;
+	idx = 0;
 	env = get_envp();
 	if (!argv[1])
+	{
 		while ((*env)->next != NULL)
+		{
 			printf("declare -x %s\n", (char *)(*env)->content);
+			env = &(*env)->next;
+		}
+	}
 	else
 	{
 		env = get_envp();
@@ -39,14 +44,14 @@ t_bool	ft_unset(char **argv)
 	t_list	**env;
 	t_list	*check;
 
-	idx = -1;
+	idx = 0;
 	if (argv[1])
 	{
 		env = get_envp();
 		while (argv[++idx])
 		{
 			check = *env;
-			while (check->next != NULL)
+			while (check)
 			{
 				if (!ft_memcmp(argv[idx], check->content, ft_strlen(argv[idx])))
 				{
