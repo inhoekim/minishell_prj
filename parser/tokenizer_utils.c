@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 12:22:20 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/17 12:43:29 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
-	if (!tokenizer->end || *tokenizer->end)
+	if (!tokenizer->end || !*tokenizer->end)
 	{
         tokenizer->curr_token->type = E0F;
 		return ;
