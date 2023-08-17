@@ -6,12 +6,12 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 21:17:01 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/17 12:00:16 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/tokenizer.h"
-#define SYMBOLCHAR "<>&|() \t\n"
+#define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
 {
@@ -43,7 +43,7 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 
 t_token	*scan_word_token(t_tokenizer *tokenizer)
 {
-	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
+	while (!ft_strchr(DELIMETER, *tokenizer->end))
 	{
 		if (*tokenizer->end == '\0')
 			return (make_token(tokenizer, E0F));
@@ -53,16 +53,12 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 			{
 				//syntax_error
 			}
-			else
-			{
-				while (*tokenizer->end != '\'' && *tokenizer->end != '"')
-					tokenizer->end++;
-			}
 		}
 		tokenizer->end++;
 	}
-	// @ start와 end가 다른 이유를 고려하는 이유가 ''나 ""의 매칭이 달라질경우, end가 quotation을 가리키도록 하기 위함인가?
-	if (tokenizer->start != tokenizer->end && ft_strchr(SYMBOLCHAR, *tokenizer->end))
+	// ex. ls & ls일 때, word token '&'는 tokenizer->start == tokenizer->end이므로 false
+	// 나머지는 DELIMETER에 속할 경우 end를 왼쪽으로 한칸 밀어야 함.
+	if (tokenizer->start != tokenizer->end && ft_strchr(DELIMETER, *tokenizer->end))
 		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
@@ -74,9 +70,7 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 	end_ptr = tokenizer->end + 1;
 	while (*end_ptr != '\0' && *end_ptr != c)
 		end_ptr++;
-	// @c는 ( or ) 이므로 *end_ptr == '\0'로도 충분.
-	// if  (*end_ptr == '\0')
-	if (*end_ptr == '\0' || *end_ptr != c)
+	if  (*end_ptr == '\0')
 		return (FALSE);
 	if (c != ')')
 		tokenizer->end = end_ptr;

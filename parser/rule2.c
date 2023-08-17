@@ -52,6 +52,7 @@ t_node	*ssh(t_tokenizer *tokenizer)
 
 	if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
 	{
+		// @ eof를 만나야 return되는데, gnt로 넘기면서 eof를 만날수가 없는것같음.
 		parent = msh_grammar(tokenizer);
 		if (match_token(SUBSHELL_RIGHT, tokenizer, TRUE))
 			return (make_tree(SUBSHELL, parent, NULL));
