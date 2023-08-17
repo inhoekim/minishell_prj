@@ -59,20 +59,20 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	t_node		*lhs;
 	t_node		*rhs;
 	int			pipe_fd[2];
-	t_context	*aux;
+	t_context	aux;
 
 	lhs = node->left;
 	rhs = node->right;
 	pipe(pipe_fd);
-	aux = p_ctx;
-	aux->fd_close = pipe_fd[STDIN];
-	aux->fd[STDOUT] = pipe_fd[STDOUT];
-	exec_word(lhs, aux);
+	aux = *p_ctx;
+	aux.fd_close = pipe_fd[STDIN];
+	aux.fd[STDOUT] = pipe_fd[STDOUT];
+	exec_word(lhs, &aux);
 
-	aux = p_ctx;
-	aux->fd[STDIN] = pipe_fd[STDIN];
-	aux->fd_close = pipe_fd[STDOUT];
-	exec_word(rhs, aux);
+	aux = *p_ctx;
+	aux.fd[STDIN] = pipe_fd[STDIN];
+	aux.fd_close = pipe_fd[STDOUT];
+	exec_word(rhs, &aux);
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
