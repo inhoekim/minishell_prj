@@ -17,6 +17,7 @@ t_bool	execute(t_node *root)
 	// exit함수 호출시, TRUE
 	ctx.check_exit = FALSE;
 	exec_node(root, &ctx);
+	(void)check_exit;
 	// exec_node에서 항상 NULL이 리턴되는데 그 이유? -> seykim 8/16
 	// @ 없어서 반환형 void로 바꿈 -> dasong 8/17
 	// if (!node && node->type != E0F)
@@ -40,8 +41,8 @@ void exec_node(t_node *node, t_context *p_ctx)
 		exec_output(node, p_ctx);
 	else if(node->type == DGREAT)
 		exec_append(node, p_ctx);
-	// else if(node->type == DLESS)
-	// 	exec_heredoc(node, p_ctx);
+	else if(node->type == DLESS)
+		exec_heredoc(node, p_ctx);
 	else if(node->type == AND_IF)
 		exec_and(node, p_ctx);
 	else if(node->type == OR_IF)

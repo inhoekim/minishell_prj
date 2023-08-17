@@ -159,6 +159,7 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	pid_t	pid;
 
 	path = ft_split2(ft_getenv("PATH"), ':');
+	// @ unset PATH
 	order = make_order(path, argv, p_ctx);
 	if (order)
 	{
@@ -171,6 +172,7 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
+	(void)pid;
 	// @ fork_exec와 기능이 같아서 수정했음
 	// pid = fork();
 	// if (pid == 0)

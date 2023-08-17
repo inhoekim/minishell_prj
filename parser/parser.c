@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 12:45:01 by sdg              ###   ########.fr       */
-=======
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 15:54:47 by inhkim           ###   ########.fr       */
->>>>>>> inhkim_develop
+/*   Updated: 2023/08/17 16:30:00 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +50,6 @@ void	syntax_error(t_tokenizer *tokenizer)
 	t_token	*token;
 
 	token = tokenizer->curr_token;
-<<<<<<< HEAD
-	ft_putstr_fd("minishell : ", STDERR_FILENO);
-	ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	// @ 문법에러인경우, token내부의 str을 출력하는 이유는?
-	// @ str에 에러메세지를 담는 token을 사용하지않으므로 필요없어 보임.
-	ft_putstr_fd(token->str, STDERR_FILENO);
-	ft_putchar_fd('\'', STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
-=======
 	if (token->type != SYNTAX_ERR)
 	{	
 		ft_putstr_fd("minishell : ", STDERR_FILENO);
@@ -80,7 +63,6 @@ void	syntax_error(t_tokenizer *tokenizer)
 		ft_putchar_fd('\n', STDERR_FILENO);
 		tokenizer->curr_token->type = SYNTAX_ERR;
 	}
->>>>>>> inhkim_develop
 	return ;
 }
 
