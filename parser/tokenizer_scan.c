@@ -13,7 +13,7 @@
 #define SYMBOLCHAR "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
-{
+{ 
 	if (*tokenizer->start == '<')
 	{
 		if (match(tokenizer, '<'))
@@ -42,6 +42,8 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 
 t_token	*scan_word_token(t_tokenizer *tokenizer)
 {
+	if (*tokenizer->end == '\0')
+		return (make_token(tokenizer, E0F));
 	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
 	{
 		if (*tokenizer->end == '\0')
@@ -50,17 +52,15 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				//syntax_error
+				//syntax_error("~~~");
+				//종료코드
 			}
 			else
-			{
-				while (*tokenizer->end != '\'' && *tokenizer->end != '"')
-					tokenizer->end++;
-			}
+				break;
 		}
 		tokenizer->end++;
 	}
-	if (tokenizer->start != tokenizer->end && ft_strchr(SYMBOLCHAR, *tokenizer->end))
+	if (ft_strchr(SYMBOLCHAR, *tokenizer->end))
 		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
@@ -69,12 +69,10 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 {
 	char	*end_ptr;
 
-	end_ptr = tokenizer->end + 1;
+	end_ptr = tokenizer->end;
 	while (*end_ptr != '\0' && *end_ptr != c)
 		end_ptr++;
 	if (*end_ptr == '\0' || *end_ptr != c)
 		return (FALSE);
-	if (c != ')')
-		tokenizer->end = end_ptr;
 	return (TRUE);
 }
