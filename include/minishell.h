@@ -39,10 +39,10 @@ typedef enum e_symbol
 	AND_IF,
 	OR_IF,
 	PIPE,
+	E0F,
 	SUBSHELL,
 	SUBSHELL_LEFT,
 	SUBSHELL_RIGHT,
-	E0F,
 	SYNTAX_ERR
 }t_symbol;
 
