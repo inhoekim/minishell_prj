@@ -1,7 +1,7 @@
 NAME = parser_test
 
 CC = cc
-CFLAGS = -fsanitize=address -g3
+CFLAGS = -g3 $-fsanitize=address
 MAIN = merge_tree.c parser_util.c parser.c rule1.c rule2.c rule3.c tokenizer_scan.c \
 tokenizer_utils.c tokenizer.c tree.c
 

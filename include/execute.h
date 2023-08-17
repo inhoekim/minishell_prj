@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/15 22:51:08 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/17 00:13:15 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,24 @@
 
 typedef struct s_context
 {
-	int	exit_status;
-	int	fd[2];
-	int	fd_close;
+	int		exit_status;
+	int		fd[2];
+	int		fd_close;
+	int		check_exit;
+	char	*heredoc_file_name;
+	int		heredoc_file_idx;
 }	t_context;
 
 t_bool	execute(t_node *root);
-t_node *exec_node(t_node *node, t_context *p_ctx);
+void exec_node(t_node *node, t_context *p_ctx);
 
-t_bool	ft_cd(t_node *node);
-t_bool	ft_echo(t_node *node);
-t_bool	ft_pwd(t_node *node);
-t_bool	ft_env(t_node *node);
-t_bool	ft_exit(t_node *node);
-t_bool	ft_export(t_node *node);
-t_bool	ft_unset(t_node *node);
+t_bool	ft_cd(char **argv);
+t_bool	ft_echo(char **argv);
+t_bool	ft_pwd(char **argv);
+t_bool	ft_env(char **argv);
+t_bool	ft_exit(char **argv);
+t_bool	ft_export(char **argv);
+t_bool	ft_unset(char **argv);
 void	exit_utils(char **temp);
 char	*vaild_env(char **temp);
 char	*special_case(char **temp);

@@ -13,6 +13,7 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 #include "../include/rule.h"
+#include "../include/parser.h"
 
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star
@@ -28,6 +29,7 @@ t_node	*command(t_tokenizer *tokenizer)
 		parent = simple_cmd(tokenizer);
 		return (parent);
 	}
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임. ssh는 무조건 실행하면 될 거같음
 	else if (match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
 		child = ssh(tokenizer);
@@ -39,7 +41,7 @@ t_node	*command(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -50,11 +52,12 @@ t_node	*ssh(t_tokenizer *tokenizer)
 
 	if (match_token(SUBSHELL_LEFT, tokenizer, TRUE))
 	{
+		// @ eof를 만나야 return되는데, gnt로 넘기면서 eof를 만날수가 없는것같음.
 		parent = msh_grammar(tokenizer);
 		if (match_token(SUBSHELL_RIGHT, tokenizer, TRUE))
 			return (make_tree(SUBSHELL, parent, NULL));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -75,13 +78,15 @@ t_node	*simple_cmd(t_tokenizer *tokenizer)
 			return (merge_tree(parent, child));
 		return (parent);
 	}
+	// @ io_redirect_dagger로 바꿔야할 것같음
+	// 	else if (check_first_set(IO_REDIRECT_DAGGER, tk.type))
 	else if (check_first_set(IO_REDIRECT, tk.type))
 	{
 		parent = io_redirect_dagger(tokenizer);
 		child = io_redirect_dg_after_simple_cmd(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -105,7 +110,7 @@ t_node	*io_redirect_or_word_star(t_tokenizer *tokenizer)
 	{
 		child = make_leaf(tokenizer);
 		parent = io_redirect_or_word_star(tokenizer);
-		return (merge_tree(parent, child)); //만약 word-word가 만나면 child word + parent word = new word가 되어야함
+		return (merge_tree(parent, child));
 	}
 	return (NULL);
 }
@@ -118,12 +123,13 @@ t_node	*io_redirect_dagger(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// ex. cat < a.txt > b.txt < c.txt > d.txt
 	if (check_first_set(IO_REDIRECT, tk.type))
 	{
 		parent = io_redirect(tokenizer);
 		child = io_redirect_star(tokenizer);
 		return (merge_tree(parent, child));
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   rule1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/15 17:03:32 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/17 16:29:45 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 #include "../include/rule.h"
+#include "../include/parser.h"
 
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)
@@ -22,6 +23,7 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임
 	if (check_first_set(PIPELINE, tk.type) || \
 	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
@@ -34,7 +36,7 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -53,12 +55,12 @@ t_node	*conditional(t_tokenizer *tokenizer)
 		parent = conditional(tokenizer);
 		child = make_tree(AND_IF, NULL, pipe);
 		return (merge_tree(parent, child));
-    }
+	}
 	else if (match_token(OR_IF, tokenizer, TRUE))
 	{
 		pipe = pipeline(tokenizer);
 		parent = conditional(tokenizer);
-		child = make_tree(AND_IF, NULL, pipe);
+		child = make_tree(OR_IF, NULL, pipe);
 		return (merge_tree(parent, child));
 	}
 	return (NULL);
@@ -72,6 +74,7 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
+	// @ SUBSHELL_LEFT검사는 할 필요없어보임
 	if (check_first_set(COMMAND, tk.type) || \
 	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
 	{
@@ -84,7 +87,7 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 		}
 		return (child);
 	}
-	syntax_error("Not available grammar");
+	syntax_error(tokenizer);
 	return (NULL);
 }
 
@@ -97,7 +100,7 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 	if (match_token(PIPE, tokenizer, TRUE))
 	{
 		child = pipeline(tokenizer);
-		return (make_tree(PIPE, NULL, child));
 	}
+	(void)child;
 	return (NULL);
 }
