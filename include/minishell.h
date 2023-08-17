@@ -12,7 +12,7 @@ typedef enum e_bool
 {
 	FALSE,
 	TRUE,
-} t_bool;
+}t_bool;
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,
@@ -26,7 +26,7 @@ typedef enum e_nonterminal{
 	IO_REDIRECT_DAGGER = IO_REDIRECT,
 	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 5,
 	CONDITIONAL = 6,
-} t_nonterminal;
+}t_nonterminal;
 
 // &&, ||, |, (, ),  <, >, <<, >>, word
 typedef enum e_symbol
@@ -43,6 +43,7 @@ typedef enum e_symbol
 	SUBSHELL_LEFT,
 	SUBSHELL_RIGHT,
 	E0F,
+	SYNTAX_ERR
 }t_symbol;
 
 /* binary tree */
@@ -59,7 +60,7 @@ typedef struct s_token
 	t_symbol	type;
 	char		*str;
 	int			len;
-} t_token;
+}t_token;
 
 /* object that separate tokens */
 typedef struct s_tokenizer
@@ -74,7 +75,5 @@ typedef struct s_tokenizer
 
 void	init_envp(char **envp);
 t_list	**get_envp(void);
-void	minishell_loop() ;
-
-
+void	minishell_loop(void);
 #endif

@@ -26,5 +26,7 @@ t_bool		match(t_tokenizer *tokenizer, char matchword);
 t_token		*scan_char_token(t_tokenizer *tokenizer);
 t_token		*scan_word_token(t_tokenizer *tokenizer);
 t_bool		string_close(t_tokenizer *tokenizer, char c);
+t_bool		check_first_set(t_nonterminal idx, t_symbol curr_token);
 void		free_token(t_tokenizer *tokenizer);
+
 #endif
