@@ -3,56 +3,106 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/15 22:57:24 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/16 18:48:54 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../libft/libft.h"
 #include "../include/execute.h"
+#include "../include/exec_node_util.h"
 
-t_bool	ft_export(t_node *node)
+t_bool	ft_export(char **argv)
 {
-	char	**temp;
 	int		idx;
 	t_list	**env;
 
-	temp = node->left->word;
-	idx = -1;
+	idx = 0;
 	env = get_envp();
-	if (!temp[1])
+	if (!argv[1])
+	{
 		while ((*env)->next != NULL)
+		{
 			printf("declare -x %s\n", (char *)(*env)->content);
+			env = &(*env)->next;
+		}
+	}
 	else
 	{
 		env = get_envp();
-		while (temp[++idx])
-			ft_lstadd_back(env, ft_lstnew(ft_strdup(temp[idx])));
+		check_env(argv, env);
+		while (argv[++idx])
+			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
 	}
 	return (FALSE);
 }
 
-t_bool	ft_unset(t_node *node)
+void	check_env(char **argv, t_list **env)
 {
-	char	**temp;
+	t_list	*check;
+	int		idx;
+	char	*temp;
+
+	env = get_envp();
+	idx = 0;
+	check = *env;
+	while (argv[++idx])
+	{
+		check = *env;
+		temp = make_temp(argv[idx]);
+		while (check)
+		{
+			if (!ft_memcmp(temp, check->content, ft_strlen(temp)))
+			{
+				delete_node(env, check);
+				break ;
+			}
+			check = check->next;
+		}
+	}
+	free(temp);
+}
+
+char	*make_temp(char *s1)
+{
+	int		idx;
+	char	*temp;
+
+	idx = 0;
+	temp = 0;
+	if (!s1)
+		return (0);
+	while (s1[idx])
+	{
+		if (s1[idx] == '=')
+		{
+			temp = ft_substr(s1, 0, idx);
+			break ;
+		}
+		idx++;
+	}
+	return (temp);
+}
+
+t_bool	ft_unset(char **argv)
+{
 	int		idx;
 	t_list	**env;
 	t_list	*check;
 
-	temp = node->left->word;
-	idx = -1;
-	if (temp[1])
+	idx = 0;
+	if (argv[1])
 	{
 		env = get_envp();
-		while (temp[++idx])
+		while (argv[++idx])
 		{
 			check = *env;
-			while (check->next != NULL)
+			while (check)
 			{
-				if (!ft_memcmp(temp[idx], check->content, ft_strlen(temp[idx])))
+				if (!ft_memcmp(argv[idx], check->content, ft_strlen(argv[idx])))
 				{
 					delete_node(env, check);
 					break ;

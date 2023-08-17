@@ -2,15 +2,13 @@
 #include "../libft/libft.h"
 #include "../include/execute.h"
 
-t_bool	ft_cd(t_node *node)
+t_bool	ft_cd(char **argv)
 {
 	char	path[PATH_MAX];
 	char	*can_env;
 	char	*newpwd;
-	char	**temp;
 
-	temp = node->left->word;
-	can_env = vaild_env(temp);
+	can_env = vaild_env(argv);
 	if (!can_env)
 	{
 		write(STDERR_FILENO, "cd: Too many arguments\n", 24);

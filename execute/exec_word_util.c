@@ -55,6 +55,7 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	waitpid(pid, 0, 0);
 }
 
+// malloc -> calloc change seykim 8/16
 char	**list_to_arr(t_list *node)
 {
 	char	**arr;
@@ -63,8 +64,7 @@ char	**list_to_arr(t_list *node)
 
 	i = 0;
 	len = ft_lstsize(node);
-	arr = malloc(sizeof(t_list) * (len + 1));
-	arr[len] = NULL;
+	arr = calloc(len + 1 ,sizeof(t_list));
 	while (node)
 	{
 		arr[i++] = node->content;

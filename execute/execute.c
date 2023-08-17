@@ -26,32 +26,23 @@ t_node *exec_node(t_node *node, t_context *p_ctx)
 {
 	if (node == NULL)
 		return (NULL);
-	else if(node->type == WORD) {
+	else if(node->type == WORD)
 		exec_word(node, p_ctx);
-	}
-	// else if(node->type == LESS) {
-	// 	exec_input(node, p_ctx);
-	// }
-	// else if(node->type == GREAT) {
-	// 	exec_output(node, p_ctx);
-	// }
-	// else if(node->type == DGREAT) {
-	// 	exec_append(node, p_ctx);
-	// }
-	// else if(node->type == DLESS) {
+	else if(node->type == LESS)
+		exec_input(node, p_ctx);
+	else if(node->type == GREAT)
+		exec_output(node, p_ctx);
+	else if(node->type == DGREAT)
+		exec_append(node, p_ctx);
+	// else if(node->type == DLESS)
 	// 	exec_heredoc(node, p_ctx);
-	// }
-	// else if(node->type == AND_IF) {
-	// 	exec_and(node, p_ctx);
-	// }
-	// else if(node->type == OR_IF) {
-	// 	exec_or(node, p_ctx);
-	// }
-	// else if(node->type == PIPE) {
-	// 	exec_pipe(node, p_ctx);
-	// }
-	// else if(node->type == SUBSHELL) {
-	// 	exec_subshell(node, p_ctx);
-	// }
+	else if(node->type == AND_IF)
+		exec_and(node, p_ctx);
+	else if(node->type == OR_IF)
+		exec_or(node, p_ctx);
+	else if(node->type == PIPE)
+		exec_pipe(node, p_ctx);
+	else if(node->type == SUBSHELL)
+		exec_subshell(node, p_ctx);
 	return (NULL);
 }

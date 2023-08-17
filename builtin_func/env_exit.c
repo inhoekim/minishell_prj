@@ -2,12 +2,12 @@
 #include "../libft/libft.h"
 #include "../include/execute.h"
 
-t_bool	ft_env(t_node *node)
+t_bool	ft_env(char **argv)
 {
-	(void)node;
 	t_list	**env;
 	t_list	*temp;
 
+	(void)argv;
 	env = get_envp();
 	temp = *env;
 	while (temp != NULL)
@@ -18,21 +18,18 @@ t_bool	ft_env(t_node *node)
 	return (FALSE);
 }
 
-t_bool	ft_exit(t_node *node)
+t_bool	ft_exit(char **argv)
 {
-	char	**temp;
-
-	temp = node->left->word;
-	if (!temp[1])
+	if (argv[1] != 0)
 	{
-		if (temp[2])
+		if (argv[2] != 0)
 		{
 			printf("exit: Too many arguments\n");
 			exit(1);
 		}
-		exit_utils(temp);
+		exit_utils(argv);
 		printf("exit\n");
-		exit(ft_atoi(temp[1]));
+		exit(ft_atoi(argv[1]));
 	}
 	else
 	{
