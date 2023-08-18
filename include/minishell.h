@@ -16,19 +16,20 @@ typedef enum e_bool
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,
-	SIMPLE_CMD = PIPELINE,
 	COMMAND = PIPELINE,
-	IO_REDIRECT_OR_WORD_STAR = PIPELINE,
-	PIPED_COMMAND = 1,
-	IO_FILE = 2,
-	IO_HERE = 3,
-	IO_REDIRECT = 4,
+	SIMPLE_CMD = 1,
+	IO_REDIRECT_OR_WORD_STAR = SIMPLE_CMD,
+	PIPED_COMMAND = 2,
+	IO_FILE = 3,
+	IO_HERE = 4,
+	IO_REDIRECT = 5,
 	IO_REDIRECT_DAGGER = IO_REDIRECT,
-	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 5,
-	CONDITIONAL = 6,
+	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 6,
+	CONDITIONAL = 7,
 }t_nonterminal;
 
-// &&, ||, |, (, ),  <, >, <<, >>, word
+// word, <, >, >>, <<, &&, ||, |, (, eof, ssh, ), err
+// SUBSHELL_LEFT, SUBSHELL_RIGHT, E0F, SYNTAX_ERR 심볼은 오직 토크나이저에서만 사용하는 심벌
 typedef enum e_symbol
 {
 	WORD,
@@ -39,9 +40,9 @@ typedef enum e_symbol
 	AND_IF,
 	OR_IF,
 	PIPE,
+	SUBSHELL_LEFT,
 	E0F,
 	SUBSHELL,
-	SUBSHELL_LEFT,
 	SUBSHELL_RIGHT,
 	SYNTAX_ERR
 }t_symbol;

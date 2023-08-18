@@ -106,9 +106,6 @@ t_node	*io_here(t_tokenizer *tokenizer)
 			return (NULL);
 		return (node);
 	}
-	// @ syntax error에서 errno도 받을수 있어야 함. (아래의 예시 고려)
-	// @ ex. cat << "ab" 'c'
-	// @ // cat: c: No such file or directory
 	syntax_error(tokenizer);
 	return (NULL);
 }

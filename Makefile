@@ -8,9 +8,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 ## directory
 ## seykim readline 설정 8/16
 INC_DIRS = /opt/homebrew/opt/readline/include
-# INC_DIRS = /Users/seykim/.brew/opt/readline/include
 INC_DIRS += include
-# LIB_DIRS = /Users/seykim/.brew/opt/readline/lib libft
 LIB_DIRS = /opt/homebrew/opt/readline/lib libft
 SRC_DIRS = src builtin_func execute parser
 
@@ -30,8 +28,8 @@ OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) #-fsanitize=address
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3 #-fsanitize=address
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3
 
 .PHONY: clean, fclean, re, all
 
