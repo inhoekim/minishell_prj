@@ -19,9 +19,10 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	pid = fork();
 	if (pid)
 	{
-		exec_word(lhs, p_ctx);
+		exec_node(lhs, p_ctx);
 		// wait_queue();
 	}
+	waitpid(pid, 0, 0);
 	// enqueue(pid);
 	// wait_queue();
 }
@@ -33,10 +34,10 @@ void	exec_or(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 	if (p_ctx->exit_status != 0)
 	{
-		exec_word(rhs, p_ctx);
+		exec_node(rhs, p_ctx);
 	}
 }
 
@@ -47,10 +48,10 @@ void	exec_and(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 	if (p_ctx->exit_status == 0)
 	{
-		exec_word(rhs, p_ctx);
+		exec_node(rhs, p_ctx);
 	}
 }
 
@@ -65,14 +66,16 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	pipe(pipe_fd);
 	aux = *p_ctx;
-	aux.fd_close = pipe_fd[STDIN];
+	aux.fd[STDIN] = STDIN;
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
-	exec_word(lhs, &aux);
+	aux.fd_close = pipe_fd[STDIN];
+	exec_node(lhs, &aux);
 
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
+	aux.fd[STDOUT] = STDOUT;
 	aux.fd_close = pipe_fd[STDOUT];
-	exec_word(rhs, &aux);
+	exec_node(rhs, &aux);
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -84,7 +87,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 }
 
 void	exec_heredoc(t_node *node, t_context *p_ctx)
@@ -96,7 +99,7 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 }
 
 void	exec_output(t_node *node, t_context *p_ctx)
@@ -107,9 +110,8 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 
-	printf("%s\n", rhs->word[0]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 }
 
 void	exec_append(t_node *node, t_context *p_ctx)
@@ -121,7 +123,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
-	exec_word(lhs, p_ctx);
+	exec_node(lhs, p_ctx);
 }
 
 char	*make_order(char **path, char **argv, t_context *p_ctx)
@@ -259,13 +261,15 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		// 빌트인
-		if (exec_builtin(argv) == FALSE) 
+		if (exec_builtin(argv) == FALSE)
 			// PATH(argv에 경로를 붙혀서 실행해야하는 경우), 현재 디렉토리 search
 			search_and_fork_exec(argv, p_ctx);
+			
 	}
 	// 경로가 명시된 경우(상대경로 or 절대경로)
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
+		
 	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
