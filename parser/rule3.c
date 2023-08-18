@@ -106,6 +106,9 @@ t_node	*io_here(t_tokenizer *tokenizer)
 			return (NULL);
 		}
 		set_delimiter(node, delim);
+		// @ sigaction set(heredoc mode)
+		// @ sigint(2) 컨트롤+ c -> 개행하고 종료
+		// @ sigquit(3) 컨트롤+ d -> 개행없이 종료
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
 			return (NULL);

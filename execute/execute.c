@@ -16,6 +16,9 @@ void	execute(t_node *root)
 	ctx.heredoc_file_idx = 0;
 	ctx.heredoc_file_name = alloc_heredoc_name();
 	ctx.queue_size = 0;
+	// @ sigaction set(default mode)
+	// @ sigint(2) 컨트롤+c -> 개행후 새로운 프롬프트 출력
+	// @ sigquit(3) 컨트롤+d -> 아무동작안함 (무시)
 	exec_node(root, &ctx);
 	wait_queue(&ctx);
 	free_delete_heredoc(&ctx);

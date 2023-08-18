@@ -217,6 +217,9 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 		{
 			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 			// @ fork후 builtin_func(argv); 실행
+			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
+			// @ sigint(2) 컨트롤+c -> exit(2)
+			// @ sigquit(3) 컨트롤+d -> exit(3)
 			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
 		}
 		else
