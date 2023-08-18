@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rule1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/16 15:52:21 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/18 12:12:06 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ t_node	*msh_grammar(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
-	// @ SUBSHELL_LEFT검사는 할 필요없어보임
-	if (check_first_set(PIPELINE, tk.type) || \
-	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
+	if (check_first_set(PIPELINE, tk.type))
 	{
 		child = pipeline(tokenizer);
 		if (child)
@@ -74,9 +72,7 @@ t_node	*pipeline(t_tokenizer *tokenizer)
 	t_token	tk;
 
 	tk = *(tokenizer->curr_token);
-	// @ SUBSHELL_LEFT검사는 할 필요없어보임
-	if (check_first_set(COMMAND, tk.type) || \
-	match_token(SUBSHELL_LEFT, tokenizer, FALSE))
+	if (check_first_set(COMMAND, tk.type))
 	{
 		child = command(tokenizer);
 		if (child)
@@ -100,7 +96,7 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 	if (match_token(PIPE, tokenizer, TRUE))
 	{
 		child = pipeline(tokenizer);
+		return (make_tree(PIPE, NULL, child));
 	}
-	(void)child;
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 12:44:00 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/17 18:26:20 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ t_token	*get_curr_token(t_tokenizer *tokenizer)
 
 t_token	*get_next_token(t_tokenizer *tokenizer)
 {
-	// reset_start_ptr(tokenizer);
 	skip_whitespace(tokenizer);
 	if (!tokenizer->end || !*tokenizer->end)
 		return (make_token(tokenizer, E0F));

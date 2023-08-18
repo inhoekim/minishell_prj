@@ -12,18 +12,18 @@ t_bool	ft_cd(char **argv)
 	if (!can_env)
 	{
 		write(STDERR_FILENO, "cd: Too many arguments\n", 24);
-		return (TRUE);
+		return (1);
 	}
 	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(can_env) != 0)
 	{
 		write(STDERR_FILENO, "cd : No such file or directory\n", 32);
-		return (TRUE);
+		return (1);
 	}
 	set_envp("OLDPWD", newpwd);
 	newpwd = getcwd(path, PATH_MAX);
 	set_envp("PWD", newpwd);
-	return (FALSE);
+	return (0);
 }
 
 char	*vaild_env(char **temp)
