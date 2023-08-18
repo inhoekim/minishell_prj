@@ -68,11 +68,7 @@ void	minishell_loop(void)
 			free(line);
 		}
 	}
-	// if (!check_exit)
-	// {
-	// 	// @ 개행이전으로 프롬프트 이동시키는 코드 추가필
-	// 	// printf("exit\n");
-	// 	printf("hge");
-	// }
-	
+	ft_putstr_fd("\x1b[1A", STDOUT);
+	ft_putstr_fd("\033[8C", STDOUT);
+	printf("exit\n");
 }
