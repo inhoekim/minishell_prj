@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 #include "../include/execute.h"
+#include "../include/exec_node_util.h"
 #include "../include/exec_word_util.h"
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
@@ -28,40 +29,33 @@ char	**make_argv(char **word_arr)
 	return (list_to_arr(argv_list));
 }
 
+//norm 규정에 맞게 수정, 함수 마지막에 ctx_status를 추가해서 or, and가 작동하도록 수정
 void	fork_exec(char **argv, t_context *p_ctx)
 {
 	int		pid;
 	t_list	*envl;
-	char	**envp;
 
 	envl = *get_envp();
 	pid = fork();
-	// 부모에서 실행되서 종료되므로, 프롬포트가 종료되어서 세그가 발생
-	// 따라서 자식프로세스에서 실행하고 자식프로세스가 종료될 때까지 대기하도록
-	// pid == 0 && waitpid(pid, 0, 0)작성 -> seykim 8/16
 	if (pid == 0)
 	{
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
-		envp = list_to_arr(envl);
-		if (p_ctx->fd_close >= 0) 
+		if (p_ctx->fd_close >= 0)
 		{
 			close(p_ctx->fd_close);
 			p_ctx->fd_close = -1;
 		}
-		execve(argv[0], argv, envp);
-		printf("execve error\n");
+		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
 	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
 		close(p_ctx->fd[STDIN_FILENO]);
 	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
 		close(p_ctx->fd[STDOUT_FILENO]);
-	waitpid(pid, 0, 0);
-	// enqueue(pid, p_ctx);
+	set_ctx_status(p_ctx, pid, 0);
 }
 
-// malloc -> calloc change seykim 8/16
 char	**list_to_arr(t_list *node)
 {
 	char	**arr;
@@ -70,7 +64,7 @@ char	**list_to_arr(t_list *node)
 
 	i = 0;
 	len = ft_lstsize(node);
-	arr = calloc(len + 1 ,sizeof(t_list));
+	arr = ft_calloc(len + 1 ,sizeof(t_list));
 	while (node)
 	{
 		arr[i++] = node->content;

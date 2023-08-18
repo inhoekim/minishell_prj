@@ -7,10 +7,10 @@ using namespace std;
 // int **allocate_dp(int row, int col) 
 // {
 // 	int **dp;
-// 	dp = calloc(row + 1, sizeof(int *));
+// 	dp = ft_calloc(row + 1, sizeof(int *));
 // 	for (int i = 0; i <= row; i++)
 // 	{
-// 		dp[i] = calloc(col + 1, sizeof(int));
+// 		dp[i] = ft_calloc(col + 1, sizeof(int));
 // 	}
 // 	return (dp);
 // }
