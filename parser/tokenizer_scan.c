@@ -14,7 +14,7 @@
 #define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
-{
+{ 
 	if (*tokenizer->start == '<')
 	{
 		if (match(tokenizer, '<'))
@@ -51,7 +51,8 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				//syntax_error
+				//syntax_error("~~~");
+				//종료코드
 			}
 		}
 		tokenizer->end++;
@@ -67,12 +68,10 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 {
 	char	*end_ptr;
 
-	end_ptr = tokenizer->end + 1;
+	end_ptr = tokenizer->end;
 	while (*end_ptr != '\0' && *end_ptr != c)
 		end_ptr++;
 	if  (*end_ptr == '\0')
 		return (FALSE);
-	if (c != ')')
-		tokenizer->end = end_ptr;
 	return (TRUE);
 }
