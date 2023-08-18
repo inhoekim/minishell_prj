@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"__node_handle": "c",
+		"locale": "c",
+		"libft.h": "c"
+	}
+}

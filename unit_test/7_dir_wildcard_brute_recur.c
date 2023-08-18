@@ -17,10 +17,10 @@ int wildcard2(char *pattern, char *word);
 
 int **allocate_dp(int row, int col) {
 	int **dp;
-	dp = calloc(row + 1, sizeof(int *));
+	dp = ft_calloc(row + 1, sizeof(int *));
 	for (int i = 0; i <= row; i++)
 	{
-		dp[i] = calloc(col + 1, sizeof(int));
+		dp[i] = ft_calloc(col + 1, sizeof(int));
 	}
 	return (dp);
 }
@@ -57,7 +57,7 @@ char	*make_pattern(t_list *list)
 		str_size += ft_strlen(list->content);
 		list = list->next;
 	}
-	pattern = calloc(str_size + 1, sizeof(*pattern));
+	pattern = ft_calloc(str_size + 1, sizeof(*pattern));
 	// pattern[str_size] = '\0';
 	list = head;
 	while (list)
@@ -223,10 +223,10 @@ int wildcard2(char *pattern, char *word)
 // int **allocate_dp(int row, int col) 
 // {
 // 	int **dp;
-// 	dp = calloc(row + 1, sizeof(int *));
+// 	dp = ft_calloc(row + 1, sizeof(int *));
 // 	for (int i = 0; i <= row; i++)
 // 	{
-// 		dp[i] = calloc(col + 1, sizeof(int));
+// 		dp[i] = ft_calloc(col + 1, sizeof(int));
 // 	}
 // 	return (dp);
 // }
@@ -291,7 +291,7 @@ int wildcard2(char *pattern, char *word)
 // 		idx++;
 // 	}
 // 	idx = -1;
-// 	new_pattern = calloc(new_len + 1, sizeof(char *));
+// 	new_pattern = ft_calloc(new_len + 1, sizeof(char *));
 // 	new_idx = 0;
 // 	flag = 0;
 // 	while (pattern[++idx] && new_idx <= new_len)

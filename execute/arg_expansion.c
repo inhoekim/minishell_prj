@@ -100,8 +100,8 @@ char	*get_value(char *key)
 	char	*value;
 
 	// status가 할당이 안되어있어서 여기서 strlcpy에서 한자리 이상을 참조하면서 에러 발생
-	// 따라서 255이상의 값이 나올 수 없으므로 status에 4칸짜리 calloc 배열 생성 -> seykim 8/16
-	status = calloc(4, sizeof(char *));
+	// 따라서 255이상의 값이 나올 수 없으므로 status에 4칸짜리 ft_calloc 배열 생성 -> seykim 8/16
+	status = ft_calloc(4, sizeof(char *));
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());

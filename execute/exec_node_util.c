@@ -36,7 +36,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
 	
-	if (p_ctx->exit_status != 0)
+	if (p_ctx->exit_status == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -50,7 +50,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	if (p_ctx->exit_status == 0)
+	if (p_ctx->exit_status != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -128,10 +128,10 @@ void	exec_append(t_node *node, t_context *p_ctx)
 
 char	*make_order(char **path, char **argv)
 {
-	int		idx;
-	int		total;
-	char	*order;
 	struct stat	buff;
+	int			idx;
+	int			total;
+	char		*order;
 
 	idx = 0;
 	order = NULL;
@@ -156,7 +156,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
 	char	**path;
-	pid_t	pid;
 
 	path = ft_split2(ft_getenv("PATH"), ':');
 	// @ unset PATH
@@ -172,24 +171,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
-	(void)pid;
-	// @ fork_exec와 기능이 같아서 수정했음
-	// pid = fork();
-	// if (pid == 0)
-	// {
-	// 	dup2(p_ctx->fd[STDIN], STDIN);
-	// 	dup2(p_ctx->fd[STDOUT], STDOUT);
-	// 	if (p_ctx->fd_close >= 0)
-	// 	{
-	// 		close(p_ctx->fd_close);
-	// 		p_ctx->fd_close = -1;
-	// 	}
-	// 	if (!order)
-	// 		msh_error(argv[0], "command not found", 0);
-	// 	execve(order, argv, list_to_arr(*get_envp()));
-	// 	exit(1);
-	// }
-	// set_ctx_status(p_ctx, pid, 0);
 }
 
 
@@ -268,7 +249,6 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	// 경로가 명시된 경우(상대경로 or 절대경로)
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
-		
 	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
