@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 15:47:21 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 17:22:01 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "../include/parser.h"
 #include "../include/filename_expansion.h"
 #include "../include/here_doc.h"
-void free_tokenizer(t_tokenizer *tokenizer);
 
 t_node	*parser(char *line)
 {
@@ -83,9 +82,6 @@ void	free_tokenizer(t_tokenizer *tokenizer)
 	free(tokenizer->curr_token);
 	i = 0;
 	while (i < tokenizer->heredoc_file_idx)
-	{
-		unlink(tokenizer->heredoc_file_name[i]);
 		free(tokenizer->heredoc_file_name[i++]);
-	}
 	free(tokenizer->heredoc_file_name);
 }

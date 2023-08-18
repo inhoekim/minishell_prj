@@ -1,20 +1,36 @@
 #include "../include/minishell.h"
 #include "../include/execute.h"
 #include "../include/exec_node_util.h"
+#include "../include/here_doc.h"
 
-t_bool	execute(t_node *root)
+void	free_delete_heredoc(t_context *p_ctx);
+
+void	execute(t_node *root)
 {
 	t_context	ctx;
 
 	ctx.fd[STDIN_FILENO] = STDIN_FILENO;
 	ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
 	ctx.fd_close = -1;
-	// exit함수 호출시, TRUE
-	ctx.check_exit = FALSE;
+	ctx.heredoc_file_idx = 0;
+	ctx.heredoc_file_name = alloc_heredoc_name();
 	ctx.queue_size = 0;
 	exec_node(root, &ctx);
-	// reaper();
-	return (ctx.check_exit);
+	wait_queue(&ctx);
+	free_delete_heredoc(&ctx);
+}
+
+void	free_delete_heredoc(t_context *p_ctx)
+{
+	int	i;
+
+	i = 0;
+	while (i < p_ctx->heredoc_file_idx)
+	{
+		unlink(p_ctx->heredoc_file_name[i]);
+		free(p_ctx->heredoc_file_name[i++]);
+	}
+	free(p_ctx->heredoc_file_name);
 }
 
 void	exec_node(t_node *node, t_context *p_ctx)

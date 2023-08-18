@@ -24,7 +24,7 @@ char	*quote_removal(char *word)
 	return (chunk);
 }
 
-int *get_heredoc_exit_flag(void)
+int	*get_heredoc_exit_flag(void)
 {
 	static int heredoc_exit_flag;
 	return (&heredoc_exit_flag);
@@ -54,11 +54,11 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		//   can_expansion = FALSE;
 		if (!input || is_same_str(input, delimiter))
 		{
-			// @ heredoc에 있는 내용을 출력하고 종료.
-			// @ cat < fd
+			if (input)
+				free(input);
 			break ;
-		}	
-		// heredoc에서는 parameter가 '안에 있어도 expasion가능
+		}
+		// heredoc에서는 parameter가 '`안에 있어도 expasion가능
 		// if (can_expansion)
 		expanded = parameter_expansion(input);
 		ft_putendl_fd(expanded, fd);
@@ -82,3 +82,4 @@ static t_bool	is_same_str(char *word1, char *word2)
 		return (TRUE);
 	return (FALSE);
 }
+

@@ -9,15 +9,13 @@ void	enqueue(pid_t pid, t_context *p_ctx)
 void	wait_queue(t_context *p_ctx)
 {
 	int	idx;
-	int	pid_cnt;
-	int	status;
+	int	size;
 
 	idx = 0;
-	pid_cnt = p_ctx->queue_size;
-	while (idx < pid_cnt)
+	size = p_ctx->queue_size;
+	while (idx < size)
 	{
-		waitpid(p_ctx->queue[idx], &status, 0);
-		set_exit_status(WEXITSTATUS(status));
+		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
 		idx++;
 		p_ctx->queue_size--;
 	}

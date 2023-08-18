@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/18 16:00:03 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 17:11:19 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ typedef struct s_context
 	int		exit_status;
 	int		fd[2];
 	int		fd_close;
-	int		check_exit;
+	int		heredoc_file_idx;
+	char	**heredoc_file_name;
 	pid_t	queue[PROC_MAX];
 	int		queue_size;
 }	t_context;
 
-t_bool	execute(t_node *root);
+void	execute(t_node *root);
 void	exec_node(t_node *node, t_context *p_ctx);
 
 t_bool	ft_cd(char **argv);

@@ -84,6 +84,8 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
+static void	delete_heredoc(t_tokenizer *tokenizer);
+
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
@@ -96,9 +98,10 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		if (*get_heredoc_exit_flag() == 1)
 			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
-		if (tokenizer->heredoc_file_idx > HEREDOC_MAX)
+		if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
 		{
-			msh_error(NULL, "maximum here-document count exceeded\n", 1);
+			msh_error(NULL, "maximum here-document count exceeded", 1);
+			delete_heredoc(tokenizer);
 			set_heredoc_exit_flag(1);
 			return (NULL);
 		}
@@ -110,4 +113,13 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	}
 	syntax_error(tokenizer);
 	return (NULL);
+}
+
+static void	delete_heredoc(t_tokenizer *tokenizer)
+{
+	int	i;
+
+	i = 0;
+	while (i < tokenizer->heredoc_file_idx)
+		unlink(tokenizer->heredoc_file_name[i++]);
 }

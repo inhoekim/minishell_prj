@@ -90,12 +90,10 @@ void	exec_input(t_node *node, t_context *p_ctx)
 void	exec_heredoc(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
-	t_node	*rhs;
 
 	lhs = node->left;
-	rhs = node->right;
 
-	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -177,17 +175,20 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	}
 }
 
-// @ reaper에서 사용될 함수인 것같음.
-// @ 자식프로세스 종료 상태에 따라 exit_status를 달리 저장해야하므로 사용됨.
-void	set_ctx_status(t_context *p_ctx, pid_t pid, int flag)
+void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 {
-	waitpid(pid, &flag, 0);
-	if (flag != 0)
-	// 이거 왜 안되는지 모르겠음
-	// if (WIFSIGNALED(flag))
-		p_ctx->exit_status = 1;
-	else
-		p_ctx->exit_status = 0;
+	int	status;
+
+	waitpid(pid, &status, flag);
+	if (WIFEXITED(status))
+	{
+		p_ctx->exit_status = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		p_ctx->exit_status = WTERMSIG(status) + 128;
+	}
+	set_exit_status(p_ctx->exit_status);
 }
 
 t_bool	exec_builtin(char **argv)
