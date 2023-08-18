@@ -61,6 +61,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	int			pipe_fd[2];
 	t_context	aux;
 
+	p_ctx->is_piped_cmd = TRUE;
 	lhs = node->left;
 	rhs = node->right;
 	pipe(pipe_fd);
@@ -68,10 +69,17 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
+	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
+	// @ ctx.queue에도 반영해야 함.
+	// @ aux.queue -> ctx.queue 로 queue복사
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
+	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
+	// @ ctx.queue에도 반영해야 함.
+	// @ aux.queue -> ctx.queue 로 queue복사
+	p_ctx->is_piped_cmd = FALSE;
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -190,7 +198,7 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	set_exit_status(p_ctx->exit_status);
 }
 
-t_bool	exec_builtin(char **argv)
+t_bool	exec_builtin(char **argv, t_context *p_ctx)
 {
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
@@ -198,10 +206,29 @@ t_bool	exec_builtin(char **argv)
 
 	can_builtin = FALSE;
 	builtin_func = check_builtin(argv[0]);
+	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
+       pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
+	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
+	*/
 	if (builtin_func)
 	{
-		builtin_exit_status = builtin_func(argv);
-		set_exit_status(builtin_exit_status);
+		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
+		if (p_ctx->is_piped_cmd)
+		{
+			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
+			// @ fork후 builtin_func(argv); 실행
+			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
+		}
+		else
+		{
+			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
+			// @ redirect 및 redirect 정보 백업
+			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
+			builtin_exit_status = builtin_func(argv);
+			// @ redirect 및 redirect 정보 복구
+			// p_ctx_fd_copy(tmp, p_ctx);
+			set_exit_status(builtin_exit_status);
+		}
 		can_builtin = TRUE;
 	}
 	return (can_builtin);
@@ -239,7 +266,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	argv = make_argv(node->word);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
-		if (exec_builtin(argv) == FALSE)
+		if (exec_builtin(argv, p_ctx) == FALSE)
 			search_and_fork_exec(argv, p_ctx);
 	}
 	else if (can_access(argv[0], p_ctx))

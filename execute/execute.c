@@ -12,6 +12,7 @@ void	execute(t_node *root)
 	ctx.fd[STDIN_FILENO] = STDIN_FILENO;
 	ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
 	ctx.fd_close = -1;
+	ctx.is_piped_cmd = FALSE;
 	ctx.heredoc_file_idx = 0;
 	ctx.heredoc_file_name = alloc_heredoc_name();
 	ctx.queue_size = 0;

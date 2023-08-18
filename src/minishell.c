@@ -68,7 +68,7 @@ void	minishell_loop(void)
 			free(line);
 		}
 	}
-	ft_putstr_fd("\x1b[1A", STDOUT);
+	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }
