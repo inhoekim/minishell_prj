@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 13:41:09 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 15:47:21 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 #include "../include/rule.h"
 #include "../include/tokenizer.h"
 #include "../include/parser.h"
+#include "../include/filename_expansion.h"
+#include "../include/here_doc.h"
+void free_tokenizer(t_tokenizer *tokenizer);
 
 t_node	*parser(char *line)
 {
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
+	set_heredoc_exit_flag(0);
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
-		free(tokenizer.curr_token);
-		// free_token(&tokenizer);
+		free_tokenizer(&tokenizer);
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
@@ -34,7 +37,12 @@ t_node	*parser(char *line)
 		free_tree(root);
 		root = NULL;
 	}
-	free(tokenizer.curr_token);
+	else if (*get_heredoc_exit_flag() == 1)
+	{
+		free_tree(root);
+		root = NULL;
+	}
+	free_tokenizer(&tokenizer);
 	return (root);
 }
 
@@ -52,20 +60,12 @@ void	syntax_error(t_tokenizer *tokenizer)
 	if (token->type != SYNTAX_ERR)
 	{	
 		ft_putstr_fd("minishell : ", STDERR_FILENO);
-<<<<<<< HEAD
-		if (token->type == E0F)
-			ft_putstr_fd("syntax error: unexpected end of file", STDERR_FILENO);
-		else
-		{
-			ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
-=======
 		ft_putstr_fd("syntax error: near unexpected ", STDERR_FILENO);
 		if (token->type == E0F)
 			ft_putstr_fd("end of file", STDERR_FILENO);
 		else
 		{
 			ft_putstr_fd("token ", STDERR_FILENO);
->>>>>>> 240_develop
 			ft_putchar_fd('\'', STDERR_FILENO);
 			ft_putstr_fd(token->str, STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
@@ -74,4 +74,18 @@ void	syntax_error(t_tokenizer *tokenizer)
 		tokenizer->curr_token->type = SYNTAX_ERR;
 	}
 	return ;
+}
+
+void	free_tokenizer(t_tokenizer *tokenizer)
+{
+	int	i;
+
+	free(tokenizer->curr_token);
+	i = 0;
+	while (i < tokenizer->heredoc_file_idx)
+	{
+		unlink(tokenizer->heredoc_file_name[i]);
+		free(tokenizer->heredoc_file_name[i++]);
+	}
+	free(tokenizer->heredoc_file_name);
 }

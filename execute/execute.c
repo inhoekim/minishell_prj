@@ -6,10 +6,6 @@ t_bool	execute(t_node *root)
 {
 	t_context	ctx;
 
-	char *file_name[16] = \
-	{"heredoc_0", "heredoc_1", "heredoc_2", "heredoc_3", "heredoc_4", "heredoc_5", "heredoc_6", "heredoc_7", "heredoc_8", "heredoc_9", "heredoc_10", "heredoc_11", "heredoc_12", "heredoc_13", "heredoc_14", "heredoc_15"};
-	ctx.heredoc_file_name = (char *)file_name;
-	ctx.heredoc_file_idx = 0;
 	ctx.fd[STDIN_FILENO] = STDIN_FILENO;
 	ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
 	ctx.fd_close = -1;

@@ -1,5 +1,5 @@
-#define DELIMLEN 1024
-
+# define DELIMLEN 1024
+# define HEREDOC_MAX 16
 #include "../include/make_argv_util.h"
 #include "../include/arg_expansion.h"
 #include "../include/filename_expansion.h"

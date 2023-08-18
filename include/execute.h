@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/17 00:13:15 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 15:19:18 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ typedef struct s_context
 	int		fd[2];
 	int		fd_close;
 	int		check_exit;
-	char	*heredoc_file_name;
-	int		heredoc_file_idx;
 }	t_context;
 
 t_bool	execute(t_node *root);

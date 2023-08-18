@@ -93,12 +93,14 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	if (match_token(DLESS, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 	{
+		if (*get_heredoc_exit_flag() == 1)
+			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
-		if (tokenizer->heredoc_file_idx >= 16)
+		if (tokenizer->heredoc_file_idx > HEREDOC_MAX)
 		{
 			msh_error(NULL, "maximum here-document count exceeded\n", 1);
-			// memory release
-			exit(1);
+			set_heredoc_exit_flag(1);
+			return (NULL);
 		}
 		set_delimiter(node, delim);
 		here_doc(delim, tokenizer);
