@@ -26,7 +26,7 @@ typedef struct s_context
 	int		check_exit;
 	char	*heredoc_file_name;
 	int		heredoc_file_idx;
-	int		queue[PROC_MAX];
+	pid_t	queue[PROC_MAX];
 	int		que_idx;
 }	t_context;
 
@@ -48,5 +48,8 @@ void	delete_node(t_list **head, t_list *node_to_delete);
 char	*ft_getenv(char *pos);
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env);
 void	set_envp(char *pos, char *pwd);
+
+void	enqueue(pid_t pid, t_context *p_ctx);
+void	wait_queue(t_context *p_ctx);
 
 #endif
