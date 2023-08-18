@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_node_util.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 14:38:34 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/16 19:19:23 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/18 12:02:45 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		exec_word(t_node *node, t_context *p_ctx);
 t_builtin	check_builtin(char *argv);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
 char		**ft_split2(char const *s, char c);
-char		*make_order(char **path, char **argv, t_context *p_ctx);
+char		*make_order(char **path, char **argv);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		exec_or(t_node *node, t_context *p_ctx);
 void		exec_and(t_node *node, t_context *p_ctx);

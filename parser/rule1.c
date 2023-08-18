@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/17 17:45:08 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/17 19:18:16 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_node	*piped_command(t_tokenizer *tokenizer)
 	if (match_token(PIPE, tokenizer, TRUE))
 	{
 		child = pipeline(tokenizer);
+		return (make_tree(PIPE, NULL, child));
 	}
-	(void)child;
 	return (NULL);
 }

@@ -35,6 +35,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	
 	if (p_ctx->exit_status != 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -70,7 +71,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd[STDOUT] = STDOUT;
@@ -126,14 +126,15 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	exec_node(lhs, p_ctx);
 }
 
-char	*make_order(char **path, char **argv, t_context *p_ctx)
+char	*make_order(char **path, char **argv)
 {
 	int		idx;
 	int		total;
 	char	*order;
+	struct stat	buff;
 
 	idx = 0;
-	order = 0;
+	order = NULL;
 	while (path[idx])
 	{
 		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
@@ -141,14 +142,11 @@ char	*make_order(char **path, char **argv, t_context *p_ctx)
 		if (!order)
 			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
-		// @ if (access(order, X_OK) != -1)의 역할은 can_access가 하기때문에 필요없어보임
-		if (access(order, X_OK) != -1)
-		{
-			if (can_access(order, p_ctx))
-				break ;
-		}
+		stat(order, &buff);
+		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
+			break ;
 		free(order);
-		order = 0;
+		order = NULL;
 		idx++;
 	}
 	return (order);
@@ -162,7 +160,7 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 
 	path = ft_split2(ft_getenv("PATH"), ':');
 	// @ unset PATH
-	order = make_order(path, argv, p_ctx);
+	order = make_order(path, argv);
 	if (order)
 	{
 		free(argv[0]);
@@ -257,6 +255,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 
 	// node에 저장된 cmd line argument 배열 parsing
 	argv = make_argv(node->word);
+	
 	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
