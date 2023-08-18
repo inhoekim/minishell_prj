@@ -3,6 +3,7 @@
 #include "../include/make_argv_util.h"
 #include "../include/arg_expansion.h"
 #include "../include/filename_expansion.h"
+#include "../include/exec_word_util.h"
 
 void	set_delimiter(t_node *node, char buf[]);
 char	*quote_removal(char *word);
