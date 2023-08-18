@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 19:22:03 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 13:38:56 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ t_node	*parser(char *line)
 		root = NULL;
 	}
 	free(tokenizer.curr_token);
-	// free_token(&tokenizer);
 	return (root);
 }
 
@@ -53,26 +52,17 @@ void	syntax_error(t_tokenizer *tokenizer)
 	if (token->type != SYNTAX_ERR)
 	{	
 		ft_putstr_fd("minishell : ", STDERR_FILENO);
-		ft_putstr_fd("syntax error: near unexpected token ", STDERR_FILENO);
-		ft_putchar_fd('\'', STDERR_FILENO);
 		if (token->type == E0F)
-			ft_putstr_fd("newline", STDERR_FILENO);
+			ft_putstr_fd("syntax error: unexpected end of file", STDERR_FILENO);
 		else
+		{
+			ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
+			ft_putchar_fd('\'', STDERR_FILENO);
 			ft_putstr_fd(token->str, STDERR_FILENO);
-		ft_putchar_fd('\'', STDERR_FILENO);
+			ft_putchar_fd('\'', STDERR_FILENO);
+		}
 		ft_putchar_fd('\n', STDERR_FILENO);
 		tokenizer->curr_token->type = SYNTAX_ERR;
 	}
 	return ;
 }
-
-// int	main(void)
-// {
-// 	t_node	*test;
-// 	int		a;
-
-// 	test = parser("ls > a.txt");
-// 	a = 3;
-// 	a++;
-// 	return (0);
-// }

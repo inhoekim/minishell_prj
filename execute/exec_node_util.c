@@ -7,9 +7,6 @@
 #include "../include/filename_expansion.h"
 
 
-// waitpid, enqueue -> 주석 처리
-// or, and -> int pid remove
-// word.buf -> word[0] change / seykim 8/16
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -20,11 +17,9 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	if (pid)
 	{
 		exec_node(lhs, p_ctx);
-		// wait_queue();
 	}
 	waitpid(pid, 0, 0);
-	// enqueue(pid);
-	// wait_queue();
+	// reaper();
 }
 
 void	exec_or(t_node *node, t_context *p_ctx)
@@ -35,6 +30,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	// reaper();
 	// @ reaper로 pid종료상태업데이트 필요
 	printf("exit status: %d\n", *get_exit_status());
 	if (*get_exit_status() != 0)
@@ -51,6 +47,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	// reaper();
 	// @ reaper로 pid종료상태업데이트 필요
 	printf("exit status: %d\n", *get_exit_status());
 	if (*get_exit_status() == 0)
@@ -145,12 +142,8 @@ char	*make_order(char **path, char **argv)
 		if (!order)
 			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
-<<<<<<< HEAD
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
-=======
-		if (access(order, X_OK) != -1)
->>>>>>> seykim_develop
 			break ;
 		free(order);
 		order = NULL;
@@ -159,16 +152,10 @@ char	*make_order(char **path, char **argv)
 	return (order);
 }
 
-//unset path가 되었을 때, 경로없을 때 에러를 띄우도록 수정
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
 	char	**path;
-<<<<<<< HEAD
-
-	path = ft_split2(ft_getenv("PATH"), ':');
-	// @ unset PATH
-=======
 	char	*temp_path;
 
 	temp_path = ft_getenv("PATH");
@@ -179,7 +166,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		return ;
 	}
 	path = ft_split2(temp_path, ':');
->>>>>>> seykim_develop
 	order = make_order(path, argv);
 	if (order)
 	{
@@ -187,7 +173,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
 	}
-	// @ else if(현재경로에 실행가능한 파일 있는지 확인)
 	else
 	{
 		p_ctx->exit_status = 127;
