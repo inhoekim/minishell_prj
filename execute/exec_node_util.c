@@ -70,13 +70,11 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	pipe(pipe_fd);
 	aux = *p_ctx;
-	aux.fd[STDIN] = STDIN;
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
-	aux.fd[STDOUT] = STDOUT;
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
 }
