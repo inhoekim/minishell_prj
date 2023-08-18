@@ -15,7 +15,7 @@ t_bool	ft_env(char **argv)
 		printf("%s\n", (char *)temp->content);
 		temp = temp->next;
 	}
-	return (FALSE);
+	return (0);
 }
 
 t_bool	ft_exit(char **argv)
@@ -36,7 +36,7 @@ t_bool	ft_exit(char **argv)
 		printf("exit\n");
 		exit(0);
 	}
-	return (TRUE);
+	return (1);
 }
 
 void	exit_utils(char **temp)

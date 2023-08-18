@@ -29,7 +29,7 @@
 // 	t_list	*temp;
 
 // 	len = ft_lstsize(list);
-// 	newstr = calloc(sizeof(*newstr), len + 1);
+// 	newstr = ft_calloc(sizeof(*newstr), len + 1);
 // 	temp = list;
 // 	while (list)
 // 	{

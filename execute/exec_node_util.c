@@ -35,7 +35,9 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	if (p_ctx->exit_status != 0)
+	// @ reaper로 pid종료상태업데이트 필요
+	printf("exit status: %d\n", *get_exit_status());
+	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -49,7 +51,9 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	if (p_ctx->exit_status == 0)
+	// @ reaper로 pid종료상태업데이트 필요
+	printf("exit status: %d\n", *get_exit_status());
+	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -70,7 +74,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd[STDOUT] = STDOUT;
@@ -126,14 +129,15 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	exec_node(lhs, p_ctx);
 }
 
-char	*make_order(char **path, char **argv, t_context *p_ctx)
+char	*make_order(char **path, char **argv)
 {
-	int		idx;
-	int		total;
-	char	*order;
+	struct stat	buff;
+	int			idx;
+	int			total;
+	char		*order;
 
 	idx = 0;
-	order = 0;
+	order = NULL;
 	while (path[idx])
 	{
 		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
@@ -141,59 +145,55 @@ char	*make_order(char **path, char **argv, t_context *p_ctx)
 		if (!order)
 			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
-		// @ if (access(order, X_OK) != -1)의 역할은 can_access가 하기때문에 필요없어보임
+<<<<<<< HEAD
+		stat(order, &buff);
+		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
+=======
 		if (access(order, X_OK) != -1)
-		{
-			if (can_access(order, p_ctx))
-				break ;
-		}
+>>>>>>> seykim_develop
+			break ;
 		free(order);
-		order = 0;
+		order = NULL;
 		idx++;
 	}
 	return (order);
 }
 
+//unset path가 되었을 때, 경로없을 때 에러를 띄우도록 수정
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
 	char	**path;
-	pid_t	pid;
+<<<<<<< HEAD
 
 	path = ft_split2(ft_getenv("PATH"), ':');
 	// @ unset PATH
-	order = make_order(path, argv, p_ctx);
+=======
+	char	*temp_path;
+
+	temp_path = ft_getenv("PATH");
+	if (!temp_path)
+	{
+		p_ctx->exit_status = 127;
+		msh_error(argv[0], "command not found", 0);
+		return ;
+	}
+	path = ft_split2(temp_path, ':');
+>>>>>>> seykim_develop
+	order = make_order(path, argv);
 	if (order)
 	{
 		free(argv[0]);
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
 	}
+	// @ else if(현재경로에 실행가능한 파일 있는지 확인)
 	else
 	{
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
-	(void)pid;
-	// @ fork_exec와 기능이 같아서 수정했음
-	// pid = fork();
-	// if (pid == 0)
-	// {
-	// 	dup2(p_ctx->fd[STDIN], STDIN);
-	// 	dup2(p_ctx->fd[STDOUT], STDOUT);
-	// 	if (p_ctx->fd_close >= 0)
-	// 	{
-	// 		close(p_ctx->fd_close);
-	// 		p_ctx->fd_close = -1;
-	// 	}
-	// 	if (!order)
-	// 		msh_error(argv[0], "command not found", 0);
-	// 	execve(order, argv, list_to_arr(*get_envp()));
-	// 	exit(1);
-	// }
-	// set_ctx_status(p_ctx, pid, 0);
 }
-
 
 // @ reaper에서 사용될 함수인 것같음.
 // @ 자식프로세스 종료 상태에 따라 exit_status를 달리 저장해야하므로 사용됨.
@@ -212,19 +212,19 @@ t_bool	exec_builtin(char **argv)
 {
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
+	int			builtin_exit_status;
 
 	can_builtin = FALSE;
 	builtin_func = check_builtin(argv[0]);
 	if (builtin_func)
 	{
-		builtin_func(argv);
+		builtin_exit_status = builtin_func(argv);
+		set_exit_status(builtin_exit_status);
 		can_builtin = TRUE;
-		// printf("not make builtin_func build\n");
-		// exit(1);
 	}
 	return (can_builtin);
 }
-// cd, env, export, unset, exit, echo, pwd
+
 t_builtin	check_builtin(char *argv)
 {
 	if (argv[0] == 'c' && argv[1] == 'd' && argv[2] == '\0')
@@ -236,7 +236,6 @@ t_builtin	check_builtin(char *argv)
 		else if (argv[1] == 'x')
 		{
 			if (argv[2] == 'p' && argv[3] == 'o' && argv[4] == 'r'  && argv[5] == 't' && argv[6] == '\0')
-			//	export 추가하는 파트에서 export test=3 입력시, export, test=3이 들어감
 				return (ft_export);
 			else if (argv[2] == 'i' && argv[3] == 't' && argv[4] == '\0')
 				return (ft_exit);
@@ -255,21 +254,14 @@ void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	// node에 저장된 cmd line argument 배열 parsing
 	argv = make_argv(node->word);
-	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
-		// 빌트인
 		if (exec_builtin(argv) == FALSE)
-			// PATH(argv에 경로를 붙혀서 실행해야하는 경우), 현재 디렉토리 search
 			search_and_fork_exec(argv, p_ctx);
-			
 	}
-	// 경로가 명시된 경우(상대경로 or 절대경로)
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
-		
 	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
