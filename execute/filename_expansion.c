@@ -37,7 +37,7 @@ char	*concatenate(t_list *list)
 		str_size += ft_strlen(list->content);
 		list = list->next;
 	}
-	pattern = calloc(str_size + 1, sizeof(char));
+	pattern = ft_calloc(str_size + 1, sizeof(char));
 	if (!pattern)
 		return (NULL);
 	list = head;
@@ -77,11 +77,11 @@ int	**allocate_dp(int row, int col)
 	int	**dp;
 	int	idx;
 
-	dp = calloc(row + 1, sizeof(int *));
+	dp = ft_calloc(row + 1, sizeof(int *));
 	idx = 0;
 	while (idx <= row)
 	{
-		dp[idx] = calloc(col + 1, sizeof(int));
+		dp[idx] = ft_calloc(col + 1, sizeof(int));
 		idx++;
 	}
 	return (dp);

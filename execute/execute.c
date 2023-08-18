@@ -4,7 +4,6 @@
 
 t_bool	execute(t_node *root)
 {
-	t_bool		check_exit;
 	t_context	ctx;
 
 	char *file_name[16] = \
@@ -17,7 +16,7 @@ t_bool	execute(t_node *root)
 	// exit함수 호출시, TRUE
 	ctx.check_exit = FALSE;
 	exec_node(root, &ctx);
-	(void)check_exit;
+	// reaper();
 	return (ctx.check_exit);
 }
 

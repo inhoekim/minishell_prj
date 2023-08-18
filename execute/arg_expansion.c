@@ -99,7 +99,7 @@ char	*get_value(char *key)
 	char	*status;
 	char	*value;
 
-	status = calloc(4, sizeof(char *));
+	status = ft_calloc(4, sizeof(char *));
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
@@ -113,7 +113,6 @@ char	*get_value(char *key)
 	return (value);
 }
 
-// norm 규정에 맞게 수정
 t_list	*search_key(char *str, int i)
 {
 	int		base;

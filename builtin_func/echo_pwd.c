@@ -25,7 +25,7 @@ t_bool	ft_echo(char **argv)
 	}
 	if (flag == 0)
 		printf("\n");
-	return (FALSE);
+	return (0);
 }
 
 t_bool	ft_pwd(char **argv)
@@ -35,5 +35,5 @@ t_bool	ft_pwd(char **argv)
 	(void)argv;
 	getcwd(path, PATH_MAX);
 	printf("%s\n", path);
-	return (FALSE);
+	return (0);
 }
