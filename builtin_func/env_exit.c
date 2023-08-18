@@ -12,7 +12,7 @@ t_bool	ft_env(char **argv)
 	temp = *env;
 	while (temp != NULL)
 	{
-		printf("%s\n", (char *)temp->content);
+		ft_putendl_fd((char *)temp->content, STDOUT_FILENO);
 		temp = temp->next;
 	}
 	return (0);
