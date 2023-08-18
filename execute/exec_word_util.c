@@ -53,7 +53,8 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		close(p_ctx->fd[STDIN_FILENO]);
 	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
 		close(p_ctx->fd[STDOUT_FILENO]);
-	set_ctx_status(p_ctx, pid, 0);
+	enqueue(pid, p_ctx);
+	// set_ctx_status(p_ctx, pid, 0);
 }
 
 char	**list_to_arr(t_list *node)
