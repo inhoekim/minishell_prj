@@ -6,12 +6,13 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 18:26:20 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 13:48:13 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
+#include "../include/parser.h"
 
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
 {
@@ -38,7 +39,7 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 	{
 		if (string_close(tokenizer, ')') == FALSE)
 		{
-			//syntax_error("");
+			syntax_error(tokenizer);
 		}
 		return (make_token(tokenizer, SUBSHELL_LEFT));
 	}

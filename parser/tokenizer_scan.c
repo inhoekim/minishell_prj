@@ -11,10 +11,11 @@
 /* ************************************************************************** */
 
 #include "../include/tokenizer.h"
+#include "../include/parser.h"
 #define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
-{
+{ 
 	if (*tokenizer->start == '<')
 	{
 		if (match(tokenizer, '<'))
@@ -51,7 +52,8 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				//syntax_error
+				syntax_error(tokenizer);
+				//make_token(tokenizer, SYNTAX_ERR);
 			}
 		}
 		tokenizer->end++;
@@ -73,6 +75,6 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 	if  (*end_ptr == '\0')
 		return (FALSE);
 	if (c != ')')
-		tokenizer->end = end_ptr;
+		tokenizer->end = end_ptr++;
 	return (TRUE);
 }

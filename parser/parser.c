@@ -52,11 +52,20 @@ void	syntax_error(t_tokenizer *tokenizer)
 	if (token->type != SYNTAX_ERR)
 	{	
 		ft_putstr_fd("minishell : ", STDERR_FILENO);
+<<<<<<< HEAD
 		if (token->type == E0F)
 			ft_putstr_fd("syntax error: unexpected end of file", STDERR_FILENO);
 		else
 		{
 			ft_putstr_fd("syntax error near unexpected token ", STDERR_FILENO);
+=======
+		ft_putstr_fd("syntax error: near unexpected ", STDERR_FILENO);
+		if (token->type == E0F)
+			ft_putstr_fd("end of file", STDERR_FILENO);
+		else
+		{
+			ft_putstr_fd("token ", STDERR_FILENO);
+>>>>>>> 240_develop
 			ft_putchar_fd('\'', STDERR_FILENO);
 			ft_putstr_fd(token->str, STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
