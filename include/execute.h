@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/18 15:19:18 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 16:00:03 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define STDIN 0
 # define STDOUT 1
 # define PATH_MAX 1024
-
+# define PROC_MAX 1024
 #include "minishell.h"
 
 typedef struct s_context
@@ -24,10 +24,12 @@ typedef struct s_context
 	int		fd[2];
 	int		fd_close;
 	int		check_exit;
+	pid_t	queue[PROC_MAX];
+	int		queue_size;
 }	t_context;
 
 t_bool	execute(t_node *root);
-void exec_node(t_node *node, t_context *p_ctx);
+void	exec_node(t_node *node, t_context *p_ctx);
 
 t_bool	ft_cd(char **argv);
 t_bool	ft_echo(char **argv);
@@ -44,5 +46,8 @@ void	delete_node(t_list **head, t_list *node_to_delete);
 char	*ft_getenv(char *pos);
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env);
 void	set_envp(char *pos, char *pwd);
+
+void	enqueue(pid_t pid, t_context *p_ctx);
+void	wait_queue(t_context *p_ctx);
 
 #endif

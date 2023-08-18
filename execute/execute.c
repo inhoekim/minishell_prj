@@ -11,6 +11,7 @@ t_bool	execute(t_node *root)
 	ctx.fd_close = -1;
 	// exit함수 호출시, TRUE
 	ctx.check_exit = FALSE;
+	ctx.queue_size = 0;
 	exec_node(root, &ctx);
 	// reaper();
 	return (ctx.check_exit);

@@ -14,12 +14,13 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	pid = fork();
-	if (pid)
+	if (pid == 0)
 	{
 		exec_node(lhs, p_ctx);
+		exit(p_ctx->exit_status);
 	}
-	waitpid(pid, 0, 0);
-	// reaper();
+	enqueue(pid, p_ctx);
+	wait_queue(p_ctx);
 }
 
 void	exec_or(t_node *node, t_context *p_ctx)
@@ -30,9 +31,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// reaper();
-	// @ reaper로 pid종료상태업데이트 필요
-	printf("exit status: %d\n", *get_exit_status());
+	wait_queue(p_ctx);
 	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -47,9 +46,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// reaper();
-	// @ reaper로 pid종료상태업데이트 필요
-	printf("exit status: %d\n", *get_exit_status());
+	wait_queue(p_ctx);
 	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
