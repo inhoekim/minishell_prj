@@ -18,10 +18,12 @@ char	**ft_split2(char const *s, char c)
 	int		start;
 
 	idx = 0;
+	// @ size_count_1((char *)s, c)는 반복호출할 필요없으므로 int word_cnt에 담는게 좋아보임
 	newstr = (char **)malloc(sizeof(char *) * (size_count_1((char *)s, c) + 1));
 	if (!newstr)
 		return (NULL);
 	num = 0;
+	// @ size_count_1((char *)s, c)는 반복호출할 필요없으므로 int word_cnt에 담는게 좋아보임
 	while (s[num] && idx < (size_count_1((char *)s, c)))
 	{
 		while (s[num] && find_cs_1(s[num], c))
@@ -92,10 +94,8 @@ static char	*abc_1(int start, int end, char *str)
 
 static int	find_cs_1(char c, char charset)
 {
-	int	i;
 
-	i = 0;
 	if (c == charset)
-		return (1);
+		return (1);	
 	return (0);
 }

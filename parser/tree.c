@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/16 13:07:06 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/17 12:20:25 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ static char	**make_first_word(char *src, int len)
 
 	new_str = (char **)malloc(sizeof(char *) * 2);
 	new_str[0] = (char *)malloc(sizeof(char) * (len + 1));
+	new_str[0][len] = '\0';
 	idx = 0;
 	while (idx < len)
 	{
 		new_str[0][idx] = src[idx];
 		idx++;
 	}
-	new_str[0][len] = '\0';
 	new_str[1] = NULL;
 	return (new_str);
 }

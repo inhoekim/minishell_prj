@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_scan.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naylee <naylee@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/11 12:09:36 by naylee           ###   ########.fr       */
+/*   Updated: 2023/08/17 12:00:16 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../include/tokenizer.h"
-#define SYMBOLCHAR "<>&|() \t\n"
+#define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
 { 
@@ -42,9 +43,7 @@ t_token	*scan_char_token(t_tokenizer *tokenizer)
 
 t_token	*scan_word_token(t_tokenizer *tokenizer)
 {
-	if (*tokenizer->end == '\0')
-		return (make_token(tokenizer, E0F));
-	while (!ft_strchr(SYMBOLCHAR, *tokenizer->end))
+	while (!ft_strchr(DELIMETER, *tokenizer->end))
 	{
 		if (*tokenizer->end == '\0')
 			return (make_token(tokenizer, E0F));
@@ -55,12 +54,12 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 				//syntax_error("~~~");
 				//종료코드
 			}
-			else
-				break;
 		}
 		tokenizer->end++;
 	}
-	if (ft_strchr(SYMBOLCHAR, *tokenizer->end))
+	// ex. ls & ls일 때, word token '&'는 tokenizer->start == tokenizer->end이므로 false
+	// 나머지는 DELIMETER에 속할 경우 end를 왼쪽으로 한칸 밀어야 함.
+	if (tokenizer->start != tokenizer->end && ft_strchr(DELIMETER, *tokenizer->end))
 		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }
@@ -72,7 +71,7 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 	end_ptr = tokenizer->end;
 	while (*end_ptr != '\0' && *end_ptr != c)
 		end_ptr++;
-	if (*end_ptr == '\0' || *end_ptr != c)
+	if  (*end_ptr == '\0')
 		return (FALSE);
 	return (TRUE);
 }

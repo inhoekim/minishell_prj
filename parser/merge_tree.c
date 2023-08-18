@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/14 10:12:29 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/16 22:38:04 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ t_node	*merge_tree(t_node *parent, t_node *child)
 		return (parent);
 	if (!parent)
 		return (child);
+	// @ 무조건 참으로 보임.
 	if (parent && child)
 		return (insert_left(parent, child));
+	// @ 없어도 될 것같음.
 	return (NULL);
 }
 
@@ -36,6 +38,7 @@ static t_node	*insert_left(t_node *parent, t_node *child)
 	dock_node = parent;
 	while (dock_node->left)
 		dock_node = dock_node->left;
+	// ex. echo "123" "456" | cat
 	if (dock_node->type == COMMAND && child->type == COMMAND)
 	{
 		dock_node->word = append_cmd(child->word, dock_node->word);

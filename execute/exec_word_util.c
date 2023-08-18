@@ -51,8 +51,14 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		}
 		execve(argv[0], argv, envp);
 		printf("execve error\n");
+		exit(1);
 	}
+	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
+		close(p_ctx->fd[STDIN_FILENO]);
+	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		close(p_ctx->fd[STDOUT_FILENO]);
 	waitpid(pid, 0, 0);
+	// enqueue(pid, p_ctx);
 }
 
 // malloc -> calloc change seykim 8/16

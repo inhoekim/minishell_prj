@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/16 14:55:56 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/17 00:13:15 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@
 
 typedef struct s_context
 {
-	int	exit_status;
-	int	fd[2];
-	int	fd_close;
+	int		exit_status;
+	int		fd[2];
+	int		fd_close;
+	int		check_exit;
+	char	*heredoc_file_name;
+	int		heredoc_file_idx;
 }	t_context;
 
 t_bool	execute(t_node *root);
-t_node *exec_node(t_node *node, t_context *p_ctx);
+void exec_node(t_node *node, t_context *p_ctx);
 
 t_bool	ft_cd(char **argv);
 t_bool	ft_echo(char **argv);

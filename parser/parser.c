@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 15:54:47 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/17 16:30:00 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_node	*parser(char *line)
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
-		free_token(&tokenizer);
+		free(tokenizer.curr_token);
+		// free_token(&tokenizer);
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
@@ -33,7 +34,8 @@ t_node	*parser(char *line)
 		free_tree(root);
 		root = NULL;
 	}
-	free_token(&tokenizer);
+	free(tokenizer.curr_token);
+	// free_token(&tokenizer);
 	return (root);
 }
 

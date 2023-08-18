@@ -14,6 +14,8 @@
 #include "../include/tokenizer.h"
 #include "../include/rule.h"
 #include "../include/parser.h"
+#include "../include/filename_expansion.h"
+#include "../include/here_doc.h"
 
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty
@@ -85,9 +87,28 @@ t_node	*io_file(t_tokenizer *tokenizer)
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
+	t_node	*node;
+	char	delim[DELIMLEN];
+
 	if (match_token(DLESS, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
-		return (make_tree(DLESS, NULL, make_leaf(tokenizer)));
+	{
+		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
+		if (tokenizer->heredoc_file_idx >= 16)
+		{
+			msh_error(NULL, "maximum here-document count exceeded\n", 1);
+			// memory release
+			exit(1);
+		}
+		set_delimiter(node, delim);
+		here_doc(delim, tokenizer);
+		if (*get_heredoc_exit_flag() == 1)
+			return (NULL);
+		return (node);
+	}
+	// @ syntax error에서 errno도 받을수 있어야 함. (아래의 예시 고려)
+	// @ ex. cat << "ab" 'c'
+	// @ // cat: c: No such file or directory
 	syntax_error(tokenizer);
 	return (NULL);
 }
