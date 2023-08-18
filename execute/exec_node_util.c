@@ -17,7 +17,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	pid = fork();
-	if (pid)
+	if (pid == 0)
 	{
 		exec_node(lhs, p_ctx);
 		// wait_queue();

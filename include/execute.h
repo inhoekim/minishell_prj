@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/17 00:13:15 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 15:09:23 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define STDIN 0
 # define STDOUT 1
 # define PATH_MAX 1024
-
+# define PROC_MAX 1024
 #include "minishell.h"
 
 typedef struct s_context
@@ -26,10 +26,12 @@ typedef struct s_context
 	int		check_exit;
 	char	*heredoc_file_name;
 	int		heredoc_file_idx;
+	int		queue[PROC_MAX];
+	int		que_idx;
 }	t_context;
 
 t_bool	execute(t_node *root);
-void exec_node(t_node *node, t_context *p_ctx);
+void	exec_node(t_node *node, t_context *p_ctx);
 
 t_bool	ft_cd(char **argv);
 t_bool	ft_echo(char **argv);
