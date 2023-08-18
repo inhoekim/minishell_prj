@@ -54,7 +54,6 @@ t_bool	list_search(t_list *list, char ch)
 	while (list)
 	{
 		content = list->content;
-		// globbing character가 quotation(', "")안에 있으면 효력상실.
 		if (ft_strchr(content, ch))
 		{
 			if (!ft_strchr(content, '"') && !ft_strchr(content, '\''))

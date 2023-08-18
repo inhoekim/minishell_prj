@@ -30,7 +30,7 @@ char	*parameter_expansion(char *str)
 
 	str = ft_strdup(str);
 	n_str = str;
-	head = search_key(str);
+	head = search_key(str, 0);
 	list = head;
 	while (list)
 	{
@@ -99,8 +99,6 @@ char	*get_value(char *key)
 	char	*status;
 	char	*value;
 
-	// status가 할당이 안되어있어서 여기서 strlcpy에서 한자리 이상을 참조하면서 에러 발생
-	// 따라서 255이상의 값이 나올 수 없으므로 status에 4칸짜리 ft_calloc 배열 생성 -> seykim 8/16
 	status = ft_calloc(4, sizeof(char *));
 	if (key[1] == '?')
 	{
@@ -115,14 +113,12 @@ char	*get_value(char *key)
 	return (value);
 }
 
-t_list	*search_key(char *str)
+t_list	*search_key(char *str, int i)
 {
 	int		base;
-	int		i;
 	t_list	*head;
 
 	base = 0;
-	i = 0;
 	head = NULL;
 	while (str[i])
 	{
@@ -135,7 +131,8 @@ t_list	*search_key(char *str)
 			{
 				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 					i++;
-				ft_lstadd_back(&head, ft_lstnew(ft_substr(str, base, i - base)));
+				ft_lstadd_back(&head, \
+				ft_lstnew(ft_substr(str, base, i - base)));
 			}
 		}
 		else
