@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
+#include "../include/parser.h"
 
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
 {
@@ -39,7 +40,7 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 	{
 		if (string_close(tokenizer, ')') == FALSE)
 		{
-			//syntax_error("");
+			syntax_error(tokenizer);
 		}
 		return (make_token(tokenizer, SUBSHELL_LEFT));
 	}
@@ -50,7 +51,8 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
-	tokenizer->curr_token->type = type;
+	if (tokenizer->curr_token->type != SYNTAX_ERR)
+		tokenizer->curr_token->type = type;
 	// @ grammar부분에서 free할 때 문제없으면 
 	// @ if (type == E0F)블록 삭제
 	if (type == E0F)
