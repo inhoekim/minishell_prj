@@ -35,8 +35,9 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	
-	if (p_ctx->exit_status == 0)
+	// @ reaper로 pid종료상태업데이트 필요
+	printf("exit status: %d\n", *get_exit_status());
+	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -50,7 +51,9 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	if (p_ctx->exit_status != 0)
+	// @ reaper로 pid종료상태업데이트 필요
+	printf("exit status: %d\n", *get_exit_status());
+	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -166,6 +169,7 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
 	}
+	// @ else if(현재경로에 실행가능한 파일 있는지 확인)
 	else
 	{
 		p_ctx->exit_status = 127;
@@ -191,15 +195,15 @@ t_bool	exec_builtin(char **argv)
 {
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
+	int			builtin_exit_status;
 
 	can_builtin = FALSE;
 	builtin_func = check_builtin(argv[0]);
 	if (builtin_func)
 	{
-		builtin_func(argv);
+		builtin_exit_status = builtin_func(argv);
+		set_exit_status(builtin_exit_status);
 		can_builtin = TRUE;
-		// printf("not make builtin_func build\n");
-		// exit(1);
 	}
 	return (can_builtin);
 }
@@ -236,7 +240,6 @@ void	exec_word(t_node *node, t_context *p_ctx)
 
 	// node에 저장된 cmd line argument 배열 parsing
 	argv = make_argv(node->word);
-	
 	// 빌드인 or PATH에 경로등록 or 현재 디렉토리에 존재하는 명령
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
@@ -244,7 +247,6 @@ void	exec_word(t_node *node, t_context *p_ctx)
 		if (exec_builtin(argv) == FALSE)
 			// PATH(argv에 경로를 붙혀서 실행해야하는 경우), 현재 디렉토리 search
 			search_and_fork_exec(argv, p_ctx);
-			
 	}
 	// 경로가 명시된 경우(상대경로 or 절대경로)
 	else if (can_access(argv[0], p_ctx))

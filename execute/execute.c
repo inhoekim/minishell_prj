@@ -4,7 +4,6 @@
 
 t_bool	execute(t_node *root)
 {
-	t_bool		check_exit;
 	t_context	ctx;
 
 	char *file_name[16] = \
@@ -18,15 +17,6 @@ t_bool	execute(t_node *root)
 	ctx.check_exit = FALSE;
 	exec_node(root, &ctx);
 	// reaper();
-	(void)check_exit;
-	// exec_node에서 항상 NULL이 리턴되는데 그 이유? -> seykim 8/16
-	// @ 없어서 반환형 void로 바꿈 -> dasong 8/17
-	// if (!node && node->type != E0F)
-	// {
-	// 	printf("node error\n");
-	// 	exit(1);
-	// 	// syntax_error();
-	// }
 	return (ctx.check_exit);
 }
 

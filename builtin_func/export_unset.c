@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/16 18:48:54 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/18 12:36:43 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_bool	ft_export(char **argv)
 		while (argv[++idx])
 			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
 	}
-	return (FALSE);
+	return (0);
 }
 
 void	check_env(char **argv, t_list **env)
@@ -111,5 +111,5 @@ t_bool	ft_unset(char **argv)
 			}
 		}
 	}
-	return (FALSE);
+	return (0);
 }

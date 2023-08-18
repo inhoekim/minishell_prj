@@ -2,6 +2,10 @@
 	"files.associations": {
 		"__node_handle": "c",
 		"locale": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"minishell.h": "c",
+		"make_argv_util.h": "c",
+		"exec_word_util.h": "c",
+		"exec_node_util.h": "c"
 	}
 }
