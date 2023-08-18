@@ -150,6 +150,7 @@ char	*make_order(char **path, char **argv)
 	return (order);
 }
 
+//unset path가 되었을 때, 경로없을 때 에러를 띄우도록 수정
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;

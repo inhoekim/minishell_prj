@@ -64,7 +64,6 @@ t_list	*globbing(char *pattern)
 	while (dir != NULL)
 	{
 		dir = readdir(dp);
-		// change is_match func argv : p_idx, w_idx add seykim 8/16
 		if (dir && dir->d_type == DT_REG && \
 		is_match(pattern, dir->d_name, 0, 0))
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
@@ -73,7 +72,7 @@ t_list	*globbing(char *pattern)
 	return (matches);
 }
 
-int **allocate_dp(int row, int col)
+int	**allocate_dp(int row, int col)
 {
 	int	**dp;
 	int	idx;
@@ -88,8 +87,7 @@ int **allocate_dp(int row, int col)
 	return (dp);
 }
 
-// change is_match func : for -> while & delete dp[1][1] check seykim 8/16
-int is_match(char *pattern, char *word, int p_idx, int w_idx)
+int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 {
 	int	len_p;
 	int	len_w;
