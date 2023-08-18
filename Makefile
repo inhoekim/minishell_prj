@@ -7,9 +7,9 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
 ## seykim readline 설정 8/16
-INC_DIRS = /opt/homebrew/opt/readline/include
+INC_DIRS = /Users/seykim/.brew/Cellar/readline/include
 INC_DIRS += include
-LIB_DIRS = /opt/homebrew/opt/readline/lib libft
+LIB_DIRS = /Users/seykim/.brew/Cellar/readline/lib libft
 SRC_DIRS = src builtin_func execute parser
 
 vpath %.h $(INC_DIRS)

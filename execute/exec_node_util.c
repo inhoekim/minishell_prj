@@ -36,7 +36,6 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
 	// @ reaper로 pid종료상태업데이트 필요
-	printf("exit status: %d\n", *get_exit_status());
 	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -52,7 +51,6 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
 	// @ reaper로 pid종료상태업데이트 필요
-	printf("exit status: %d\n", *get_exit_status());
 	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -145,12 +143,8 @@ char	*make_order(char **path, char **argv)
 		if (!order)
 			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
-<<<<<<< HEAD
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
-=======
-		if (access(order, X_OK) != -1)
->>>>>>> seykim_develop
 			break ;
 		free(order);
 		order = NULL;
@@ -164,11 +158,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
 	char	**path;
-<<<<<<< HEAD
-
-	path = ft_split2(ft_getenv("PATH"), ':');
-	// @ unset PATH
-=======
 	char	*temp_path;
 
 	temp_path = ft_getenv("PATH");
@@ -179,7 +168,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		return ;
 	}
 	path = ft_split2(temp_path, ':');
->>>>>>> seykim_develop
 	order = make_order(path, argv);
 	if (order)
 	{
