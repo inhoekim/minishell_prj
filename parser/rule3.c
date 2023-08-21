@@ -84,6 +84,8 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
+static void	delete_heredoc(t_tokenizer *tokenizer);
+
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
@@ -93,14 +95,20 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	if (match_token(DLESS, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 	{
+		if (*get_heredoc_exit_flag() == 1)
+			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
-		if (tokenizer->heredoc_file_idx >= 16)
+		if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
 		{
-			msh_error(NULL, "maximum here-document count exceeded\n", 1);
-			// memory release
-			exit(1);
+			msh_error(NULL, "maximum here-document count exceeded", 1);
+			delete_heredoc(tokenizer);
+			set_heredoc_exit_flag(1);
+			return (NULL);
 		}
 		set_delimiter(node, delim);
+		// @ sigaction set(heredoc mode)
+		// @ sigint(2) 컨트롤+ c -> 개행하고 종료
+		// @ sigquit(3) 컨트롤+ d -> 개행없이 종료
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
 			return (NULL);
@@ -108,4 +116,13 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	}
 	syntax_error(tokenizer);
 	return (NULL);
+}
+
+static void	delete_heredoc(t_tokenizer *tokenizer)
+{
+	int	i;
+
+	i = 0;
+	while (i < tokenizer->heredoc_file_idx)
+		unlink(tokenizer->heredoc_file_name[i++]);
 }

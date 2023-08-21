@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 16:12:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/16 13:01:18 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/18 17:22:07 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ t_token		*scan_char_token(t_tokenizer *tokenizer);
 t_token		*scan_word_token(t_tokenizer *tokenizer);
 t_bool		string_close(t_tokenizer *tokenizer, char c);
 t_bool		check_first_set(t_nonterminal idx, t_symbol curr_token);
-void		free_token(t_tokenizer *tokenizer);
+void		free_tokenizer(t_tokenizer *tokenizer);
 
 #endif
