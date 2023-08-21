@@ -54,6 +54,20 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	}
 }
 
+void	copy_queue(t_context *dst, t_context *src)
+{
+	int	idx;
+	int	size;
+
+	idx = 0;
+	size = src->queue_size;
+	while (idx < size)
+	{
+		dst->queue[idx] = src->queue[idx];
+		idx++;
+	}
+}
+
 void	exec_pipe(t_node *node, t_context *p_ctx)
 {
 	t_node		*lhs;
@@ -69,18 +83,18 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
+	// copy_queue(p_ctx, &aux);
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
-	// @ !깊은 복사라서 안해도 될 것같음!
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
+	// copy_queue(p_ctx, &aux);
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
-	// @ !깊은 복사라서 안해도 될 것같음!
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -189,6 +203,7 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	int	status;
 
 	waitpid(pid, &status, flag);
+	printf("%d end\n", pid);
 	if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);
@@ -209,6 +224,7 @@ void redirect_fd(int dst[2])
 void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 {
 	int		pid;
+	int		builtin_exit_status;
 
 	pid = fork();
 	if (pid == 0)
@@ -223,9 +239,8 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 			close(p_ctx->fd_close);
 			p_ctx->fd_close = -1;
 		}
-		builtin_func(argv);
-		ft_putstr_fd("builtin execute fail.\n", STDERR_FILENO);
-		exit(1);
+		builtin_exit_status = builtin_func(argv);
+		exit(builtin_exit_status);
 	}
 	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
 		close(p_ctx->fd[STDIN_FILENO]);

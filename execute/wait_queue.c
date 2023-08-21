@@ -2,6 +2,8 @@
 
 void	enqueue(pid_t pid, t_context *p_ctx)
 {
+	if (PROC_MAX <= p_ctx->queue_size)
+		exit(1);
 	p_ctx->queue[p_ctx->queue_size] = pid;
 	p_ctx->queue_size++;
 }

@@ -92,24 +92,29 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 	int	len_p;
 	int	len_w;
 	int	**dp;
+	int	pos;
 
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);
 	dp = allocate_dp(len_p, len_w);
 	dp[0][0] = 1;
-	if (pattern[0] == '*')
-		dp[1][0] = 1;
+	pos = 0;
+	while (pattern[pos] == '*')
+	{
+		dp[pos + 1][0] = 1;
+		pos++;
+	}
 	while (++p_idx <= len_p)
 	{
 		w_idx = 0;
 		while (++w_idx <= len_w)
 		{
-			if (pattern[p_idx - 1] == '?' \
-			|| (pattern[p_idx - 1] == word[w_idx - 1]))
-				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
-			else if (pattern[p_idx - 1] == '*')
+			if (pattern[p_idx - 1] == '*')
 				dp[p_idx][w_idx] = \
 				(dp[p_idx - 1][w_idx] || dp[p_idx][w_idx - 1]);
+			else if (pattern[p_idx - 1] == '?' \
+			|| (pattern[p_idx - 1] == word[w_idx - 1]))
+				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
 		}
 	}
 	return (dp[len_p][len_w]);
