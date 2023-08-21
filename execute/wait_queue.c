@@ -1,4 +1,11 @@
 #include "../include/wait_queue.h"
+#include "../include/minishell.h"
+#include "../include/execute.h"
+#include "../include/exec_node_util.h"
+#include "../include/exec_word_util.h"
+#include "../include/filename_expansion.h"
+#include "../include/arg_expansion.h"
+#include "../include/make_argv_util.h"
 
 void	enqueue(pid_t pid, t_context *p_ctx)
 {
