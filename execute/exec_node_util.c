@@ -66,6 +66,7 @@ void	copy_queue(t_context *dst, t_context *src)
 		dst->queue[idx] = src->queue[idx];
 		idx++;
 	}
+	dst->queue_size = idx;
 }
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
@@ -83,7 +84,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-	// copy_queue(p_ctx, &aux);
+	copy_queue(p_ctx, &aux);
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
@@ -91,7 +92,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
-	// copy_queue(p_ctx, &aux);
+	copy_queue(p_ctx, &aux);
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
@@ -203,7 +204,6 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	int	status;
 
 	waitpid(pid, &status, flag);
-	printf("%d end\n", pid);
 	if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);

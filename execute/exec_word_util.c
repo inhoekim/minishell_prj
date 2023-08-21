@@ -34,9 +34,6 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	int		pid;
 	t_list	*envl;
 
-	printf("fork in: %d\n",p_ctx->fd[STDIN]);
-	printf("fork out: %d\n",p_ctx->fd[STDOUT]);
-	
 	envl = *get_envp();
 	pid = fork();
 	if (pid == 0)
