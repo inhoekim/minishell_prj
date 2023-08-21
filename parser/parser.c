@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/17 19:22:03 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/18 17:22:01 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 #include "../include/rule.h"
 #include "../include/tokenizer.h"
 #include "../include/parser.h"
+#include "../include/filename_expansion.h"
+#include "../include/here_doc.h"
 
 t_node	*parser(char *line)
 {
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
+	set_heredoc_exit_flag(0);
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
-		free(tokenizer.curr_token);
-		// free_token(&tokenizer);
+		free_tokenizer(&tokenizer);
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
@@ -34,8 +36,12 @@ t_node	*parser(char *line)
 		free_tree(root);
 		root = NULL;
 	}
-	free(tokenizer.curr_token);
-	// free_token(&tokenizer);
+	else if (*get_heredoc_exit_flag() == 1)
+	{
+		free_tree(root);
+		root = NULL;
+	}
+	free_tokenizer(&tokenizer);
 	return (root);
 }
 
@@ -69,13 +75,13 @@ void	syntax_error(t_tokenizer *tokenizer)
 	return ;
 }
 
-// int	main(void)
-// {
-// 	t_node	*test;
-// 	int		a;
+void	free_tokenizer(t_tokenizer *tokenizer)
+{
+	int	i;
 
-// 	test = parser("ls > a.txt");
-// 	a = 3;
-// 	a++;
-// 	return (0);
-// }
+	free(tokenizer->curr_token);
+	i = 0;
+	while (i < tokenizer->heredoc_file_idx)
+		free(tokenizer->heredoc_file_name[i++]);
+	free(tokenizer->heredoc_file_name);
+}
