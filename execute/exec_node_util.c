@@ -72,6 +72,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
+	// @ !깊은 복사라서 안해도 될 것같음!
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
@@ -79,6 +80,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
+	// @ !깊은 복사라서 안해도 될 것같음!
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -198,6 +200,40 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	set_exit_status(p_ctx->exit_status);
 }
 
+void redirect_fd(int dst[2])
+{
+	dup2(dst[STDIN], STDIN);
+	dup2(dst[STDOUT], STDOUT);
+}
+
+void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
+{
+	int		pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		// @ sigaction set(fork interactive mode)
+		// @ sigint(2) 컨트롤+c -> exit(2)
+		// @ sigquit(3) 컨트롤+d -> exit(3)
+		dup2(p_ctx->fd[STDIN], STDIN);
+		dup2(p_ctx->fd[STDOUT], STDOUT);
+		if (p_ctx->fd_close >= 0)
+		{
+			close(p_ctx->fd_close);
+			p_ctx->fd_close = -1;
+		}
+		builtin_func(argv);
+		ft_putstr_fd("builtin execute fail.\n", STDERR_FILENO);
+		exit(1);
+	}
+	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
+		close(p_ctx->fd[STDIN_FILENO]);
+	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		close(p_ctx->fd[STDOUT_FILENO]);
+	enqueue(pid, p_ctx);
+}
+
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
 {
 	t_bool		can_builtin;
@@ -218,6 +254,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 			// @ fork후 builtin_func(argv); 실행
 			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
+			forked_builtin(p_ctx, builtin_func, argv);
 			// @ sigint(2) 컨트롤+c -> exit(2)
 			// @ sigquit(3) 컨트롤+d -> exit(3)
 			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
@@ -227,9 +264,14 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
 			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
+			int tmp_fd[2];
+			tmp_fd[STDIN] = dup(STDIN);
+			tmp_fd[STDOUT] = dup(STDOUT);
+			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
 			// @ redirect 및 redirect 정보 복구
 			// p_ctx_fd_copy(tmp, p_ctx);
+			redirect_fd(tmp_fd);
 			set_exit_status(builtin_exit_status);
 		}
 		can_builtin = TRUE;
