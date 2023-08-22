@@ -40,9 +40,41 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	init_parser()
+void	new_prompt(int signum)
 {
+	if (signum != SIGINT)
+        return ;
 
+	printf("\n");
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
+}
+
+// @ sigaction set(default mode)
+// @(구현o) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
+// @(구현o) sigquit(3) 컨트롤+\ -> 아무동작안함 (무시)
+// @(구현o) eof 		컨트롤+ d -> minishell 종료 
+void	sigact_default(void)
+{
+	struct sigaction	intsig;
+	struct sigaction	quitsig;
+
+	struct termios attributes;
+
+    tcgetattr(STDIN, &attributes);
+    attributes.c_lflag &= (~ECHOCTL);
+    tcsetattr(STDIN, TCSANOW, &attributes);
+
+	intsig.sa_handler = new_prompt;
+  	sigemptyset(&intsig.sa_mask);
+	intsig.sa_flags = 0;
+	sigaction(SIGINT, &intsig, 0); 
+
+	quitsig.sa_handler = SIG_IGN;
+  	sigemptyset(&quitsig.sa_mask);
+	quitsig.sa_flags = 0;
+	sigaction(SIGQUIT, &quitsig, 0); 
 }
 
 void	minishell_loop(void) 
@@ -50,6 +82,7 @@ void	minishell_loop(void)
 	t_node		*root;
 	char		*line;
 
+	sigact_default();
 	line = ft_strdup("");
 	while (line)
 	{

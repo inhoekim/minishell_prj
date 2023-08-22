@@ -7,6 +7,8 @@
 # include "libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+# include <termios.h>
 
 typedef enum e_bool
 {
@@ -76,5 +78,7 @@ typedef struct s_tokenizer
 void	init_envp(char **envp);
 t_list	**get_envp(void);
 void	minishell_loop(void);
+t_bool 	*get_redirect_ambiguity(void);
+void 	set_redirect_ambiguity(t_bool value);
 
 #endif

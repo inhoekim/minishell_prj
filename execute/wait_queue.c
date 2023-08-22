@@ -1,11 +1,5 @@
 #include "../include/wait_queue.h"
-#include "../include/minishell.h"
 #include "../include/execute.h"
-#include "../include/exec_node_util.h"
-#include "../include/exec_word_util.h"
-#include "../include/filename_expansion.h"
-#include "../include/arg_expansion.h"
-#include "../include/make_argv_util.h"
 
 void	enqueue(pid_t pid, t_context *p_ctx)
 {
@@ -15,22 +9,63 @@ void	enqueue(pid_t pid, t_context *p_ctx)
 	p_ctx->queue_size++;
 }
 
+// void	enqueue_n(pid_t pid, t_context *p_ctx)
+// {
+// 	// pid -> int new
+// 	int *_pid = (int *)malloc(sizeof(int));
+// 	*_pid = pid;
+// 	ft_lstadd_back(p_ctx->pid_list, ft_lstnew(_pid));
+// }
+
+
+// void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
+// {
+// 	int		status;
+// 	pid_t	pid;
+
+// 	pid = *((int *)node->content);
+// 	waitpid(pid, &status, flag);
+// 	if (WIFEXITED(status))
+// 	{
+// 		p_ctx->exit_status = WEXITSTATUS(status);
+// 		set_exit_status(p_ctx->exit_status);
+// 		delete_node(p_ctx->pid_list, node);
+// 		p_ctx->pid_size--;
+// 	}
+// 	else if (WIFSIGNALED(status))
+// 	{
+// 		p_ctx->exit_status = WTERMSIG(status) + 128;
+// 		set_exit_status(p_ctx->exit_status);
+// 		delete_node(p_ctx->pid_list, node);
+// 		p_ctx->pid_size--;
+// 	}
+// }
+
+
+// void	wait_queue_n(t_context *p_ctx)
+// {
+// 	t_list	*_pid_list;
+
+
+// 	while (_pid_list && p_ctx->pid_size)
+// 	{
+// 		wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
+// 		_pid_list = _pid_list->next;
+// 	}
+
+// }
+
 void	wait_queue(t_context *p_ctx)
 {
-	int	last_idx;
 	int	idx;
+	int	size;
 
-	last_idx = p_ctx->queue_size;
-	idx = last_idx;
-	last_idx--;
-	while (--idx >= 0)
+	idx = 0;
+	size = p_ctx->queue_size;
+	while (idx < size)
 	{
-		if (idx == last_idx)
-			wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 1);
-		else
-			wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
+		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
+		idx++;
 		p_ctx->queue_size--;
 	}
-	if (p_ctx->queue_size == -1)
-		p_ctx->queue_size = 0;
 }

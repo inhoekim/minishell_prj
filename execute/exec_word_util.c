@@ -6,7 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 
-char	**make_argv(char **word_arr)
+void	*make_argv(char **word_arr, int flag)
 {
 	int		i;
 	t_list	*list;
@@ -16,6 +16,7 @@ char	**make_argv(char **word_arr)
 	i = 0;
 	list = NULL;
 	argv_list = NULL;
+	glob_flag = FALSE;
 	while (word_arr[i])
 	{
 		list = split_quotes(word_arr[i]);
@@ -26,7 +27,10 @@ char	**make_argv(char **word_arr)
 		ft_lstclear(&list, free);
 		i++;
 	}
-	return (list_to_arr(argv_list));
+	if (flag == 0)
+		return (argv_list);
+	else
+		return (list_to_arr(argv_list));
 }
 
 void	fork_exec(char **argv, t_context *p_ctx)
@@ -39,8 +43,10 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
-		// @ sigint(2) 컨트롤+c -> exit(2)
-		// @ sigquit(3) 컨트롤+d -> exit(3)
+		// @ sigint(2) 컨트롤+c -> 개행하고 default mode전환
+		// @ sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
+		// @ eof 		컨트롤+ d -> eof (건들필요 x )
+		// sigact_fork();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -51,10 +57,10 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
-	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
-		close(p_ctx->fd[STDIN_FILENO]);
-	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(p_ctx->fd[STDOUT_FILENO]);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
 }
 

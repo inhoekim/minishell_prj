@@ -5,7 +5,9 @@
 #include "../include/make_argv_util.h"
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
+#include "../include/arg_expansion.h"
 
+static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
@@ -20,6 +22,10 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		wait_queue(p_ctx);
 		exit(p_ctx->exit_status);
 	}
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
 	wait_queue(p_ctx);
 }
@@ -67,6 +73,7 @@ void	copy_queue(t_context *dst, t_context *src)
 		idx++;
 	}
 	dst->queue_size = idx;
+	dst->exit_status = src->exit_status;
 }
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
@@ -99,19 +106,61 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	p_ctx->is_piped_cmd = FALSE;
 }
 
+static t_bool	is_regular_file(char *filename, t_context *p_ctx)
+{
+	struct stat	buff;
+
+	if (access(filename, F_OK) != 0)
+	{
+		msh_error(filename, NULL, ENOENT);
+		p_ctx->exit_status = 127;
+		return (FALSE);
+	}
+	stat(filename, &buff);
+	if ((buff.st_mode & S_IFMT) == S_IFDIR)
+	{
+		msh_error(filename, NULL, EISDIR);
+		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+t_bool *get_redirect_ambiguity(void)
+{
+	static t_bool redirect_ambiguity;
+	return (&redirect_ambiguity);
+}
+
+void set_redirect_ambiguity(t_bool value)
+{
+	*get_redirect_ambiguity() = value;
+}
+
 void	exec_input(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
-	// @파이프 자식으로 input 노드가 있을시에 fd[STDIN]이 파이프와 연결되어 있다가 새로 open하는 파일로 변경됨
-	// @해당 부분을 처리해주어야 한다
-	// 08.21 inhkim
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
+
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_regular_file(filename, p_ctx))
+	{
+		set_exit_status(p_ctx->exit_status);
+		return ;
+	}
+	p_ctx->fd[STDIN] = open(filename, O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -120,20 +169,50 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
-
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
+}
+
+static t_bool	is_not_directory(char *filename, t_context *p_ctx)
+{
+	struct stat	buff;
+
+	stat(filename, &buff);
+	if ((buff.st_mode & S_IFMT) == S_IFDIR)
+	{
+		msh_error(filename, NULL, EISDIR);
+		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
 }
 
 void	exec_output(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 
-	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_not_directory(filename, p_ctx))
+	{
+		set_exit_status(p_ctx->exit_status);
+		return ;
+	}
+	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -141,11 +220,25 @@ void	exec_append(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
-
-	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_not_directory(filename, p_ctx))
+	{
+		set_exit_status(p_ctx->exit_status);
+		return ;
+	}
+	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -198,8 +291,11 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	}
 	else
 	{
+		if (p_ctx->fd[STDIN] != STDIN)
+			close(p_ctx->fd[STDIN]);
+		if (p_ctx->fd[STDOUT] != STDOUT)
+			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
-		set_exit_status(127); //exec_word에서 해당 파트로 코드를 옮김. 08.21 inhkim
 		msh_error(argv[0], "command not found", 0);
 	}
 }
@@ -208,14 +304,22 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 {
 	int	status;
 
-	waitpid(pid, get_exit_status(), 0); //flag -> 0으로 일단 임시 수정함. 08.21 inhkim
-	status = *get_exit_status();
+	waitpid(pid, &status, flag);
 	if (WIFEXITED(status))
+	{
 		p_ctx->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		p_ctx->exit_status = WTERMSIG(status) + 128;
-	if (flag)
 		set_exit_status(p_ctx->exit_status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		p_ctx->exit_status = WTERMSIG(status) + 128;
+		if (status == 13)
+		{
+			set_exit_status(p_ctx->exit_status);
+			return ;
+		}
+		set_exit_status(p_ctx->exit_status);
+	}
 }
 
 void redirect_fd(int dst[2])
@@ -233,8 +337,10 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
-		// @ sigint(2) 컨트롤+c -> exit(2)
-		// @ sigquit(3) 컨트롤+d -> exit(3)
+		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
+		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
+		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
+		// sigact_fork();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -257,9 +363,10 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
 	int			builtin_exit_status;
+	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]);
+	builtin_func = check_builtin(argv[0]); 
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
@@ -282,7 +389,6 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
 			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
-			int tmp_fd[2];
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
@@ -290,7 +396,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ redirect 및 redirect 정보 복구
 			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
-			set_exit_status(builtin_exit_status);
+			p_ctx->exit_status = builtin_exit_status;
 		}
 		can_builtin = TRUE;
 	}
@@ -299,34 +405,39 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 
 t_builtin	check_builtin(char *argv)
 {
-	if (argv[0] == 'c' && argv[1] == 'd' && argv[2] == '\0')
+	if (argv[0] == 'c' && check_str(argv, 1, 1, "d"))
 		return (ft_cd);
 	else if (argv[0] == 'e')
 	{
-		if (argv[1] == 'c' && argv[2] == 'h' && argv[3] == 'o' && argv[4] == '\0')
+		if (argv[1] == 'c' && check_str(argv, 2, 2, "ho"))
 			return (ft_echo);
 		else if (argv[1] == 'x')
 		{
-			if (argv[2] == 'p' && argv[3] == 'o' && argv[4] == 'r'  && argv[5] == 't' && argv[6] == '\0')
+			if (argv[2] == 'p' && check_str(argv, 3, 3, "ort"))
 				return (ft_export);
-			else if (argv[2] == 'i' && argv[3] == 't' && argv[4] == '\0')
+			else if (argv[2] == 'i' && check_str(argv, 3, 1, "t"))
 				return (ft_exit);
 		}
-		else if (argv[1] == 'n' && argv[2] == 'v' && argv[3] == '\0')
+		else if (argv[1] == 'n' && check_str(argv, 2, 1, "v"))
 			return (ft_env);
 	}
-	else if (argv[0] == 'p' && argv[1] == 'w' && argv[2] == 'd' && argv[3] == 0)
+	else if (argv[0] == 'p' && check_str(argv, 1, 2, "wd"))
 		return (ft_pwd);
-	else if (argv[0] == 'u' && argv[1] == 'n' && argv[2] == 's' && argv[3] == 'e' && argv[4] == 't' && argv[5] == '\0')
+	else if (argv[0] == 'u' && check_str(argv, 1, 4, "nset"))
 		return (ft_unset);
 	return (NULL);
+}
+
+static t_bool	check_str(char *argv, int idx, int size, char *sep)
+{
+	return (ft_memcmp(argv + idx, sep, size + 1) == 0);
 }
 
 void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	argv = make_argv(node->word);
+	argv = (char **)make_argv(node->word, 1);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		if (exec_builtin(argv, p_ctx) == FALSE)
@@ -334,6 +445,6 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
-	//set_exit_status(p_ctx->exit_status); 제대로 갱신할려면 wait_queue에서 처리하는게 맞는것같음. 08.21 inhkim 
+	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }

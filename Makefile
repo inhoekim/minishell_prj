@@ -27,8 +27,8 @@ OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3 #-fsanitize=address
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) #-g3 
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft #-fsanitize=address#-g3 
 
 .PHONY: clean, fclean, re, all
 
