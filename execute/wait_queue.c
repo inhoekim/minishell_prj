@@ -1,29 +1,26 @@
-#include "../include/minishell.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
-#include "../include/exec_word_util.h"
-#include "../include/make_argv_util.h"
-#include "../include/execute_util.h"
+#include "../include/wait_queue.h"
 
 void	enqueue(pid_t pid, t_context *p_ctx)
 {
-	p_ctx->queue[p_ctx->que_idx] = pid;
-	p_ctx->que_idx++;
+	if (PROC_MAX <= p_ctx->queue_size)
+		exit(1);
+	p_ctx->queue[p_ctx->queue_size] = pid;
+	p_ctx->queue_size++;
 }
 
 void	wait_queue(t_context *p_ctx)
 {
 	int	idx;
-	int	pid_cnt;
+	int	size;
 
 	idx = 0;
-	pid_cnt = p_ctx->que_idx;
-	while (idx < pid_cnt)
+	size = p_ctx->queue_size;
+	while (idx < size)
 	{
-		waitpid(p_ctx->queue[idx], get_exit_status(), 0);
-		p_ctx->exit_status = *get_exit_status();
+		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, WNOHANG);
 		idx++;
-		p_ctx->que_idx--;
+		idx %= size;
+		p_ctx->queue_size--;
 	}
 	if (*get_exit_status() != 0)
 		p_ctx->exit_status = 1;

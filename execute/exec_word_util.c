@@ -29,7 +29,6 @@ char	**make_argv(char **word_arr)
 	return (list_to_arr(argv_list));
 }
 
-//norm 규정에 맞게 수정, 함수 마지막에 ctx_status를 추가해서 or, and가 작동하도록 수정
 void	fork_exec(char **argv, t_context *p_ctx)
 {
 	int		pid;
@@ -39,6 +38,9 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 	{
+		// @ sigaction set(fork interactive mode)
+		// @ sigint(2) 컨트롤+c -> exit(2)
+		// @ sigquit(3) 컨트롤+d -> exit(3)
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -49,12 +51,11 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
-	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
-		close(p_ctx->fd[STDIN_FILENO]);
-	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(p_ctx->fd[STDOUT_FILENO]);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
-	// set_ctx_status(p_ctx, pid, 0);
 }
 
 char	**list_to_arr(t_list *node)

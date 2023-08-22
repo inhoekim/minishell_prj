@@ -6,10 +6,6 @@
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 
-
-// waitpid, enqueue -> 주석 처리
-// or, and -> int pid remove
-// word.buf -> word[0] change / seykim 8/16
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -20,6 +16,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	if (pid == 0)
 	{
 		exec_node(lhs, p_ctx);
+		wait_queue(p_ctx);
 		exit(p_ctx->exit_status);
 	}
 	enqueue(pid, p_ctx);
@@ -34,7 +31,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// @ reaper로 pid종료상태업데이트 필요
+	wait_queue(p_ctx);
 	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -49,11 +46,26 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// @ reaper로 pid종료상태업데이트 필요
+	wait_queue(p_ctx);
 	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
+}
+
+void	copy_queue(t_context *dst, t_context *src)
+{
+	int	idx;
+	int	size;
+
+	idx = 0;
+	size = src->queue_size;
+	while (idx < size)
+	{
+		dst->queue[idx] = src->queue[idx];
+		idx++;
+	}
+	dst->queue_size = idx;
 }
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
@@ -63,19 +75,27 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	int			pipe_fd[2];
 	t_context	aux;
 
+	p_ctx->is_piped_cmd = TRUE;
 	lhs = node->left;
 	rhs = node->right;
 	pipe(pipe_fd);
 	aux = *p_ctx;
-	aux.fd[STDIN] = STDIN;
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
+	copy_queue(p_ctx, &aux);
+	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
+	// @ ctx.queue에도 반영해야 함.
+	// @ aux.queue -> ctx.queue 로 queue복사
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
-	aux.fd[STDOUT] = STDOUT;
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
+	copy_queue(p_ctx, &aux);
+	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
+	// @ ctx.queue에도 반영해야 함.
+	// @ aux.queue -> ctx.queue 로 queue복사
+	p_ctx->is_piped_cmd = FALSE;
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -85,7 +105,8 @@ void	exec_input(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -93,12 +114,11 @@ void	exec_input(t_node *node, t_context *p_ctx)
 void	exec_heredoc(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
-	t_node	*rhs;
 
 	lhs = node->left;
-	rhs = node->right;
-
-	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -109,7 +129,8 @@ void	exec_output(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -121,7 +142,8 @@ void	exec_append(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -152,7 +174,6 @@ char	*make_order(char **path, char **argv)
 	return (order);
 }
 
-//unset path가 되었을 때, 경로없을 때 에러를 띄우도록 수정
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
@@ -174,7 +195,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
 	}
-	// @ else if(현재경로에 실행가능한 파일 있는지 확인)
 	else
 	{
 		p_ctx->exit_status = 127;
@@ -182,20 +202,57 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	}
 }
 
-// @ reaper에서 사용될 함수인 것같음.
-// @ 자식프로세스 종료 상태에 따라 exit_status를 달리 저장해야하므로 사용됨.
-void	set_ctx_status(t_context *p_ctx, pid_t pid, int flag)
+void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 {
-	waitpid(pid, &flag, 0);
-	if (flag != 0)
-	// 이거 왜 안되는지 모르겠음
-	// if (WIFSIGNALED(flag))
-		p_ctx->exit_status = 1;
-	else
-		p_ctx->exit_status = 0;
+	int	status;
+
+	waitpid(pid, &status, flag);
+	if (WIFEXITED(status))
+	{
+		p_ctx->exit_status = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		p_ctx->exit_status = WTERMSIG(status) + 128;
+	}
+	set_exit_status(p_ctx->exit_status);
 }
 
-t_bool	exec_builtin(char **argv)
+void redirect_fd(int dst[2])
+{
+	dup2(dst[STDIN], STDIN);
+	dup2(dst[STDOUT], STDOUT);
+}
+
+void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
+{
+	int		pid;
+	int		builtin_exit_status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		// @ sigaction set(fork interactive mode)
+		// @ sigint(2) 컨트롤+c -> exit(2)
+		// @ sigquit(3) 컨트롤+d -> exit(3)
+		dup2(p_ctx->fd[STDIN], STDIN);
+		dup2(p_ctx->fd[STDOUT], STDOUT);
+		if (p_ctx->fd_close >= 0)
+		{
+			close(p_ctx->fd_close);
+			p_ctx->fd_close = -1;
+		}
+		builtin_exit_status = builtin_func(argv);
+		exit(builtin_exit_status);
+	}
+	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
+		close(p_ctx->fd[STDIN_FILENO]);
+	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		close(p_ctx->fd[STDOUT_FILENO]);
+	enqueue(pid, p_ctx);
+}
+
+t_bool	exec_builtin(char **argv, t_context *p_ctx)
 {
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
@@ -203,10 +260,38 @@ t_bool	exec_builtin(char **argv)
 
 	can_builtin = FALSE;
 	builtin_func = check_builtin(argv[0]);
+	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
+       pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
+	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
+	*/
 	if (builtin_func)
 	{
-		builtin_exit_status = builtin_func(argv);
-		set_exit_status(builtin_exit_status);
+		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
+		if (p_ctx->is_piped_cmd)
+		{
+			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
+			// @ fork후 builtin_func(argv); 실행
+			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
+			forked_builtin(p_ctx, builtin_func, argv);
+			// @ sigint(2) 컨트롤+c -> exit(2)
+			// @ sigquit(3) 컨트롤+d -> exit(3)
+			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
+		}
+		else
+		{
+			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
+			// @ redirect 및 redirect 정보 백업
+			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
+			int tmp_fd[2];
+			tmp_fd[STDIN] = dup(STDIN);
+			tmp_fd[STDOUT] = dup(STDOUT);
+			redirect_fd(p_ctx->fd);
+			builtin_exit_status = builtin_func(argv);
+			// @ redirect 및 redirect 정보 복구
+			// p_ctx_fd_copy(tmp, p_ctx);
+			redirect_fd(tmp_fd);
+			p_ctx->exit_status = builtin_exit_status;
+		}
 		can_builtin = TRUE;
 	}
 	return (can_builtin);
@@ -244,7 +329,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	argv = make_argv(node->word);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
-		if (exec_builtin(argv) == FALSE)
+		if (exec_builtin(argv, p_ctx) == FALSE)
 			search_and_fork_exec(argv, p_ctx);
 	}
 	else if (can_access(argv[0], p_ctx))
