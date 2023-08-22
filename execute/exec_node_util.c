@@ -6,7 +6,6 @@
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 
-
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -106,7 +105,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
@@ -118,7 +116,8 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
-
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -130,7 +129,8 @@ void	exec_output(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -142,7 +142,8 @@ void	exec_append(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
