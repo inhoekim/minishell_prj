@@ -7,7 +7,7 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 
-t_bool	check_str(char *argv, int idx, int size, char *sep);
+static t_bool	check_str(char *argv, int idx, int size, char *sep);
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -68,6 +68,7 @@ void	copy_queue(t_context *dst, t_context *src)
 		idx++;
 	}
 	dst->queue_size = idx;
+	dst->exit_status = src->exit_status;
 }
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
@@ -98,6 +99,8 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
 	p_ctx->is_piped_cmd = FALSE;
+	printf("원본 %d\n", p_ctx->exit_status);
+	printf("복사본 %d\n", aux.exit_status);
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -137,11 +140,15 @@ void	exec_output(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	**temp;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
+	temp = rhs->word;
+	rhs->word = make_argv(rhs->word, 0);
+	free_argv(temp);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -150,11 +157,15 @@ void	exec_append(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	**temp;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
+	temp = rhs->word;
+	rhs->word = make_argv(rhs->word, 0);
+	free_argv(temp);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -208,6 +219,10 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	}
 	else
 	{
+		if (p_ctx->fd[STDIN] != STDIN)
+			close(p_ctx->fd[STDIN]);
+		if (p_ctx->fd[STDOUT] != STDOUT)
+			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
@@ -334,7 +349,7 @@ t_builtin	check_builtin(char *argv)
 	return (NULL);
 }
 
-t_bool	check_str(char *argv, int idx, int size, char *sep)
+static t_bool	check_str(char *argv, int idx, int size, char *sep)
 {
 	return (ft_memcmp(argv + idx, sep, size + 1) == 0);
 }
