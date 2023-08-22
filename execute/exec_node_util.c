@@ -210,12 +210,13 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);
+		set_exit_status(p_ctx->exit_status);
 	}
 	else if (WIFSIGNALED(status))
 	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
+		set_exit_status(p_ctx->exit_status);
 	}
-	set_exit_status(p_ctx->exit_status);
 }
 
 void redirect_fd(int dst[2])
@@ -257,9 +258,10 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
 	int			builtin_exit_status;
+	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]);
+	builtin_func = check_builtin(argv[0]); 
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
@@ -282,7 +284,6 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
 			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
-			int tmp_fd[2];
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
