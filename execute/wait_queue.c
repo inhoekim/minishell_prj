@@ -1,4 +1,11 @@
 #include "../include/wait_queue.h"
+#include "../include/minishell.h"
+#include "../include/execute.h"
+#include "../include/exec_node_util.h"
+#include "../include/exec_word_util.h"
+#include "../include/filename_expansion.h"
+#include "../include/arg_expansion.h"
+#include "../include/make_argv_util.h"
 
 void	enqueue(pid_t pid, t_context *p_ctx)
 {
@@ -10,20 +17,16 @@ void	enqueue(pid_t pid, t_context *p_ctx)
 
 void	wait_queue(t_context *p_ctx)
 {
+	int	last_idx;
 	int	idx;
-	int	size;
 
-	idx = 0;
-	size = p_ctx->queue_size;
-	while (idx < size)
+	last_idx = p_ctx->queue_size;
+	idx = last_idx;
+	last_idx--;
+	while (--idx >= 0)
 	{
-		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, WNOHANG);
+		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
 		idx++;
-		idx %= size;
 		p_ctx->queue_size--;
 	}
-	if (*get_exit_status() != 0)
-		p_ctx->exit_status = 1;
-	else
-		p_ctx->exit_status = 0;
 }
