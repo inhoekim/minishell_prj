@@ -210,12 +210,13 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);
+		set_exit_status(p_ctx->exit_status);
 	}
 	else if (WIFSIGNALED(status))
 	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
+		set_exit_status(p_ctx->exit_status);
 	}
-	set_exit_status(p_ctx->exit_status);
 }
 
 void redirect_fd(int dst[2])
