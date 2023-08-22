@@ -5,7 +5,7 @@
 #include "../include/make_argv_util.h"
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
-
+t_bool	check_str(char *argv, int idx, int size, char *sep);
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -300,27 +300,32 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 
 t_builtin	check_builtin(char *argv)
 {
-	if (argv[0] == 'c' && argv[1] == 'd' && argv[2] == '\0')
+	if (argv[0] == 'c' && check_str(argv, 1, 1, "d"))
 		return (ft_cd);
 	else if (argv[0] == 'e')
 	{
-		if (argv[1] == 'c' && argv[2] == 'h' && argv[3] == 'o' && argv[4] == '\0')
+		if (argv[1] == 'c' && check_str(argv, 2, 2, "ho"))
 			return (ft_echo);
 		else if (argv[1] == 'x')
 		{
-			if (argv[2] == 'p' && argv[3] == 'o' && argv[4] == 'r'  && argv[5] == 't' && argv[6] == '\0')
+			if (argv[2] == 'p' && check_str(argv, 3, 3, "ort"))
 				return (ft_export);
-			else if (argv[2] == 'i' && argv[3] == 't' && argv[4] == '\0')
+			else if (argv[2] == 'i' && check_str(argv, 3, 1, "t"))
 				return (ft_exit);
 		}
-		else if (argv[1] == 'n' && argv[2] == 'v' && argv[3] == '\0')
+		else if (argv[1] == 'n' && check_str(argv, 2, 1, "v"))
 			return (ft_env);
 	}
-	else if (argv[0] == 'p' && argv[1] == 'w' && argv[2] == 'd' && argv[3] == 0)
+	else if (argv[0] == 'p' && check_str(argv, 1, 2, "wd"))
 		return (ft_pwd);
-	else if (argv[0] == 'u' && argv[1] == 'n' && argv[2] == 's' && argv[3] == 'e' && argv[4] == 't' && argv[5] == '\0')
+	else if (argv[0] == 'u' && check_str(argv, 1, 4, "nset"))
 		return (ft_unset);
 	return (NULL);
+}
+
+t_bool	check_str(char *argv, int idx, int size, char *sep)
+{
+	return (ft_memcmp(argv + idx, sep, size + 1) == 0);
 }
 
 void	exec_word(t_node *node, t_context *p_ctx)
