@@ -81,7 +81,7 @@ void	sigact_default()
 	quitsig.sa_handler = SIG_IGN;
   	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
-	sigaction(SIGQUIT, &quitsig, 0); 
+	sigaction(SIGQUIT, &quitsig, 0);
 }
 
 void	minishell_loop(void) 
