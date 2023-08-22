@@ -6,10 +6,9 @@ RESET := \033[0m
 LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
-## seykim readline 설정 8/16
-INC_DIRS = /opt/homebrew/opt/readline/include
+INC_DIRS = $(shell brew --prefix readline)/include
 INC_DIRS += include
-LIB_DIRS = /opt/homebrew/opt/readline/lib libft
+LIB_DIRS = $(shell brew --prefix readline)/lib libft
 SRC_DIRS = src builtin_func execute parser
 
 vpath %.h $(INC_DIRS)
