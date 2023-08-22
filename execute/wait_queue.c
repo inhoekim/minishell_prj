@@ -17,9 +17,12 @@ void	wait_queue(t_context *p_ctx)
 	size = p_ctx->queue_size;
 	while (idx < size)
 	{
-		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, WNOHANG);
+		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
+		// wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, WNOHANG);
 		idx++;
-		idx %= size;
 		p_ctx->queue_size--;
+		// idx %= p_ctx->queue_size;
+		// p_ctx->queue_size--;
 	}
+	p_ctx->queue_size = 0;
 }
