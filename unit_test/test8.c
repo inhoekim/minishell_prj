@@ -19,7 +19,7 @@ int main() {
 	act_new.sa_handler = sigint_handler; // 시그널 핸들러 지정
   	sigemptyset( &act_new.sa_mask);      // 시그널 처리 중 블록될 시그널은 없음
 
-	sigaction(3, &act_new, 0); 
+	sigaction(3, &act_new, 0);
 	read(0, buff, 12);
 
 	while(1) {

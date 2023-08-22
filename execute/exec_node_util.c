@@ -5,7 +5,9 @@
 #include "../include/make_argv_util.h"
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
+#include "../include/arg_expansion.h"
 
+t_bool	check_str(char *argv, int idx, int size, char *sep);
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -102,11 +104,20 @@ void	exec_input(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	**temp;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
+	temp = rhs->word;
+	rhs->word = make_argv(rhs->word, 0);
+	free_argv(temp);
+	if (can_access(rhs->word[0], p_ctx) == 0)
+	{
+		set_exit_status(1);
+		return ;
+	}
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -197,6 +208,10 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	}
 	else
 	{
+		if (p_ctx->fd[STDIN] != STDIN)
+			close(p_ctx->fd[STDIN]);
+		if (p_ctx->fd[STDOUT] != STDOUT)
+			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
@@ -260,9 +275,10 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	t_bool		can_builtin;
 	t_builtin	builtin_func;
 	int			builtin_exit_status;
+	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]);
+	builtin_func = check_builtin(argv[0]); 
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
@@ -285,7 +301,6 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
 			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
-			int tmp_fd[2];
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
@@ -304,34 +319,39 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 
 t_builtin	check_builtin(char *argv)
 {
-	if (argv[0] == 'c' && argv[1] == 'd' && argv[2] == '\0')
+	if (argv[0] == 'c' && check_str(argv, 1, 1, "d"))
 		return (ft_cd);
 	else if (argv[0] == 'e')
 	{
-		if (argv[1] == 'c' && argv[2] == 'h' && argv[3] == 'o' && argv[4] == '\0')
+		if (argv[1] == 'c' && check_str(argv, 2, 2, "ho"))
 			return (ft_echo);
 		else if (argv[1] == 'x')
 		{
-			if (argv[2] == 'p' && argv[3] == 'o' && argv[4] == 'r'  && argv[5] == 't' && argv[6] == '\0')
+			if (argv[2] == 'p' && check_str(argv, 3, 3, "ort"))
 				return (ft_export);
-			else if (argv[2] == 'i' && argv[3] == 't' && argv[4] == '\0')
+			else if (argv[2] == 'i' && check_str(argv, 3, 1, "t"))
 				return (ft_exit);
 		}
-		else if (argv[1] == 'n' && argv[2] == 'v' && argv[3] == '\0')
+		else if (argv[1] == 'n' && check_str(argv, 2, 1, "v"))
 			return (ft_env);
 	}
-	else if (argv[0] == 'p' && argv[1] == 'w' && argv[2] == 'd' && argv[3] == 0)
+	else if (argv[0] == 'p' && check_str(argv, 1, 2, "wd"))
 		return (ft_pwd);
-	else if (argv[0] == 'u' && argv[1] == 'n' && argv[2] == 's' && argv[3] == 'e' && argv[4] == 't' && argv[5] == '\0')
+	else if (argv[0] == 'u' && check_str(argv, 1, 4, "nset"))
 		return (ft_unset);
 	return (NULL);
+}
+
+t_bool	check_str(char *argv, int idx, int size, char *sep)
+{
+	return (ft_memcmp(argv + idx, sep, size + 1) == 0);
 }
 
 void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	argv = make_argv(node->word);
+	argv = make_argv(node->word, 1);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		if (exec_builtin(argv, p_ctx) == FALSE)
