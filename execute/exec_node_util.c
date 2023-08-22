@@ -8,6 +8,7 @@
 #include "../include/arg_expansion.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
+
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -99,6 +100,8 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
 	p_ctx->is_piped_cmd = FALSE;
+	close(pipe_fd[STDIN]);
+	close(pipe_fd[STDOUT]);
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
