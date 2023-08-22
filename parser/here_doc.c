@@ -61,7 +61,7 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		{
 			if (input)
 				free(input);
-			else
+			else if (*get_heredoc_exit_flag() != 1)
 			{
 				ft_putstr_fd("\033[1A", STDOUT);
 				ft_putstr_fd("\033[2C", STDOUT);
