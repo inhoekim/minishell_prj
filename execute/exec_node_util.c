@@ -105,7 +105,8 @@ void	exec_input(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -197,7 +198,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	else
 	{
 		p_ctx->exit_status = 127;
-		set_exit_status(127); //exec_word에서 해당 파트로 코드를 옮김. 08.21 inhkim
 		msh_error(argv[0], "command not found", 0);
 	}
 }
@@ -206,14 +206,16 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 {
 	int	status;
 
-	waitpid(pid, get_exit_status(), 0); //flag -> 0으로 일단 임시 수정함. 08.21 inhkim
-	status = *get_exit_status();
+	waitpid(pid, &status, flag);
 	if (WIFEXITED(status))
+	{
 		p_ctx->exit_status = WEXITSTATUS(status);
+	}
 	else if (WIFSIGNALED(status))
+	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
-	if (flag)
-		set_exit_status(p_ctx->exit_status);
+	}
+	set_exit_status(p_ctx->exit_status);
 }
 
 void redirect_fd(int dst[2])
@@ -332,6 +334,6 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
-	//set_exit_status(p_ctx->exit_status); 제대로 갱신할려면 wait_queue에서 처리하는게 맞는것같음. 08.21 inhkim 
+	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
