@@ -64,7 +64,8 @@ t_list	*globbing(char *pattern)
 	while (dir != NULL)
 	{
 		dir = readdir(dp);
-		if (dir && dir->d_type == DT_REG && \
+		// 08.21 inhkim -> *에 디렉토리까지 같이 발견되게 해야함 (원본 배쉬)
+		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) && \
 		is_match(pattern, dir->d_name, 0, 0))
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 	}
@@ -101,7 +102,7 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 	pos = 0;
 	while (pattern[pos] == '*')
 	{
-		dp[pos + 1][0] = 1;
+		dp[pos + 1][0] = dp[pos][0];
 		pos++;
 	}
 	while (++p_idx <= len_p)
