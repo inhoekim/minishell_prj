@@ -142,6 +142,7 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
+	printf("output: %s\n",rhs->word[0]);
 	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
