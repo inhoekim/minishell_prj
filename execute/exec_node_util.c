@@ -5,6 +5,8 @@
 #include "../include/make_argv_util.h"
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
+#include "../include/arg_expansion.h"
+
 t_bool	check_str(char *argv, int idx, int size, char *sep);
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
@@ -102,11 +104,20 @@ void	exec_input(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
+	char	**temp;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
+	temp = rhs->word;
+	rhs->word = make_argv(rhs->word, 0);
+	free_argv(temp);
+	if (can_access(rhs->word[0], p_ctx) == 0)
+	{
+		set_exit_status(1);
+		return ;
+	}
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -332,7 +343,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	argv = make_argv(node->word);
+	argv = make_argv(node->word, 1);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		if (exec_builtin(argv, p_ctx) == FALSE)

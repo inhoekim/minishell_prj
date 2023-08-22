@@ -6,7 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 
-char	**make_argv(char **word_arr)
+char	**make_argv(char **word_arr, int flag)
 {
 	int		i;
 	t_list	*list;
@@ -16,10 +16,12 @@ char	**make_argv(char **word_arr)
 	i = 0;
 	list = NULL;
 	argv_list = NULL;
+	glob_flag = FALSE;
 	while (word_arr[i])
 	{
 		list = split_quotes(word_arr[i]);
-		glob_flag = check_glob(list);
+		if (flag == 1)
+			glob_flag = check_glob(list);
 		arg_expansion(list);
 		unquote(list);
 		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
