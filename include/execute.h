@@ -6,7 +6,7 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/22 12:55:38 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/22 13:45:06 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct s_context
 	char	**heredoc_file_name;
 	pid_t	queue[PROC_MAX];
 	int		queue_size;
-	t_list	*pid_list;
-	t_bool		is_piped_cmd;
+	t_list	**pid_list;
+	int		pid_size;
+	t_bool	is_piped_cmd;
 }	t_context;
 
 void	execute(t_node *root);

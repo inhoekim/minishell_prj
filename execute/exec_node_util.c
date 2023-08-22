@@ -234,8 +234,10 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
-		// @ sigint(2) 컨트롤+c -> exit(2)
-		// @ sigquit(3) 컨트롤+d -> exit(3)
+		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
+		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
+		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
+		sigact_fork();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -292,6 +294,8 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
+			
+
 		}
 		can_builtin = TRUE;
 	}
