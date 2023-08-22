@@ -51,10 +51,10 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
-	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
-		close(p_ctx->fd[STDIN_FILENO]);
-	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(p_ctx->fd[STDOUT_FILENO]);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
 }
 

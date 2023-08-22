@@ -107,6 +107,8 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
@@ -287,7 +289,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// @ redirect 및 redirect 정보 복구
 			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
-			set_exit_status(builtin_exit_status);
+			p_ctx->exit_status = builtin_exit_status;
 		}
 		can_builtin = TRUE;
 	}

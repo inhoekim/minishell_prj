@@ -64,8 +64,7 @@ t_list	*globbing(char *pattern)
 	while (dir != NULL)
 	{
 		dir = readdir(dp);
-		if (dir && dir->d_type == DT_REG && \
-		is_match(pattern, dir->d_name, 0, 0))
+		if (dir && dir->d_type == DT_REG && is_match(pattern, dir->d_name, 0, 0))
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 	}
 	closedir(dp);
