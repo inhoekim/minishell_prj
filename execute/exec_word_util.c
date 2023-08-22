@@ -51,7 +51,6 @@ void	fork_exec(char **argv, t_context *p_ctx)
 			p_ctx->fd_close = -1;
 		}
 		execve(argv[0], argv, list_to_arr(envl));
-		msh_error(argv[0], 0, EISDIR);
 		exit(1);
 	}
 	if (p_ctx->fd[STDIN] != STDIN)

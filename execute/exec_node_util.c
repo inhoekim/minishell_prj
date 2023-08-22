@@ -99,8 +99,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
 	p_ctx->is_piped_cmd = FALSE;
-	printf("원본 %d\n", p_ctx->exit_status);
-	printf("복사본 %d\n", aux.exit_status);
 }
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -241,6 +239,11 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	else if (WIFSIGNALED(status))
 	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
+		if (status == 13)
+		{
+			set_exit_status(p_ctx->exit_status);
+			return ;
+		}
 		set_exit_status(p_ctx->exit_status);
 	}
 }
