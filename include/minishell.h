@@ -7,6 +7,8 @@
 # include "libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+# include <termios.h>
 
 typedef enum e_bool
 {
