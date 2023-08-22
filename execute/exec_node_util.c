@@ -18,6 +18,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	{
 		exec_node(lhs, p_ctx);
 		wait_queue(p_ctx);
+		set_exit_status(p_ctx->exit_status);
 		exit(p_ctx->exit_status);
 	}
 	enqueue(pid, p_ctx);
