@@ -6,7 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 
-char	**make_argv(char **word_arr, int flag)
+void	*make_argv(char **word_arr, int flag)
 {
 	int		i;
 	t_list	*list;
@@ -20,15 +20,17 @@ char	**make_argv(char **word_arr, int flag)
 	while (word_arr[i])
 	{
 		list = split_quotes(word_arr[i]);
-		if (flag == 1)
-			glob_flag = check_glob(list);
+		glob_flag = check_glob(list);
 		arg_expansion(list);
 		unquote(list);
 		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
 		ft_lstclear(&list, free);
 		i++;
 	}
-	return (list_to_arr(argv_list));
+	if (flag == 0)
+		return (argv_list);
+	else
+		return (list_to_arr(argv_list));
 }
 
 void	fork_exec(char **argv, t_context *p_ctx)

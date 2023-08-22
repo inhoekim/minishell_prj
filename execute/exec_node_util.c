@@ -104,25 +104,61 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	close(pipe_fd[STDOUT]);
 }
 
+static t_bool	is_regular_file(char *filename, t_context *p_ctx)
+{
+	struct stat	buff;
+
+	if (access(filename, F_OK) != 0)
+	{
+		msh_error(filename, NULL, ENOENT);
+		p_ctx->exit_status = 127;
+		return (FALSE);
+	}
+	stat(filename, &buff);
+	if ((buff.st_mode & S_IFMT) == S_IFDIR)
+	{
+		msh_error(filename, NULL, EISDIR);
+		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+t_bool *get_redirect_ambiguity(void)
+{
+	static t_bool redirect_ambiguity;
+	return (&redirect_ambiguity);
+}
+
+void set_redirect_ambiguity(t_bool value)
+{
+	*get_redirect_ambiguity() = value;
+}
+
 void	exec_input(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	**temp;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	temp = rhs->word;
-	rhs->word = make_argv(rhs->word, 0);
-	free_argv(temp);
-	if (can_access(rhs->word[0], p_ctx) == 0)
+
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_regular_file(filename, p_ctx))
 	{
-		set_exit_status(1);
+		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDIN] = open(rhs->word[0], O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = open(filename, O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -137,20 +173,44 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	exec_node(lhs, p_ctx);
 }
 
+static t_bool	is_not_directory(char *filename, t_context *p_ctx)
+{
+	struct stat	buff;
+
+	stat(filename, &buff);
+	if ((buff.st_mode & S_IFMT) == S_IFDIR)
+	{
+		msh_error(filename, NULL, EISDIR);
+		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
 void	exec_output(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	**temp;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	temp = rhs->word;
-	rhs->word = make_argv(rhs->word, 0);
-	free_argv(temp);
-	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_not_directory(filename, p_ctx))
+	{
+		set_exit_status(p_ctx->exit_status);
+		return ;
+	}
+	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -158,16 +218,25 @@ void	exec_append(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	**temp;
+	char	*filename;
+	t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	temp = rhs->word;
-	rhs->word = make_argv(rhs->word, 0);
-	free_argv(temp);
-	p_ctx->fd[STDOUT] = open(rhs->word[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
+	set_redirect_ambiguity(TRUE);
+	filename_list = (t_list *)make_argv(rhs->word, 0);
+	if (*get_redirect_ambiguity() == FALSE)
+		return ;
+	set_redirect_ambiguity(FALSE);
+	filename = concatenate(filename_list);
+	if (!is_not_directory(filename, p_ctx))
+	{
+		set_exit_status(p_ctx->exit_status);
+		return ;
+	}
+	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -326,8 +395,6 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
-			
-
 		}
 		can_builtin = TRUE;
 	}
@@ -368,7 +435,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	argv = make_argv(node->word, 1);
+	argv = (char **)make_argv(node->word, 1);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		if (exec_builtin(argv, p_ctx) == FALSE)

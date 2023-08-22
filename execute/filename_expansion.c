@@ -50,13 +50,17 @@ char	*concatenate(t_list *list)
 	return (pattern);
 }
 
+extern int amb_flag;
+
 t_list	*globbing(char *pattern)
 {
 	t_list			*matches;
 	DIR				*dp;
 	char			dirbuf[PATH_MAX];
 	struct dirent	*dir;
+	int				file_cnt;
 
+	file_cnt = 0;
 	matches = NULL;
 	getcwd(dirbuf, PATH_MAX);
 	dp = opendir(dirbuf);
@@ -67,10 +71,20 @@ t_list	*globbing(char *pattern)
 		if (dir && dir->d_name[0] == '.')
 			dir->d_type = DT_UNKNOWN;
 		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) && is_match(pattern, dir->d_name, 0, 0))
+		{
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
+			file_cnt++;
+		}
 	}
 	closedir(dp);
-	return (matches);
+	if (*get_redirect_ambiguity() == TRUE && file_cnt > 1)
+	{
+		printf("minishell: %s: ambiguous redirect\n", pattern);
+		set_redirect_ambiguity(FALSE);
+		return (NULL);
+	}
+	else
+		return (matches);
 }
 
 int	**allocate_dp(int row, int col)
