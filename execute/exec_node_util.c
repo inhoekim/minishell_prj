@@ -22,6 +22,10 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		wait_queue(p_ctx);
 		exit(p_ctx->exit_status);
 	}
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
 	wait_queue(p_ctx);
 }
@@ -100,8 +104,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue복사
 	p_ctx->is_piped_cmd = FALSE;
-	close(pipe_fd[STDIN]);
-	close(pipe_fd[STDOUT]);
 }
 
 static t_bool	is_regular_file(char *filename, t_context *p_ctx)
