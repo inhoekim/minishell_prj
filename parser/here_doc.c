@@ -59,10 +59,13 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		input = readline("> ");
 		if (!input || is_same_str(input, delimiter))
 		{
-			ft_putstr_fd("\033[1A", STDOUT);
-			ft_putstr_fd("\033[2C", STDOUT);
 			if (input)
 				free(input);
+			else
+			{
+				ft_putstr_fd("\033[1A", STDOUT);
+				ft_putstr_fd("\033[2C", STDOUT);
+			}
 			break ;
 		}
 		// heredoc에서는 parameter가 '안에 있어도 expasion 가능하다.
