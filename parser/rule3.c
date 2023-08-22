@@ -144,7 +144,7 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		}
 		set_delimiter(node, delim);
 		// @ sigaction set(heredoc mode)
-		// @(구현x) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
+		// @(구현o) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
 		// @(구현o) sigquit(3) 컨트롤+ \ -> 무시
 		// @(구현o) eof 컨트롤+ d -> 개행 없이 종료. heredoc파일은 생성.
 		sigact_heredoc();
