@@ -110,7 +110,7 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		// @(구현x) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
 		// @(구현x) sigquit(3) 컨트롤+ \ -> 무시
 		// @(구현x) eof 컨트롤+ d -> 개행 없이 종료
-		sigact_heredoc();
+		// sigact_heredoc();
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
 			return (NULL);
