@@ -33,22 +33,16 @@ void	*make_argv(char **word_arr, int flag)
 		return (list_to_arr(argv_list));
 }
 
-void	fork_handler(int signum)
-{
-	if (signum == SIGINT || signum == SIGQUIT)
-		return ;
-}
-
 void	sigact_fork(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
 
-	intsig.sa_handler = fork_handler;
+	intsig.sa_handler = 0;
 	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
 	sigaction(SIGINT, &intsig, 0);
-	quitsig.sa_handler = fork_handler;
+	quitsig.sa_handler = 0;
 	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
 	sigaction(SIGQUIT, &quitsig, 0);
