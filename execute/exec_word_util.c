@@ -50,10 +50,7 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
-		{
 			close(p_ctx->fd_close);
-			p_ctx->fd_close = -1;
-		}
 		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
