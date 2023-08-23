@@ -135,7 +135,6 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 	return (dp[len_p][len_w]);
 }
 
-
 void	msh_error(char *name, char *msg, int error)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);

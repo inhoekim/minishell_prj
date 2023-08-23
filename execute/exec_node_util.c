@@ -150,7 +150,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-
 	set_redirect_ambiguity(TRUE);
 	filename_list = (t_list *)make_argv(rhs->word, 0);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -202,7 +201,6 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-
 	set_redirect_ambiguity(TRUE);
 	filename_list = (t_list *)make_argv(rhs->word, 0);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -240,7 +238,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -320,6 +318,10 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 			set_exit_status(p_ctx->exit_status);
 			return ;
 		}
+		if (p_ctx->exit_status == 130)
+			printf("\n");
+		else if (p_ctx->exit_status == 131)
+			printf("Quit: 3\n");
 		set_exit_status(p_ctx->exit_status);
 	}
 }

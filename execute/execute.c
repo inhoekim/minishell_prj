@@ -22,6 +22,7 @@ void	execute(t_node *root)
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	wait_queue(&ctx);
+	sigact_default();
 	free_delete_heredoc(&ctx);
 }
 

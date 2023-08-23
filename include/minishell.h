@@ -81,4 +81,13 @@ void	minishell_loop(void);
 t_bool 	*get_redirect_ambiguity(void);
 void 	set_redirect_ambiguity(t_bool value);
 
+
+//sigaction
+void	sigact_default(void);
+void	new_prompt(int signum);
+void	fork_handler(int signum);
+void	sigact_fork(void);
+void	sigact_heredoc(void);
+void	quit_heredoc(int signum);
+
 #endif

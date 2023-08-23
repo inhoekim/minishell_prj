@@ -143,16 +143,13 @@ t_node	*io_here(t_tokenizer *tokenizer)
 			return (NULL);
 		}
 		set_delimiter(node, delim);
-		// @ sigaction set(heredoc mode)
-		// @(구현o) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
-		// @(구현o) sigquit(3) 컨트롤+ \ -> 무시
-		// @(구현o) eof 컨트롤+ d -> 개행 없이 종료. heredoc파일은 생성.
 		sigact_heredoc();
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
 		{
 			dup2(*get_tmp_stdin_fd(), STDIN_FILENO);
 			close(*get_tmp_stdin_fd());
+			delete_heredoc(tokenizer);
 			return (NULL);
 		}
 			
