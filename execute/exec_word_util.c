@@ -5,8 +5,9 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
+#include "../include/wait_queue.h"
 
-void	*make_argv(char **word_arr, int flag)
+char	**make_argv(char **word_arr)
 {
 	int		i;
 	t_list	*list;
@@ -27,10 +28,7 @@ void	*make_argv(char **word_arr, int flag)
 		ft_lstclear(&list, free);
 		i++;
 	}
-	if (flag == 0)
-		return (argv_list);
-	else
-		return (list_to_arr(argv_list));
+	return (list_to_arr(argv_list));
 }
 
 void	sigact_fork(void)
@@ -81,10 +79,7 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		sigact_fork();
 		if (p_ctx->fd_close >= 0)
-		{
 			close(p_ctx->fd_close);
-			p_ctx->fd_close = -1;
-		}
 		execve(argv[0], argv, list_to_arr(envl));
 		exit(1);
 	}
@@ -92,7 +87,7 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue(pid, p_ctx);
+	enqueue_after(pid, p_ctx);
 }
 
 char	**list_to_arr(t_list *node)
