@@ -298,6 +298,8 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
 	}
+	free_argv(path);
+	free(temp_path);
 }
 
 void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
