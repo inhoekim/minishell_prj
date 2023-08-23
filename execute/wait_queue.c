@@ -1,7 +1,7 @@
 #include "../include/wait_queue.h"
 #include "../include/execute.h"
 
-#define WORKING 1
+#define WORKING 0
 
 #if WORKING == 0
 void	enqueue_after(pid_t pid, t_context *p_ctx)
@@ -55,6 +55,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	*_pid = pid;
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
+	printf("added size: %d\n", p_ctx->pid_size);
 }
 
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
@@ -105,32 +106,60 @@ void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	waitpid(pid, &status, flag);
 	if (WIFEXITED(status))
 	{
+		printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
 		set_exit_status(p_ctx->exit_status);
 		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 	}
-	else if (WIFSIGNALED(status))
+	else if (WIFSIGNALED(status) && WTERMSIG(status) != 88)
 	{
+		printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
 		set_exit_status(p_ctx->exit_status);
 		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
-		
 	}
 }
+// #include <setjmp.h>
+
+// sigjmp_buf env;
+// struct sigaction sa;
+
+// void delete_zombies(void);
+
+// sigfillset(&sa.sa_mask);
+// sa.sa_handler = delete_zombies;
+// sa.sa_flags = 0;
+// sigaction(SIGCHLD, &sa, NULL);
+
+// void delete_zombies(void)
+// {
+//     pid_t kidpid;
+//     int status;
+
+//     printf("Inside zombie deleter:  ");
+//     while ((kidpid = waitpid(-1, &status, WNOHANG)) > 0)
+//     {
+//          printf("Child %ld terminated\n", kidpid);
+//     }
+//     siglongjmp(env,1);
+// }
 
 void	wait_queue_after(t_context *p_ctx)
 {
 	t_list	*_pid_list;
 
 	_pid_list = p_ctx->pid_list;
+	printf("size: %d\n", p_ctx->pid_size);
 	while (_pid_list && p_ctx->pid_size)
 	{
-		printf("hi\n");
-		wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
+		printf("start\n");
+		wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
 		_pid_list = _pid_list->next;
+		printf("end\n");
 	}
 }
+
 #endif
 

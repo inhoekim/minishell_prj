@@ -66,6 +66,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	}
 }
 
+#if WORKING == 0
 void	copy_queue(t_context *dst, t_context *src)
 {
 	int	idx;
@@ -81,6 +82,27 @@ void	copy_queue(t_context *dst, t_context *src)
 	dst->queue_size = idx;
 	dst->exit_status = src->exit_status;
 }
+#endif
+
+#if WORKING == 1
+void	copy_queue(t_context *dst, t_context *src)
+{
+	t_list *tmp;
+
+	// clear dst
+	tmp = src.pid_list;
+	while (tmp->next != *head)
+	{
+
+		ft_cir_lstadd_back(&dst->pid_list, tmp->content);
+		tmp = src->next;
+	}
+	
+
+	dst->queue_size = idx;
+	dst->exit_status = src->exit_status;
+}
+#endif
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
 {
@@ -148,8 +170,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 	t_node	*rhs;
 	char	**filename;
-	
-	// t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
