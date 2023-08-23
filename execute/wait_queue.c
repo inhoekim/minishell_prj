@@ -30,43 +30,13 @@ void	wait_queue_after(t_context *p_ctx)
 
 void	ft_cir_lstclear(t_context *p_ctx)
 {
-	// t_list *prev;
 	t_list *current;
 	t_list *tmp;
 	t_list **head;
 	(void)p_ctx;
-// @ 수정중
-	// head = &(p_ctx->pid_list);
-	// prev = *head;
-	// current = (*head)->next;
-	// while (current != *head)
-	// {
-	// 	prev = current;
-	// 	current = current->next;
-	// }
-	// // list의 원소가 하나이고 *head == d_node인 경우
-	// if (current == *head && prev == *head)
-	// {
-	// 	head = NULL;
-	// 	ft_lstdelone(d_node, free);
-	// 	return (NULL);
-	// }
-	// // list의 원소가 하나가 아니고 *head == d_node인 경우
-	// else if (current == *head)
-	// {
-	// 	tmp = *head;
-	// 	while (tmp->next != *head)
-	// 		tmp = tmp->next;
-	// 	*head = current->next;
-	// 	tmp->next = *head;
-	// 	ft_lstdelone(current, free);
-	// }
-//
 
-/* 원래 코드*/
 	head = &(p_ctx->pid_list);
 	current = (*head);
-	
 	while (current->next != *head)
 	{
 		tmp = current;

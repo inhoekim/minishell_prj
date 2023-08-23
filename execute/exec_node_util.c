@@ -87,17 +87,15 @@ void	copy_queue(t_context *dst, t_context *src)
 #if WORKING == 1
 void	copy_queue(t_context *dst, t_context *src)
 {
-	// t_list *prev;
 	t_list *current;
 	t_list	**head;
 
-	
 	// clear dst
-	if (dst->pid_list) {
+	if (dst->pid_list)
+	{
 		ft_cir_lstclear(dst);
 		dst->pid_list = NULL;
 	}
-	
 	head = &(src->pid_list);
 	current = *head;
 	while (current->next != *head)
@@ -105,40 +103,9 @@ void	copy_queue(t_context *dst, t_context *src)
 		ft_cir_lstadd_back(&dst->pid_list, current);
 		current = current->next;
 	}
-	// 첫번째 진입시: cat의 pid복사
 	ft_cir_lstadd_back(&dst->pid_list, current);
 	dst->pid_size = src->pid_size;
 	dst->exit_status = src->exit_status;
-
-	/*
-	// list의 원소가 하나인 경우
-	if (current == *head && prev == *head)
-	{
-		printf("aux pid list 원소가 하나인경우\n");
-		dst->pid_list = current;
-		// dst->pid_size = src->pid_size;
-		// dst->exit_status = src->exit_status;
-		// return ;
-	}
-	//list의 원소가 2개 이상인경우
-	else {
-		while (current != *head)
-		{
-			prev = current;
-			current = current->next;
-			
-			if (current == *head)
-			{
-				printf("aux pid list 원소가 두개이상인 경우\n");
-				printf("node: %p\n", current);
-				ft_cir_lstadd_back(&dst->pid_list, current);
-				current = current->next;
-			}
-		}
-	}
-	dst->pid_size = src->pid_size;
-	dst->exit_status = src->exit_status;
-	*/
 }
 #endif
 
