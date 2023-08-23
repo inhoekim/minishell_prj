@@ -22,7 +22,8 @@ void	execute(t_node *root)
 	ctx.pid_size = 0;
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
-	wait_queue_after(&ctx);
+	wait_queue(&ctx);
+	sigact_default();
 	free_delete_heredoc(&ctx);
 }
 
