@@ -101,6 +101,7 @@ void	copy_queue(t_context *dst, t_context *src)
 	while (current->next != *head)
 	{	
 		ft_cir_lstadd_back(&dst->pid_list, current);
+		// @ current->content도 복사되어야 함.
 		current = current->next;
 	}
 	ft_cir_lstadd_back(&dst->pid_list, current);

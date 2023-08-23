@@ -33,7 +33,6 @@ void	ft_cir_lstclear(t_context *p_ctx)
 	t_list *current;
 	t_list *tmp;
 	t_list **head;
-	(void)p_ctx;
 
 	head = &(p_ctx->pid_list);
 	current = (*head);
@@ -88,16 +87,20 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 		prev = current;
 		current = current->next;
 	}
+	printf("here0-0\n");
 	// list의 원소가 하나이고 *head == d_node인 경우
 	if (current == *head && prev == *head)
 	{
-		head = NULL;
-		ft_lstdelone(d_node, free);
+		printf("here0-1\n");
+		printf("%p %p\n", d_node->content, d_node);
+		ft_lstdelone(d_node, free); // seg
+		printf("here0-2\n");
 		return (NULL);
 	}
 	// list의 원소가 하나가 아니고 *head == d_node인 경우
 	else if (current == *head)
 	{
+		printf("here0-3\n");
 		tmp = *head;
 		while (tmp->next != *head)
 			tmp = tmp->next;
@@ -108,6 +111,7 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	// 그 외
 	else
 	{
+		printf("here0-4\n");
 		prev->next = current->next;
 		ft_lstdelone(current, free);
 	}
