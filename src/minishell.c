@@ -3,6 +3,7 @@
 #include "../include/minishell.h"
 #include "../include/parser.h"
 #include "../include/execute.h"
+#include "../include/execute_util.h"
 
 
 int main(int argc, char **argv, char **envp)
@@ -49,6 +50,7 @@ void	new_prompt(int signum)
     rl_on_new_line();
     rl_replace_line("", 1);
     rl_redisplay();
+	set_exit_status(1);
 }
 
 // @ sigaction set(default mode)

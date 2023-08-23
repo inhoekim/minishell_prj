@@ -5,6 +5,7 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
+#include "../include/wait_queue.h"
 
 char	**make_argv(char **word_arr)
 {
@@ -55,7 +56,7 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue(pid, p_ctx);
+	enqueue_after(pid, p_ctx);
 }
 
 char	**list_to_arr(t_list *node)

@@ -6,6 +6,7 @@
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
+#include "../include/wait_queue.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
@@ -22,7 +23,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		//여기서 자식쉘의 pipe[stdin]과 fork할 ls의 pipe[stdin]은 닫힘
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
-		wait_queue(p_ctx);
+		wait_queue_after(p_ctx);
 		exit(p_ctx->exit_status);
 	}
 	//(ls) | cat 에서 exec_subshell은 1번만 호출되는데
@@ -32,7 +33,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue(pid, p_ctx);
+	enqueue_after(pid, p_ctx);
 }
 
 void	exec_or(t_node *node, t_context *p_ctx)
@@ -43,7 +44,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	wait_queue(p_ctx);
+	wait_queue_after(p_ctx);
 	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -58,7 +59,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	wait_queue(p_ctx);
+	wait_queue_after(p_ctx);
 	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
@@ -355,7 +356,7 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue(pid, p_ctx);
+	enqueue_after(pid, p_ctx);
 }
 
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
