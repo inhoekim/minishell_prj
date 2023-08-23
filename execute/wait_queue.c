@@ -70,6 +70,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 
 	*_pid = pid;
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
+	printf("enqueued pid : %d\n", pid);
 	p_ctx->pid_size++;
 	printf("added size: %d\n", p_ctx->pid_size);
 }
@@ -92,6 +93,7 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	if (current == *head && prev == *head)
 	{
 		printf("here0-1\n");
+		printf("pid : %d\n", *((int *)d_node->content));
 		printf("%p %p\n", d_node->content, d_node);
 		ft_lstdelone(d_node, free); // seg
 		printf("here0-2\n");
