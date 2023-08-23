@@ -101,6 +101,10 @@ void	copy_queue(t_context *dst, t_context *src)
 	while (current->next != *head)
 	{	
 		ft_cir_lstadd_back(&dst->pid_list, current);
+		printf("addr: %p %p %p\n", current, current->content, (int *)(current->content));
+		// printf("pid: %d\n", *(int *)(current->content));
+		// ft_cir_lstadd_back(&dst->pid_list, ft_lstnew(current->content));
+		// free(current->content);
 		// @ current->content도 복사되어야 함.
 		current = current->next;
 	}
