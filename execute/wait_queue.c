@@ -1,8 +1,6 @@
 #include "../include/wait_queue.h"
 #include "../include/execute.h"
 
-#define WORKING 0
-
 #if WORKING == 0
 void	enqueue_after(pid_t pid, t_context *p_ctx)
 {
@@ -29,6 +27,55 @@ void	wait_queue_after(t_context *p_ctx)
 #endif
 
 #if WORKING == 1
+
+void	ft_cir_lstclear(t_context *p_ctx)
+{
+	// t_list *prev;
+	t_list *current;
+	t_list *tmp;
+	t_list **head;
+	(void)p_ctx;
+// @ 수정중
+	// head = &(p_ctx->pid_list);
+	// prev = *head;
+	// current = (*head)->next;
+	// while (current != *head)
+	// {
+	// 	prev = current;
+	// 	current = current->next;
+	// }
+	// // list의 원소가 하나이고 *head == d_node인 경우
+	// if (current == *head && prev == *head)
+	// {
+	// 	head = NULL;
+	// 	ft_lstdelone(d_node, free);
+	// 	return (NULL);
+	// }
+	// // list의 원소가 하나가 아니고 *head == d_node인 경우
+	// else if (current == *head)
+	// {
+	// 	tmp = *head;
+	// 	while (tmp->next != *head)
+	// 		tmp = tmp->next;
+	// 	*head = current->next;
+	// 	tmp->next = *head;
+	// 	ft_lstdelone(current, free);
+	// }
+//
+
+/* 원래 코드*/
+	head = &(p_ctx->pid_list);
+	current = (*head);
+	
+	while (current->next != *head)
+	{
+		tmp = current;
+		current = current->next;
+		ft_lstdelone(tmp, free);
+	}
+	ft_lstdelone(current, free);
+}
+
 void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
 	t_list	*tmp;
@@ -109,7 +156,9 @@ void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 		printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
 		set_exit_status(p_ctx->exit_status);
-		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		printf("here0\n");
+		ft_cir_lstdelete_node(&p_ctx->pid_list, node); // seg
+		printf("here1\n");
 		p_ctx->pid_size--;
 	}
 	else if (WIFSIGNALED(status) && WTERMSIG(status) != 88)
@@ -117,7 +166,9 @@ void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 		printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
 		set_exit_status(p_ctx->exit_status);
+		printf("here3\n");
 		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		printf("here4\n");
 		p_ctx->pid_size--;
 	}
 }
@@ -151,13 +202,14 @@ void	wait_queue_after(t_context *p_ctx)
 	t_list	*_pid_list;
 
 	_pid_list = p_ctx->pid_list;
-	printf("size: %d\n", p_ctx->pid_size);
+	printf("head: %p size: %d\n", _pid_list, p_ctx->pid_size);
+	// @ 지금 여기 있는 list node는 {echo, cat}이다. 
 	while (_pid_list && p_ctx->pid_size)
 	{
 		printf("start\n");
 		wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
-		_pid_list = _pid_list->next;
 		printf("end\n");
+		_pid_list = _pid_list->next;
 	}
 }
 

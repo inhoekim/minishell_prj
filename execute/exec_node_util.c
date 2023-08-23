@@ -87,20 +87,58 @@ void	copy_queue(t_context *dst, t_context *src)
 #if WORKING == 1
 void	copy_queue(t_context *dst, t_context *src)
 {
-	t_list *tmp;
+	// t_list *prev;
+	t_list *current;
+	t_list	**head;
 
+	
 	// clear dst
-	tmp = src.pid_list;
-	while (tmp->next != *head)
-	{
-
-		ft_cir_lstadd_back(&dst->pid_list, tmp->content);
-		tmp = src->next;
+	if (dst->pid_list) {
+		ft_cir_lstclear(dst);
+		dst->pid_list = NULL;
 	}
 	
-
-	dst->queue_size = idx;
+	head = &(src->pid_list);
+	current = *head;
+	while (current->next != *head)
+	{	
+		ft_cir_lstadd_back(&dst->pid_list, current);
+		current = current->next;
+	}
+	// 첫번째 진입시: cat의 pid복사
+	ft_cir_lstadd_back(&dst->pid_list, current);
+	dst->pid_size = src->pid_size;
 	dst->exit_status = src->exit_status;
+
+	/*
+	// list의 원소가 하나인 경우
+	if (current == *head && prev == *head)
+	{
+		printf("aux pid list 원소가 하나인경우\n");
+		dst->pid_list = current;
+		// dst->pid_size = src->pid_size;
+		// dst->exit_status = src->exit_status;
+		// return ;
+	}
+	//list의 원소가 2개 이상인경우
+	else {
+		while (current != *head)
+		{
+			prev = current;
+			current = current->next;
+			
+			if (current == *head)
+			{
+				printf("aux pid list 원소가 두개이상인 경우\n");
+				printf("node: %p\n", current);
+				ft_cir_lstadd_back(&dst->pid_list, current);
+				current = current->next;
+			}
+		}
+	}
+	dst->pid_size = src->pid_size;
+	dst->exit_status = src->exit_status;
+	*/
 }
 #endif
 
@@ -128,9 +166,12 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
 	copy_queue(p_ctx, &aux);
+	printf("not seg\n");
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
 	// @ aux.queue -> ctx.queue 로 queue 복사
+	
+
 	p_ctx->is_piped_cmd = FALSE;
 }
 
