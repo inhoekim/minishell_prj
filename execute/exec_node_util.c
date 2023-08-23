@@ -37,6 +37,10 @@ void	exec_or(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	exec_node(lhs, p_ctx);
 	wait_queue(p_ctx);
 	if (*get_exit_status() != 0)
@@ -52,6 +56,10 @@ void	exec_and(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	exec_node(lhs, p_ctx);
 	wait_queue(p_ctx);
 	if (*get_exit_status() == 0)
@@ -102,7 +110,7 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	copy_queue(p_ctx, &aux);
 	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
 	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue복사
+	// @ aux.queue -> ctx.queue 로 queue 복사
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -351,10 +359,10 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 		builtin_exit_status = builtin_func(argv);
 		exit(builtin_exit_status);
 	}
-	if (p_ctx->fd[STDIN_FILENO] != STDIN_FILENO)
-		close(p_ctx->fd[STDIN_FILENO]);
-	if (p_ctx->fd[STDOUT_FILENO] != STDOUT_FILENO)
-		close(p_ctx->fd[STDOUT_FILENO]);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
 }
 
