@@ -6,7 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 
-void	*make_argv(char **word_arr, int flag)
+char	**make_argv(char **word_arr)
 {
 	int		i;
 	t_list	*list;
@@ -27,10 +27,7 @@ void	*make_argv(char **word_arr, int flag)
 		ft_lstclear(&list, free);
 		i++;
 	}
-	if (flag == 0)
-		return (argv_list);
-	else
-		return (list_to_arr(argv_list));
+	return (list_to_arr(argv_list));
 }
 
 void	fork_exec(char **argv, t_context *p_ctx)

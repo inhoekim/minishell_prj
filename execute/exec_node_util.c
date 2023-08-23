@@ -18,12 +18,16 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 	{
+		exec_node(lhs, p_ctx);
+		//여기서 자식쉘의 pipe[stdin]과 fork할 ls의 pipe[stdin]은 닫힘
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
-		exec_node(lhs, p_ctx);
 		wait_queue(p_ctx);
 		exit(p_ctx->exit_status);
 	}
+	//(ls) | cat 에서 exec_subshell은 1번만 호출되는데
+	//여기서 들어갈때 p_ctx->fd[0] = stdin / p_ctx->fd[1] = pipe[stdout]
+	//그래서 부모쉘의 pipe[stdout]은 닫히는데 pipe[stdin]이 안닫히는 것 같아요
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -142,26 +146,25 @@ void	exec_input(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	*filename;
-	t_list	*filename_list;
+	char	**filename;
+	
+	// t_list	*filename_list;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-
 	set_redirect_ambiguity(TRUE);
-	filename_list = (t_list *)make_argv(rhs->word, 0);
+	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
 		return ;
 	set_redirect_ambiguity(FALSE);
-	filename = concatenate(filename_list);
-	if (!is_regular_file(filename, p_ctx))
+	if (!is_regular_file(filename[0], p_ctx))
 	{
 		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDIN] = open(filename, O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -194,8 +197,7 @@ void	exec_output(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	*filename;
-	t_list	*filename_list;
+	char	**filename;
 
 	lhs = node->left;
 	rhs = node->right;
@@ -203,17 +205,16 @@ void	exec_output(t_node *node, t_context *p_ctx)
 		close(p_ctx->fd[STDOUT]);
 
 	set_redirect_ambiguity(TRUE);
-	filename_list = (t_list *)make_argv(rhs->word, 0);
+	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
 		return ;
 	set_redirect_ambiguity(FALSE);
-	filename = concatenate(filename_list);
-	if (!is_not_directory(filename, p_ctx))
+	if (!is_not_directory(filename[0], p_ctx))
 	{
 		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -221,25 +222,23 @@ void	exec_append(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;
 	t_node	*rhs;
-	char	*filename;
-	t_list	*filename_list;
+	char	**filename;
 
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	set_redirect_ambiguity(TRUE);
-	filename_list = (t_list *)make_argv(rhs->word, 0);
+	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
 		return ;
 	set_redirect_ambiguity(FALSE);
-	filename = concatenate(filename_list);
-	if (!is_not_directory(filename, p_ctx))
+	if (!is_not_directory(filename[0], p_ctx))
 	{
 		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -438,7 +437,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 {
 	char	**argv;
 
-	argv = (char **)make_argv(node->word, 1);
+	argv = make_argv(node->word);
 	if (ft_strchr(argv[0], '/') == NULL)
 	{
 		if (exec_builtin(argv, p_ctx) == FALSE)
