@@ -116,7 +116,7 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 	pos = 0;
 	while (pattern[pos] == '*')
 	{
-		dp[pos + 1][0] = 1;
+		dp[pos + 1][0] = dp[pos][0];
 		pos++;
 	}
 	while (++p_idx <= len_p)

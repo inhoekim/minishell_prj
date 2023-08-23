@@ -18,6 +18,8 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (p_ctx->fd_close >= 0)
+			close(p_ctx->fd_close);
 		exec_node(lhs, p_ctx);
 		wait_queue(p_ctx);
 		exit(p_ctx->exit_status);
@@ -27,7 +29,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	enqueue(pid, p_ctx);
-	wait_queue(p_ctx);
+	//wait_queue(p_ctx);
 }
 
 void	exec_or(t_node *node, t_context *p_ctx)
