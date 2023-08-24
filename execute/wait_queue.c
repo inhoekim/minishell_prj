@@ -23,6 +23,7 @@ void	wait_queue_after(t_context *p_ctx)
 		idx++;
 		p_ctx->queue_size--;
 	}
+	sigact_default();
 }
 #endif
 
@@ -187,6 +188,7 @@ void	wait_queue_after(t_context *p_ctx)
 		printf("end\n");
 		_pid_list = _pid_list->next;
 	}
+	sigact_default();
 }
 
 #endif

@@ -73,8 +73,14 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	envl = *get_envp();
 	sigact_forkset();
 	pid = fork();
+	sigact_fork_parent();
 	if (pid == 0)
 	{
+		// @ sigaction set(fork interactive mode)
+		// @ sigint(2) 컨트롤+c -> 개행하고 default mode전환
+		// @ sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
+		// @ eof 		컨트롤+ d -> eof (건들필요 x )
+		sigact_fork_child(); // 이것도 더 우아한 방법으로 고쳐야함. 동작은 함
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		sigact_fork();

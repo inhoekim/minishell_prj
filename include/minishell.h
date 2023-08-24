@@ -89,4 +89,10 @@ void	sigact_fork(void);
 void	sigact_heredoc(void);
 void	quit_heredoc(int signum);
 
+void	ms_signal(int signum, void *handler);
+void	sigint_handler(int signum);
+void	sigact_fork_parent();
+void 	sigact_fork_child();
+void	sigact_default();
+
 #endif
