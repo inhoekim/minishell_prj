@@ -4,7 +4,6 @@
 #include "../include/parser.h"
 #include "../include/execute.h"
 
-
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -17,7 +16,6 @@ int main(int argc, char **argv, char **envp)
 	// free_tree();
 	// set_exit_status();
 }
-
 void	init_envp(char **envp)
 {
 	t_list	**env;
@@ -51,15 +49,15 @@ void	sigint_handler(int signum)
 	struct termios attributes;
 	struct termios saved;
 
-    tcgetattr(STDIN_FILENO, &saved);
-    tcgetattr(STDIN_FILENO, &attributes);
-    attributes.c_lflag &= (~ECHOCTL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
+	tcgetattr(STDIN_FILENO, &saved);
+	tcgetattr(STDIN_FILENO, &attributes);
+	attributes.c_lflag &= (~ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
 
 	printf("\n");
-    rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
 }
 
 // @ sigaction set(default mode)
