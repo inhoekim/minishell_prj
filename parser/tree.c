@@ -13,10 +13,9 @@
 #include "../include/minishell.h"
 #include "../include/tokenizer.h"
 
-static char	**make_first_word(char *src, int len);
-// static char	**make_node_word(char *src, int len);
-static char	**make_first_word(char *src, int len);
+static char	**make_word_data(char *src, int len);
 
+/* Only WORD type can come to the leaf node */
 t_node	*make_leaf(t_tokenizer *tokenizer)
 {
 	t_node	*node;
@@ -32,6 +31,7 @@ t_node	*make_leaf(t_tokenizer *tokenizer)
 	return (node);
 }
 
+/* Create a new tree with the first parameter(node_type) as the parent */
 t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right)
 {
 	t_node	*node;
@@ -44,7 +44,8 @@ t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right)
 	return (node);
 }
 
-static char	**make_first_word(char *src, int len)
+/* Initialize the node's word-data variable for the first time */
+static char	**make_word_data(char *src, int len)
 {
 	char	**new_str;
 	int		idx;
