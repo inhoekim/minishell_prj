@@ -101,10 +101,10 @@ void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	printf("heredoc\n");
-	// rl_on_new_line();
-    // rl_replace_line("", 1);
-    // rl_redisplay();
+	// printf("heredoc\n");
+	rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
 	set_heredoc_exit_flag(1);
 	set_tmp_stdin_fd(dup(STDIN));
 	close(STDIN);
