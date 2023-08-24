@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/23 16:54:05 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/24 17:01:38 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,10 @@ void	delete_node(t_list **head, t_list *node_to_delete);
 char	*ft_getenv(char *pos);
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env);
 void	set_envp(char *pos, char *pwd);
+int		*get_last_pid();
+void	set_last_pid(int pid);
+void	find_last_pid(t_context	*p_ctx);
+int *get_last_exit_status();
+void	set_last_exit_status(int exit_status);
 
 #endif

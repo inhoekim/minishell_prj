@@ -6,6 +6,59 @@
 
 void	free_delete_heredoc(t_context *p_ctx);
 
+int *get_last_pid()
+{
+	static int last_pid;
+	return (&last_pid);
+}
+
+void	set_last_pid(int pid)
+{
+	*get_last_pid() = pid;
+}
+
+int *get_last_exit_status()
+{
+	static int last_exit_status;
+	return (&last_exit_status);
+}
+
+void	set_last_exit_status(int exit_status)
+{
+	*get_last_exit_status() = exit_status;
+}
+
+void	find_last_pid(t_context	*p_ctx)
+{
+	t_list	**head;
+	t_list	*prev;
+	t_list	*current;
+	t_list	*tmp;
+
+	head = &(p_ctx->pid_list);
+	if (!(*head))
+		return ;
+	prev = *head;
+	current = (*head)->next;
+	while (current != *head)
+	{
+		prev = current;
+		current = current->next;
+	}
+	// list의 원소가 하나인 경우
+	if (current == *head && prev == *head)
+		set_last_pid(*((int *)current->content));
+	// list의 원소가 하나가 아닌 경우
+	else if (current == *head)
+	{
+		tmp = *head;
+		while (tmp->next != *head)
+			tmp = tmp->next;
+		set_last_pid(*((int *)tmp->content));
+	}
+	return ;
+}
+
 void	execute(t_node *root)
 {
 	t_context	ctx;
@@ -21,6 +74,9 @@ void	execute(t_node *root)
 	ctx.pid_size = 0;
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
+	find_last_pid(&ctx);
+	// @ 제거
+	printf("last pid: %d\n", *get_last_pid());
 	wait_queue_after(&ctx);
 	free_delete_heredoc(&ctx);
 }

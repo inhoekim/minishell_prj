@@ -101,7 +101,7 @@ void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	// printf("heredoc\n");
+	printf("heredoc\n");
 	rl_on_new_line();
     rl_replace_line("", 1);
     rl_redisplay();
