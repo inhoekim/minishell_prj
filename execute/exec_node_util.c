@@ -10,7 +10,7 @@
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
-void fork_error(t_context *p_ctx)
+void	fork_error(t_context *p_ctx)
 {
 	int	pid;
 
@@ -19,7 +19,6 @@ void fork_error(t_context *p_ctx)
 		exit(p_ctx->exit_status);
 	enqueue_after(pid, p_ctx);
 }
-
 
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
