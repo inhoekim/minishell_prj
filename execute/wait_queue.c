@@ -70,7 +70,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	int	*_pid = (int *)malloc(sizeof(int));
 
 	*_pid = pid;
-	printf("pid: %d\n", pid);
+	// printf("pid: %d\n", pid);
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
 }
@@ -129,44 +129,32 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 		return (ret);
 	else if (WIFEXITED(status))
 	{
-		printf("exit: %d\n", WEXITSTATUS(status));
+		// printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
 		set_exit_status(p_ctx->exit_status);
-		// printf("delete pid: %d\n", *((int *)node->content));
 		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 		if (pid == *get_last_pid())
-		{
-			// @ global exit status set
-			printf("global: %d\n", p_ctx->exit_status);
 			set_last_exit_status(p_ctx->exit_status);
-		}
 	}
 	else if (WIFSIGNALED(status))
 	{
-		printf("signal: %d\n", WTERMSIG(status));
+		// printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
 		set_exit_status(p_ctx->exit_status);
 		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 		if (pid == *get_last_pid())
-		{
-			// @ global exit status set
-			printf("global: %d\n", p_ctx->exit_status);
 			set_last_exit_status(p_ctx->exit_status);
-		}
 	}
 	return (ret);
 }
-
-// @ built-in 일때 문제!!!!
 
 void	wait_queue_after(t_context *p_ctx)
 {
 	t_list	*_pid_list;
 
 	_pid_list = p_ctx->pid_list;
-	// printf("addr: %p %p\n", _pid_list, _pid_list->next);
 	while (_pid_list && p_ctx->pid_size)
 	{
 		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);

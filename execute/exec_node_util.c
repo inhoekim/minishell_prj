@@ -10,6 +10,17 @@
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
+void fork_error(t_context *p_ctx)
+{
+	int pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(127);
+	enqueue_after(pid, p_ctx);
+}
+
+
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -44,11 +55,9 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// find_last_pid(p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	// printf("or exit status: %d\n", *get_last_exit_status());
-	// if (*get_last_exit_status() != 0)
-	if (*get_exit_status() != 0)
+	if (*get_last_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -62,10 +71,9 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	// find_last_pid(p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	// if (*get_last_exit_status() == 0)
-	if (*get_exit_status() == 0)
+	if (*get_last_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -314,6 +322,7 @@ char	*make_order(char **path, char **argv)
 	return (order);
 }
 
+
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
@@ -342,10 +351,13 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
-		// set_last_exit_status(p_ctx->exit_status);
-		set_exit_status(p_ctx->exit_status);
+		// @  error fork not error msg
+		fork_error(p_ctx);
+		// set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
+	
+
 }
 
 void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
@@ -494,6 +506,8 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
+	else
+		fork_error(p_ctx);
 	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
