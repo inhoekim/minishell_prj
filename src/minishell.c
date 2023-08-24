@@ -37,11 +37,15 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
+int	*get_heredoc_exit_flag(void);
+void set_heredoc_exit_flag(int flag);
+
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
         return ;
-	printf("\n");
+	if (*get_heredoc_exit_flag() == 0)
+		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
