@@ -39,12 +39,5 @@ void	sigact_modeoff()
 {
 	ms_signal(SIGINT, SIG_DFL);
 	ms_signal(SIGQUIT, SIG_DFL);
-	// @ 좀비 죽이는 로직
-	struct sigaction	act;
-
-	act.sa_handler = SIG_IGN;
-  	sigemptyset(&act.sa_mask);
-	act.sa_flags = 0;
-	sigaction(SIGCHLD, &act, 0);
 }
 

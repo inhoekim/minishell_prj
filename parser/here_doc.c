@@ -29,7 +29,6 @@ int	*get_heredoc_exit_flag(void)
 	return (&heredoc_exit_flag);
 }
 
-// @ heredoc 작성중 sigterm(ctrl+c)종료된 경우 flag를 1로 set
 void set_heredoc_exit_flag(int flag)
 {
 	*get_heredoc_exit_flag() = flag;

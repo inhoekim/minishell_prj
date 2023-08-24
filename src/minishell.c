@@ -46,16 +46,20 @@ void	new_prompt(int signum)
 		return ;
 	
 	
-	// printf("123\n"); // 덮어씀
-	// printf("123"); // 안덮어씀-> 이경우 한가지 더 의문인게 왜 시그널 계속 갈겨도 추가가 안되고 같은 자리에 덮어쓰는가
+	// if (*get_heredoc_exit_flag() == 0)
+	// 	printf("default\n");
+
+	// @ 현상
+	// heredoc readline종료이후
+	// readline buffer의 입력커서포인터가 프롬프트 아래 라인에 있음.
+	// stdin buffer에 뭔가를 입력하면,
+	// readline buffer의 입력커서포인터가 프롬프트 오른쪽에 위치하게 됨.
+
 	// ft_putstr_fd("def\nault",1);
-
-	if (*get_heredoc_exit_flag() == 0)
-		printf("default\n");
-	// ft_putstr_fd("default\n",1);
-
-	rl_on_new_line(); 
+	
+	printf("default\n");
 	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
+	rl_on_new_line(); 
     rl_replace_line("", 1);
     rl_redisplay();
 	set_exit_status(1);
