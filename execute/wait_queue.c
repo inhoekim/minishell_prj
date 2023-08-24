@@ -23,7 +23,7 @@ void	wait_queue_after(t_context *p_ctx)
 		idx++;
 		p_ctx->queue_size--;
 	}
-	sigact_default();
+	sigact_default_mode();
 }
 #endif
 

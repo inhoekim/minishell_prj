@@ -83,8 +83,8 @@ void 	set_redirect_ambiguity(t_bool value);
 
 void	ms_signal(int signum, void *handler);
 void	sigint_handler(int signum);
-void	sigact_fork_parent();
-void 	sigact_fork_child();
-void	sigact_default();
+void	sigact_fork_mode();
+void 	sigact_modeoff();
+void	sigact_default_mode();
 
 #endif
