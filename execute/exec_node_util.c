@@ -44,10 +44,11 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
-	find_last_pid(p_ctx);
+	// find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	// @ false시 seg
-	if (*get_last_exit_status() != 0)
+	// printf("or exit status: %d\n", *get_last_exit_status());
+	// if (*get_last_exit_status() != 0)
+	if (*get_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -61,8 +62,10 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	// find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	if (*get_last_exit_status() == 0)
+	// if (*get_last_exit_status() == 0)
+	if (*get_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -339,6 +342,8 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
+		// set_last_exit_status(p_ctx->exit_status);
+		set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
 }

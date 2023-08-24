@@ -50,7 +50,6 @@ void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
 	t_list	*tmp;
 
-	printf("added: %p\n", n_node);
 	if (*head == NULL)
 	{
 		*head = n_node;
@@ -71,7 +70,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	int	*_pid = (int *)malloc(sizeof(int));
 
 	*_pid = pid;
-	// printf("pid: %d\n", pid);
+	printf("pid: %d\n", pid);
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
 }
@@ -167,10 +166,9 @@ void	wait_queue_after(t_context *p_ctx)
 	t_list	*_pid_list;
 
 	_pid_list = p_ctx->pid_list;
-	printf("addr: %p %p\n", _pid_list, _pid_list->next);
+	// printf("addr: %p %p\n", _pid_list, _pid_list->next);
 	while (_pid_list && p_ctx->pid_size)
 	{
-		// printf("wait pid: %d\n", *((int *)_pid_list->content));
 		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
 		if (!_pid_list)
 			break;

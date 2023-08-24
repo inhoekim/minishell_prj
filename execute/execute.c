@@ -74,10 +74,11 @@ void	execute(t_node *root)
 	ctx.pid_size = 0;
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
-	find_last_pid(&ctx);
+	// find_last_pid(&ctx);
 	// @ 제거
-	printf("last pid: %d\n", *get_last_pid());
+	// printf("last pid: %d %d\n", *get_last_pid(), *get_last_exit_status() );
 	wait_queue_after(&ctx);
+	set_exit_status(*get_exit_status());
 	free_delete_heredoc(&ctx);
 }
 
