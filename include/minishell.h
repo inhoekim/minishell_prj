@@ -81,4 +81,10 @@ void	minishell_loop(void);
 t_bool 	*get_redirect_ambiguity(void);
 void 	set_redirect_ambiguity(t_bool value);
 
+void	ms_signal(int signum, void *handler);
+void	sigint_handler(int signum);
+void	sigact_fork_parent();
+void 	sigact_fork_child();
+void	sigact_default();
+
 #endif

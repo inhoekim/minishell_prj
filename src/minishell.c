@@ -5,7 +5,6 @@
 #include "../include/execute.h"
 #include "../include/execute_util.h"
 
-
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -18,7 +17,6 @@ int main(int argc, char **argv, char **envp)
 	// free_tree();
 	// set_exit_status();
 }
-
 void	init_envp(char **envp)
 {
 	t_list	**env;
@@ -76,7 +74,10 @@ void	sigact_default(void)
 	quitsig.sa_handler = SIG_IGN;
   	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
-	sigaction(SIGQUIT, &quitsig, 0); 
+	sigaction(SIGQUIT, &quitsig, 0);
+
+	// ms_signal(SIGINT, sigint_handler);
+	// ms_signal(SIGQUIT, SIG_IGN);
 }
 
 void	minishell_loop(void) 
