@@ -3,6 +3,7 @@
 #include <termios.h>
 #include "../include/execute.h"
 #include "../include/minishell.h"
+#include "../include/execute.h"
 
 void	ms_signal(int signum, void *handler)
 {
@@ -29,6 +30,12 @@ void	sig_parent(int signum)
 }
 void	sigact_fork_parent()
 {
+	struct termios attributes;
+
+    tcgetattr(STDIN, &attributes);
+    attributes.c_lflag |= (ECHOCTL);
+    tcsetattr(STDIN, TCSANOW, &attributes);
+
 	ms_signal(SIGINT, sig_parent);
 	ms_signal(SIGQUIT, sig_parent);
 }
