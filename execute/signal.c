@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <termios.h>
+#include "../include/execute.h"
 #include "../include/minishell.h"
 
 void	ms_signal(int signum, void *handler)
@@ -15,6 +16,12 @@ void	ms_signal(int signum, void *handler)
 
 void	sig_parent(int signum)
 {
+	struct termios attributes;
+
+    tcgetattr(STDIN, &attributes);
+    attributes.c_lflag |= (ECHOCTL);
+    tcsetattr(STDIN, TCSANOW, &attributes);
+
 	if (signum == SIGINT)
 		printf("\n");
 	if (signum == SIGQUIT)
