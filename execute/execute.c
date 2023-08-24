@@ -6,7 +6,6 @@
 
 void	free_delete_heredoc(t_context *p_ctx);
 
-
 void	execute(t_node *root)
 {
 	t_context	ctx;

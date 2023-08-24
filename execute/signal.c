@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include <signal.h> 
+#include <signal.h>
+#include <termios.h>
+#include "../include/minishell.h"
+#include "../include/execute.h"
 
 void	ms_signal(int signum, void *handler)
 {
@@ -11,19 +14,26 @@ void	ms_signal(int signum, void *handler)
 	sigaction(signum, &act, 0);
 }
 
-void	sigquit_parent(int signum)
+void	fork_mode_handler(int signum)
 {
-	if (signum != SIGQUIT)
-		return ;
-	printf("Quit: %d\n", signum);
-}
-void	sigact_fork_parent()
-{
-	ms_signal(SIGINT, SIG_IGN);
-	ms_signal(SIGQUIT, sigquit_parent);
+	if (signum == SIGINT)
+		printf("\n");
+	if (signum == SIGQUIT)
+		printf("Quit: %d\n", signum);
 }
 
-void sigact_fork_child()
+void	sigact_fork_mode()
+{
+	struct termios attributes;
+
+	tcgetattr(STDIN, &attributes);
+    attributes.c_lflag |= (ECHOCTL);
+	tcsetattr(STDIN, TCSANOW, &attributes);
+	ms_signal(SIGINT, fork_mode_handler);
+	ms_signal(SIGQUIT, fork_mode_handler);
+}
+
+void	sigact_modeoff()
 {
 	ms_signal(SIGINT, SIG_DFL);
 	ms_signal(SIGQUIT, SIG_DFL);

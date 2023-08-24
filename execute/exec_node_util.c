@@ -385,13 +385,14 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	int		builtin_exit_status;
 
 	pid = fork();
+	sigact_fork_mode();
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
 		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
 		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
 		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
-		// sigact_fork();
+		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
