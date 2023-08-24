@@ -84,7 +84,7 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
-static void	delete_heredoc(t_tokenizer *tokenizer);
+void	delete_heredoc(t_tokenizer *tokenizer);
 
 int *get_tmp_stdin_fd(void)
 {
@@ -101,10 +101,12 @@ void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	// printf("heredoc\n");
-	rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
+	printf("\n");
+	/*
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+	*/
 	set_heredoc_exit_flag(1);
 	set_tmp_stdin_fd(dup(STDIN));
 	close(STDIN);
@@ -117,7 +119,7 @@ void	sigact_heredoc_mode(void)
 
 	intsig.sa_handler = quit_heredoc;
   	sigemptyset(&intsig.sa_mask);
-	intsig.sa_flags = 0;
+	intsig.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &intsig, 0);
 
 	quitsig.sa_handler = SIG_IGN;
@@ -152,21 +154,16 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		// @(구현o) eof 컨트롤+ d -> 개행 없이 종료. heredoc파일은 생성.
 		sigact_heredoc_mode();
 		here_doc(delim, tokenizer);
-		if (*get_heredoc_exit_flag() == 1)
-		{
-			dup2(*get_tmp_stdin_fd(), STDIN);
-			close(*get_tmp_stdin_fd());
-			sigact_default_mode();
-			return (NULL);
-		}
 		sigact_default_mode();
+		if (*get_heredoc_exit_flag() == 1)
+			return (NULL);
 		return (node);
 	}
 	syntax_error(tokenizer);
 	return (NULL);
 }
 
-static void	delete_heredoc(t_tokenizer *tokenizer)
+void	delete_heredoc(t_tokenizer *tokenizer)
 {
 	int	i;
 

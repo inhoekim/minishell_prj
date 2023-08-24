@@ -1,6 +1,8 @@
 #include "../include/here_doc.h"
 
+void	delete_heredoc(t_tokenizer *tokenizer);
 static t_bool	is_same_str(char *word1, char *word2);
+int *get_tmp_stdin_fd(void);
 
 void	set_delimiter(t_node *node, char buf[])
 {
@@ -61,10 +63,11 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		{
 			if (input)
 				free(input);
-			else if (*get_heredoc_exit_flag() != 1)
+			else if (*get_heredoc_exit_flag() == 1)
 			{
-				ft_putstr_fd("\033[1A", STDOUT);
-				ft_putstr_fd("\033[2C", STDOUT);
+				dup2(*get_tmp_stdin_fd(), STDIN);
+				close(*get_tmp_stdin_fd());
+				delete_heredoc(tokenizer);
 			}
 			break ;
 		}

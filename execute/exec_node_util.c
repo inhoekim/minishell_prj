@@ -365,10 +365,6 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 			set_exit_status(p_ctx->exit_status);
 			return ;
 		}
-		if (p_ctx->exit_status == 130)
-			printf("\n");
-		else if (p_ctx->exit_status == 131)
-			printf("Quit: 3\n");
 		set_exit_status(p_ctx->exit_status);
 	}
 }

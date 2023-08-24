@@ -41,11 +41,10 @@ void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
         return ;
-
-	// printf("\n");
-    rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
 	set_exit_status(1);
 }
 
@@ -78,7 +77,7 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");
+	line = ft_strdup("");		
 	while (line)
 	{
 		line = readline("prompt> ");
