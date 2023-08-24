@@ -68,4 +68,5 @@ void	wait_queue(t_context *p_ctx)
 		idx++;
 		p_ctx->queue_size--;
 	}
+	sigact_default();
 }

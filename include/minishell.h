@@ -77,4 +77,10 @@ void	init_envp(char **envp);
 t_list	**get_envp(void);
 void	minishell_loop(void);
 
+void	ms_signal(int signum, void *handler);
+void	sigint_handler(int signum);
+void	sigact_fork_parent();
+void 	sigact_fork_child();
+void	sigact_default();
+
 #endif
