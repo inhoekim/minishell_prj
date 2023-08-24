@@ -283,7 +283,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 		set_exit_status(p_ctx->exit_status);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 

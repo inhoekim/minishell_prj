@@ -26,7 +26,7 @@ t_node	*make_leaf(t_tokenizer *tokenizer)
 	node->left = NULL;
 	node->right = NULL;
 	token = tokenizer->curr_token;
-	node->word = make_first_word(token->str, token->len);
+	node->word = make_word_data(token->str, token->len);
 	get_next_token(tokenizer);
 	return (node);
 }
