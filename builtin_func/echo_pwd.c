@@ -9,8 +9,11 @@ t_bool	ft_echo(char **argv)
 
 	flag = 0;
 	idx = 0;
-	if (!*(argv + 1))
-		;
+	if (!argv[1])
+	{
+		printf("\n");
+		return (0);
+	}
 	else if (argv[1][0] == '-' && argv[1][1] == 'n')
 	{
 		idx = 1;

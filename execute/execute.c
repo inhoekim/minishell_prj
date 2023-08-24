@@ -2,6 +2,7 @@
 #include "../include/execute.h"
 #include "../include/exec_node_util.h"
 #include "../include/here_doc.h"
+#include "../include/wait_queue.h"
 
 void	free_delete_heredoc(t_context *p_ctx);
 
@@ -19,9 +20,9 @@ void	execute(t_node *root)
 	ctx.queue_size = 0;
 	ctx.pid_list = NULL;
 	ctx.pid_size = 0;
-
+	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
-	wait_queue(&ctx);
+	wait_queue_after(&ctx);
 	free_delete_heredoc(&ctx);
 }
 

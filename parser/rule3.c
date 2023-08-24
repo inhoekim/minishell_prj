@@ -86,6 +86,43 @@ t_node	*io_file(t_tokenizer *tokenizer)
 
 static void	delete_heredoc(t_tokenizer *tokenizer);
 
+int *get_tmp_stdin_fd(void)
+{
+	static int tmp_stdin_fd;
+	return (&tmp_stdin_fd);
+}
+
+void set_tmp_stdin_fd(int fd)
+{
+	*get_tmp_stdin_fd() = fd;
+}
+
+void	quit_heredoc(int signum)
+{
+	if (signum != SIGINT)
+        return ;
+	printf("\n");
+	set_heredoc_exit_flag(1);
+	set_tmp_stdin_fd(dup(0));
+	close(STDIN_FILENO);
+}
+
+void	sigact_heredoc(void)
+{
+	struct sigaction	intsig;
+	struct sigaction	quitsig;
+
+	intsig.sa_handler = quit_heredoc;
+  	sigemptyset(&intsig.sa_mask);
+	intsig.sa_flags = 0;
+	sigaction(SIGINT, &intsig, 0);
+
+	quitsig.sa_handler = SIG_IGN;
+  	sigemptyset(&quitsig.sa_mask);
+	quitsig.sa_flags = 0;
+	sigaction(SIGQUIT, &quitsig, 0);
+}
+
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
@@ -107,13 +144,18 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		}
 		set_delimiter(node, delim);
 		// @ sigaction set(heredoc mode)
-		// @(구현x) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
-		// @(구현x) sigquit(3) 컨트롤+ \ -> 무시
-		// @(구현x) eof 컨트롤+ d -> 개행 없이 종료
-		// sigact_heredoc();
+		// @(구현o) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
+		// @(구현o) sigquit(3) 컨트롤+ \ -> 무시
+		// @(구현o) eof 컨트롤+ d -> 개행 없이 종료. heredoc파일은 생성.
+		sigact_heredoc();
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
+		{
+			dup2(*get_tmp_stdin_fd(), STDIN_FILENO);
+			close(*get_tmp_stdin_fd());
 			return (NULL);
+		}
+			
 		return (node);
 	}
 	syntax_error(tokenizer);

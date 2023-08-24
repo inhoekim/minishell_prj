@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_scan.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 14:01:24 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/22 16:09:27 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
 				syntax_error(tokenizer);
-				// @ make_token(tokenizer, SYNTAX_ERR);
+				return (make_token(tokenizer, SYNTAX_ERR));
 			}
 		}
 		tokenizer->end++;
@@ -72,7 +72,7 @@ t_bool	string_close(t_tokenizer *tokenizer, char c)
 	end_ptr = tokenizer->end + 1;
 	while (*end_ptr != '\0' && *end_ptr != c)
 		end_ptr++;
-	if  (*end_ptr == '\0')
+	if (*end_ptr == '\0')
 		return (FALSE);
 	if (c != ')')
 		tokenizer->end = end_ptr++;

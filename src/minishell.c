@@ -3,6 +3,7 @@
 #include "../include/minishell.h"
 #include "../include/parser.h"
 #include "../include/execute.h"
+#include "../include/execute_util.h"
 
 int main(int argc, char **argv, char **envp)
 {
@@ -38,43 +39,37 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-
-#include <signal.h>
-#include <termios.h>
-
-void	sigint_handler(int signum)
+void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
         return ;
-	struct termios attributes;
-	struct termios saved;
-
-	tcgetattr(STDIN_FILENO, &saved);
-	tcgetattr(STDIN_FILENO, &attributes);
-	attributes.c_lflag &= (~ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
 
 	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
+	set_exit_status(1);
 }
 
 // @ sigaction set(default mode)
-// @(구현x) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
+// @(구현o) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
 // @(구현o) sigquit(3) 컨트롤+\ -> 아무동작안함 (무시)
 // @(구현o) eof 		컨트롤+ d -> minishell 종료 
-// sigact_default();
-void	sigact_default()
+void	sigact_default(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
 
-	intsig.sa_handler = sigint_handler;
+	struct termios attributes;
+
+    tcgetattr(STDIN, &attributes);
+    attributes.c_lflag &= (~ECHOCTL);
+    tcsetattr(STDIN, TCSANOW, &attributes);
+
+	intsig.sa_handler = new_prompt;
   	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
 	sigaction(SIGINT, &intsig, 0); 
-
 
 	quitsig.sa_handler = SIG_IGN;
   	sigemptyset(&quitsig.sa_mask);
@@ -105,7 +100,7 @@ void	minishell_loop(void)
 			root = parser(line);
 			// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
 			execute(root);
-			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
+ 			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
 			free(line);
 		}
 	}
