@@ -42,9 +42,9 @@ t_list	**get_envp(void)
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-        return ;
+		return ;
 
-	// printf("\n");
+	printf("\n");
     rl_on_new_line();
     rl_replace_line("", 1);
     rl_redisplay();

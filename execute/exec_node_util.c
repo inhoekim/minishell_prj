@@ -90,18 +90,10 @@ void	copy_queue(t_context *dst, t_context *src)
 	t_list *current;
 	t_list	**head;
 
-	printf("copy state: %p %p %d\n", src->pid_list, src->pid_list->content, *((int *)(src->pid_list->content)));
-	// clear dst
-	if (dst->pid_list)
-	{
-		ft_cir_lstclear(dst);
-		dst->pid_list = NULL;
-	}
-	printf("copy state: %p %p %d\n", src->pid_list, src->pid_list->content, *((int *)(src->pid_list->content)));
 	head = &(src->pid_list);
-	printf("copy state: %p %p %d\n", src->pid_list, *head, *((int *)(src->pid_list->content)));
 	current = *head;
-	printf("copy state: %p %p %d\n", current, current->content, *((int *)(current->content)));
+	printf("copy start\n");
+	// printf("copy state: %p %p %d\n", current, current->content, *((int *)(current->content)));
 	while (current->next != *head)
 	{	
 		ft_cir_lstadd_back(&dst->pid_list, current);
@@ -113,6 +105,7 @@ void	copy_queue(t_context *dst, t_context *src)
 		current = current->next;
 	}
 	ft_cir_lstadd_back(&dst->pid_list, current);
+	printf("copy end\n");
 	dst->pid_size = src->pid_size;
 	dst->exit_status = src->exit_status;
 }
@@ -133,28 +126,31 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-	// *p_ctx와 aux가 pid_list의 주소를 공유하고 있음
-	// *p_ctx에 새로 복사하기 위해 초기화
-	p_ctx->pid_list = NULL;
-	copy_queue(p_ctx, &aux);
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue복사
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
+	
+	// // clear dst
+	// if (p_ctx->pid_list)
+	// {
+	// 	ft_cir_lstclear(p_ctx);
+	// 	p_ctx->pid_list = NULL;
+	// }
+	// p_ctx->pid_list = NULL;
+	// copy_queue(p_ctx, &aux);
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
-	printf("aux state: %p %p %d\n", aux.pid_list, aux.pid_list->content, *((int *)(aux.pid_list->content)));
-	// *p_ctx와 aux가 pid_list의 주소를 공유하고 있음
-	// *p_ctx에 새로 복사하기 위해 초기화
-	p_ctx->pid_list = NULL;
-	copy_queue(p_ctx, &aux);
-	printf("not seg\n");
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue 복사
-	
-
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
+	// // clear dst
+	// if (p_ctx->pid_list)
+	// {
+	// 	ft_cir_lstclear(p_ctx);
+	// 	p_ctx->pid_list = NULL;
+	// }
+	// p_ctx->pid_list = NULL;
+	// copy_queue(p_ctx, &aux);
 	p_ctx->is_piped_cmd = FALSE;
 }
 

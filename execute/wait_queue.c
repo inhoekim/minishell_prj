@@ -50,10 +50,12 @@ void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
 	t_list	*tmp;
 
+	
 	if (*head == NULL)
 	{
 		*head = n_node;
 		(*head)->next = *head;
+		// printf("pid list(1개) : %d\n", *((int *)(*head)->content));
 	}
 	else
 	{
@@ -62,6 +64,7 @@ void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 			tmp = tmp->next;
 		tmp->next = n_node;
 		n_node->next = *head;
+		// printf("pid list(2개) : %d %d\n", *((int *)tmp->content), *((int *)tmp->next->content));
 	}
 }
 
@@ -73,7 +76,6 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	printf("enqueued pid : %d\n", pid);
 	p_ctx->pid_size++;
-	printf("added size: %d\n", p_ctx->pid_size);
 }
 
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
@@ -84,48 +86,53 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 
 	prev = *head;
 	current = (*head)->next;
+	// {echo , cat}
 	while (current != d_node)
 	{
 		prev = current;
 		current = current->next;
 	}
-	printf("here0-0\n");
 	// list의 원소가 하나이고 *head == d_node인 경우
 	if (current == *head && prev == *head)
 	{
-		printf("here0-1\n");
-		printf("pid : %d\n", *((int *)d_node->content));
-		printf("%p %p\n", d_node->content, d_node);
-		ft_lstdelone(d_node, free); // seg
-		printf("here0-2\n");
+		printf("list의 원소가 하나이고 *head == d_node인 경우\n");
+		ft_lstdelone(d_node, free);
+		printf("1개 짜리 리스트 delete\n");
 		return (NULL);
 	}
 	// list의 원소가 하나가 아니고 *head == d_node인 경우
 	else if (current == *head)
 	{
-		printf("here0-3\n");
+		printf("원소가 하나가 아니고 head가 delnode인 경우 삭제\n");
 		tmp = *head;
 		while (tmp->next != *head)
 			tmp = tmp->next;
 		*head = current->next;
 		tmp->next = *head;
+		
+		printf("delete: %d\n", *((int *)current->content));
 		ft_lstdelone(current, free);
+		printf("head: %d\n", *((int *)(*head)->content));
+		printf("head->next: %d\n", *((int *)(*head)->next->content));
+		printf("-----------------\n");
 	}
 	// 그 외
 	else
 	{
-		printf("here0-4\n");
+		printf("원소가 하나가 아닌 경우 삭제\n");
 		prev->next = current->next;
 		ft_lstdelone(current, free);
 	}
 	return (prev);
 }
 
-void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
+void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 {
 	int		status;
 	pid_t	pid;
+	t_list	*ret;
 
+	ret = NULL;
 	pid = *((int *)node->content);
 	waitpid(pid, &status, flag);
 	if (WIFEXITED(status))
@@ -133,9 +140,7 @@ void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 		printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
 		set_exit_status(p_ctx->exit_status);
-		printf("here0\n");
-		ft_cir_lstdelete_node(&p_ctx->pid_list, node); // seg
-		printf("here1\n");
+		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 	}
 	else if (WIFSIGNALED(status) && WTERMSIG(status) != 88)
@@ -143,11 +148,10 @@ void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 		printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
 		set_exit_status(p_ctx->exit_status);
-		printf("here3\n");
-		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
-		printf("here4\n");
+		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 	}
+	return (ret);
 }
 // #include <setjmp.h>
 
@@ -179,13 +183,15 @@ void	wait_queue_after(t_context *p_ctx)
 	t_list	*_pid_list;
 
 	_pid_list = p_ctx->pid_list;
-	printf("head: %p size: %d\n", _pid_list, p_ctx->pid_size);
 	// @ 지금 여기 있는 list node는 {echo, cat}이다. 
 	while (_pid_list && p_ctx->pid_size)
 	{
-		printf("start\n");
-		wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
-		printf("end\n");
+		printf("---wait_queue_loop---\n");
+		printf("size: %d\n", p_ctx->pid_size);
+		printf("---------------------\n");
+		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
+		if (!_pid_list)
+			break;
 		_pid_list = _pid_list->next;
 	}
 }
