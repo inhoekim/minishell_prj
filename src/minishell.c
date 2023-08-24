@@ -43,8 +43,16 @@ void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	printf("default\n"); //default
-    rl_on_new_line();
+	
+	
+	// printf("123\n"); // 덮어씀
+	// printf("123"); // 안덮어씀-> 이경우 한가지 더 의문인게 왜 시그널 계속 갈겨도 추가가 안되고 같은 자리에 덮어쓰는가
+	// ft_putstr_fd("def\nault",1);
+
+	ft_putstr_fd("default\n",1);
+
+	rl_on_new_line(); 
+	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
     rl_replace_line("", 1);
     rl_redisplay();
 	set_exit_status(1);

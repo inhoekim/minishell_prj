@@ -101,10 +101,7 @@ void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	printf("heredoc\n");
-	rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
+	ft_putstr_fd("heredoc\n",1);
 	set_heredoc_exit_flag(1);
 	set_tmp_stdin_fd(dup(STDIN));
 	close(STDIN);
@@ -156,6 +153,7 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		{
 			dup2(*get_tmp_stdin_fd(), STDIN);
 			close(*get_tmp_stdin_fd());
+			// read(0,"tq", 2);
 			sigact_default_mode();
 			return (NULL);
 		}

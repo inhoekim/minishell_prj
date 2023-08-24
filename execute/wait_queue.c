@@ -163,6 +163,7 @@ void	wait_queue_after(t_context *p_ctx)
 		_pid_list = _pid_list->next;
 	}
 	p_ctx->pid_list = NULL;
+	sigact_default_mode();
 }
 #endif
 
