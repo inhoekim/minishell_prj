@@ -12,11 +12,11 @@ static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
 void fork_error(t_context *p_ctx)
 {
-	int pid;
+	int	pid;
 
 	pid = fork();
 	if (pid == 0)
-		exit(127);
+		exit(p_ctx->exit_status);
 	enqueue_after(pid, p_ctx);
 }
 
@@ -211,11 +211,16 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_regular_file(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
@@ -261,11 +266,16 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -285,11 +295,16 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
@@ -417,6 +432,7 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	enqueue_after(pid, p_ctx);
+
 }
 
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
@@ -435,29 +451,21 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	if (builtin_func)
 	{
 		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
+		// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 		if (p_ctx->is_piped_cmd)
-		{
-			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
-			// @ fork후 builtin_func(argv); 실행
-			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
 			forked_builtin(p_ctx, builtin_func, argv);
-			// @ sigint(2) 컨트롤+c -> exit(2)
-			// @ sigquit(3) 컨트롤+d -> exit(3)
-			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
-		}
 		else
 		{
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
-			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
 			// @ redirect 및 redirect 정보 복구
-			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
+			set_last_exit_status(p_ctx->exit_status);
 		}
 		can_builtin = TRUE;
 	}
