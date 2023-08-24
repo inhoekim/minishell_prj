@@ -40,3 +40,4 @@ void	sigact_modeoff()
 	// @ 좀비 죽이는 로직
 	// ms_signal(SIGCHLD, SIG_DFL);
 }
+
