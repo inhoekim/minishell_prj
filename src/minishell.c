@@ -40,11 +40,12 @@ t_list	**get_envp(void)
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-		return ;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
+        return ;
+
+	// printf("\n");
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
 	set_exit_status(1);
 }
 

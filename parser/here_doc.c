@@ -66,8 +66,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 				ft_putstr_fd("\033[1A", STDOUT);
 				ft_putstr_fd("\033[2C", STDOUT);
 			}
-			// else
-			// 	// printf("heredoc\n");
 			break ;
 		}
 		// heredoc에서는 parameter가 '안에 있어도 expasion 가능하다.
