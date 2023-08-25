@@ -31,15 +31,11 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	if (pid == 0)
 	{
 		exec_node(lhs, p_ctx);
-		//여기서 자식쉘의 pipe[stdin]과 fork할 ls의 pipe[stdin]은 닫힘
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
 		wait_queue_after(p_ctx);
 		exit(p_ctx->exit_status);
 	}
-	//(ls) | cat 에서 exec_subshell은 1번만 호출되는데
-	//여기서 들어갈때 p_ctx->fd[0] = stdin / p_ctx->fd[1] = pipe[stdout]
-	//그래서 부모쉘의 pipe[stdout]은 닫히는데 pipe[stdin]이 안닫히는 것 같아요
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -58,9 +54,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
 	if (*get_last_exit_status() != 0)
-	{
 		exec_node(rhs, p_ctx);
-	}
 }
 
 void	exec_and(t_node *node, t_context *p_ctx)
@@ -74,54 +68,8 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
 	if (*get_last_exit_status() == 0)
-	{
 		exec_node(rhs, p_ctx);
-	}
 }
-
-#if WORKING == 0
-void	copy_queue(t_context *dst, t_context *src)
-{
-	int	idx;
-	int	size;
-
-	idx = 0;
-	size = src->queue_size;
-	while (idx < size)
-	{
-		dst->queue[idx] = src->queue[idx];
-		idx++;
-	}
-	dst->queue_size = idx;
-	dst->exit_status = src->exit_status;
-}
-#endif
-
-#if WORKING == 1
-void	copy_queue(t_context *dst, t_context *src)
-{
-	t_list	*current;
-	t_list	**head;
-
-	head = &(src->pid_list);
-	current = *head;
-	printf("copy start\n");
-	// printf("copy state: %p %p %d\n", current, current->content, *((int *)(current->content)));
-	while (current->next != *head)
-	{	
-		ft_cir_lstadd_back(&dst->pid_list, current);
-		// printf("pid: %d\n", *(int *)(current->content));
-		// ft_cir_lstadd_back(&dst->pid_list, ft_lstnew(current->content));
-		// free(current->content);
-		// @ current->content도 복사되어야 함.
-		current = current->next;
-	}
-	ft_cir_lstadd_back(&dst->pid_list, current);
-	printf("copy end\n");
-	dst->pid_size = src->pid_size;
-	dst->exit_status = src->exit_status;
-}
-#endif
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
 {
@@ -140,28 +88,13 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	exec_node(lhs, &aux);
 	p_ctx->pid_list = aux.pid_list;
 	p_ctx->pid_size = aux.pid_size;
-	// // clear dst
-	// if (p_ctx->pid_list)
-	// {
-	// 	ft_cir_lstclear(p_ctx);
-	// 	p_ctx->pid_list = NULL;
-	// }
-	// p_ctx->pid_list = NULL;
-	// copy_queue(p_ctx, &aux);
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
 	p_ctx->pid_list = aux.pid_list;
 	p_ctx->pid_size = aux.pid_size;
-	// // clear dst
-	// if (p_ctx->pid_list)
-	// {
-	// 	ft_cir_lstclear(p_ctx);
-	// 	p_ctx->pid_list = NULL;
-	// }
-	// p_ctx->pid_list = NULL;
-	// copy_queue(p_ctx, &aux);
+
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -219,7 +152,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(FALSE);
 	if (!is_regular_file(filename[0], p_ctx))
 	{
-		// set_exit_status(p_ctx->exit_status);
 		fork_error(p_ctx);
 		return ;
 	}
@@ -275,7 +207,6 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		// set_exit_status(p_ctx->exit_status);
 		fork_error(p_ctx);
 		return ;
 	}
@@ -304,7 +235,6 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		// set_exit_status(p_ctx->exit_status);
 		fork_error(p_ctx);
 		return ;
 	}
@@ -366,36 +296,13 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
-		// @  error fork not error msg
 		fork_error(p_ctx);
-		// set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
 	free_argv(path);
 	free(temp_path);
 }
 
-void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
-{
-	int	status;
-
-	waitpid(pid, &status, flag);
-	if (WIFEXITED(status))
-	{
-		p_ctx->exit_status = WEXITSTATUS(status);
-		set_exit_status(p_ctx->exit_status);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		p_ctx->exit_status = WTERMSIG(status) + 128;
-		if (status == 13)
-		{
-			set_exit_status(p_ctx->exit_status);
-			return ;
-		}
-		set_exit_status(p_ctx->exit_status);
-	}
-}
 
 void	redirect_fd(int dst[2])
 {
@@ -515,6 +422,5 @@ void	exec_word(t_node *node, t_context *p_ctx)
 		fork_exec(argv, p_ctx);
 	else
 		fork_error(p_ctx);
-	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }

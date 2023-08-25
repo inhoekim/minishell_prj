@@ -41,11 +41,15 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 				close(get_heredoc_data()->temp_stdin_fd);
 				delete_heredoc(tokenizer);
 			}
+			else
+			{
+				ft_putstr_fd("\033[1A", STDOUT);
+				ft_putstr_fd("\033[2C", STDOUT);
+			}
 			if (is_same_str(input, delimiter))
 				set_heredoc_visit_flag(FALSE);
 			break ;
 		}
-		// heredoc에서는 parameter가 '안에 있어도 expasion 가능하다.
 		if (can_expansion)
 		{
 			expanded = parameter_expansion(input);

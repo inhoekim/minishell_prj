@@ -1,12 +1,6 @@
 #ifndef WAIT_QUEUE_H
 # define WAIT_QUEUE_H
 
-# include "../include/execute.h"
-# include "../include/execute_util.h"
-# include "../include/exec_node_util.h"
-
-# define WORKING 1
-
 void	enqueue(pid_t pid, t_context *p_ctx);
 void	wait_queue(t_context *p_ctx);
 void	ft_cir_lstclear(t_context *p_ctx);

@@ -54,6 +54,7 @@ fclean: clean
 	@make fclean -C libft
 	@rm -f $(NAME)
 
-re: 
+re:
+	@$(LOG) "re"
 	@make fclean
 	@make all

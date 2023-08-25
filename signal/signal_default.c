@@ -37,5 +37,5 @@ static void	new_prompt(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
-	set_exit_status(1);
+	set_last_exit_status(1);
 }

@@ -12,7 +12,7 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 
 	pattern = concatenate(list);
 	if (!pattern)
-		set_exit_status(ENOMEM);
+		exit(ENOMEM);
 	if (glob_flag)
 	{
 		expanded_list = globbing(pattern);
@@ -51,8 +51,6 @@ char	*concatenate(t_list *list)
 	}
 	return (pattern);
 }
-
-extern int	amb_flag;
 
 t_list	*globbing(char *pattern)
 {

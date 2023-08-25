@@ -72,7 +72,6 @@ void	execute(t_node *root)
 	ctx.is_piped_cmd = FALSE;
 	ctx.heredoc_file_idx = 0;
 	ctx.heredoc_file_name = alloc_heredoc_name();
-	ctx.queue_size = 0;
 	ctx.pid_list = NULL;
 	ctx.pid_size = 0;
 	sigact_default_mode();
@@ -80,7 +79,6 @@ void	execute(t_node *root)
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);
 	wait_queue_after(&ctx);
-	// set_exit_status(*get_exit_status());
 	free_delete_heredoc(&ctx);
 }
 
