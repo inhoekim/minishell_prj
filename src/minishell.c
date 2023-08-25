@@ -7,11 +7,6 @@
 #include "../include/here_doc.h"
 #include "../include/ms_signal.h"
 
-static void	test()
-{
-	system("leaks minishell");
-}
-
 void __leak()
 {
 	system("leaks minishell");
@@ -19,6 +14,7 @@ void __leak()
 
 int	main(int argc, char **argv, char **envp)
 {
+	atexit(__leak);
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
