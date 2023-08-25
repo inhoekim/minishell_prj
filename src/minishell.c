@@ -48,6 +48,7 @@ void	minishell_loop(void)
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
+		set_heredoc_size(0);
 		line = readline("prompt> ");
 		if (line)
 		{
