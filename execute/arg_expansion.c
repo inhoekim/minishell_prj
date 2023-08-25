@@ -102,7 +102,7 @@ char	*get_value(char *key)
 	status = ft_calloc(4, sizeof(char *));
 	if (key[1] == '?')
 	{
-		value = ft_itoa(*get_exit_status());
+		value = ft_itoa(*get_last_exit_status());
 		ft_strlcpy(status, value, ft_strlen(value) + 1);
 		free(value);
 		return (status);

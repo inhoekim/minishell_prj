@@ -97,27 +97,35 @@ void set_tmp_stdin_fd(int fd)
 	*get_tmp_stdin_fd() = fd;
 }
 
+
 void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
-        return ;
-	printf("\n");
+		return ;
+	ft_putstr_fd("heredoc\n",1);
+
+	set_tmp_stdin_fd(dup(STDIN));
+	// @ 껏다켜는 순간, readline buffer의 입력커서포인터에 대한 stdout buffer의
+	// @ 상대위치는 아래라인으로 고정됨?
+	close(STDIN);
 	set_heredoc_exit_flag(1);
-	set_tmp_stdin_fd(dup(0));
-	close(STDIN_FILENO);
 }
 
-void	sigact_heredoc(void)
+void	sigact_heredoc_mode(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
 
+	// rl_catch_signals = 1;
+	
 	intsig.sa_handler = quit_heredoc;
+	// intsig.sa_handler = SIG_DFL;
   	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
 	sigaction(SIGINT, &intsig, 0);
 
 	quitsig.sa_handler = SIG_IGN;
+	// quitsig.sa_handler = SIG_DFL;
   	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
 	sigaction(SIGQUIT, &quitsig, 0);
@@ -147,15 +155,17 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		// @(구현o) sigint(2) 컨트롤+ c -> 개행 하고 default mode전환
 		// @(구현o) sigquit(3) 컨트롤+ \ -> 무시
 		// @(구현o) eof 컨트롤+ d -> 개행 없이 종료. heredoc파일은 생성.
-		sigact_heredoc();
+		sigact_heredoc_mode();
 		here_doc(delim, tokenizer);
 		if (*get_heredoc_exit_flag() == 1)
 		{
-			dup2(*get_tmp_stdin_fd(), STDIN_FILENO);
+			dup2(*get_tmp_stdin_fd(), STDIN);
 			close(*get_tmp_stdin_fd());
+			delete_heredoc(tokenizer);
+			sigact_default_mode();
 			return (NULL);
 		}
-			
+		sigact_default_mode();
 		return (node);
 	}
 	syntax_error(tokenizer);

@@ -4,6 +4,7 @@
 #include "../include/parser.h"
 #include "../include/execute.h"
 #include "../include/execute_util.h"
+#include "../include/here_doc.h"
 
 int main(int argc, char **argv, char **envp)
 {
@@ -42,10 +43,23 @@ t_list	**get_envp(void)
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-        return ;
+		return ;
+	
+	
+	// if (*get_heredoc_exit_flag() == 0)
+	// 	printf("default\n");
 
-	printf("\n");
-    rl_on_new_line();
+	// @ 현상
+	// heredoc readline종료이후
+	// readline buffer의 입력커서포인터가 프롬프트 아래 라인에 있음.
+	// stdin buffer에 뭔가를 입력하면,
+	// readline buffer의 입력커서포인터가 프롬프트 오른쪽에 위치하게 됨.
+
+	// ft_putstr_fd("def\nault",1);
+	
+	printf("default\n");
+	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
+	rl_on_new_line(); 
     rl_replace_line("", 1);
     rl_redisplay();
 	set_exit_status(1);
@@ -55,7 +69,7 @@ void	new_prompt(int signum)
 // @(구현o) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
 // @(구현o) sigquit(3) 컨트롤+\ -> 아무동작안함 (무시)
 // @(구현o) eof 		컨트롤+ d -> minishell 종료 
-void	sigact_default(void)
+void	sigact_default_mode(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
@@ -75,9 +89,6 @@ void	sigact_default(void)
   	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
 	sigaction(SIGQUIT, &quitsig, 0);
-
-	// ms_signal(SIGINT, sigint_handler);
-	// ms_signal(SIGQUIT, SIG_IGN);
 }
 
 void	minishell_loop(void) 
@@ -85,7 +96,7 @@ void	minishell_loop(void)
 	t_node		*root;
 	char		*line;
 
-	sigact_default();
+	sigact_default_mode();
 	line = ft_strdup("");
 	while (line)
 	{

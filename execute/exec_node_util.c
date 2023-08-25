@@ -10,6 +10,16 @@
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
+void	fork_error(t_context *p_ctx)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(p_ctx->exit_status);
+	enqueue_after(pid, p_ctx);
+}
+
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
@@ -44,8 +54,9 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	if (*get_exit_status() != 0)
+	if (*get_last_exit_status() != 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -59,8 +70,9 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	if (*get_exit_status() == 0)
+	if (*get_last_exit_status() == 0)
 	{
 		exec_node(rhs, p_ctx);
 	}
@@ -90,18 +102,10 @@ void	copy_queue(t_context *dst, t_context *src)
 	t_list *current;
 	t_list	**head;
 
-	printf("copy state: %p %p %d\n", src->pid_list, src->pid_list->content, *((int *)(src->pid_list->content)));
-	// clear dst
-	if (dst->pid_list)
-	{
-		ft_cir_lstclear(dst);
-		dst->pid_list = NULL;
-	}
-	printf("copy state: %p %p %d\n", src->pid_list, src->pid_list->content, *((int *)(src->pid_list->content)));
 	head = &(src->pid_list);
-	printf("copy state: %p %p %d\n", src->pid_list, *head, *((int *)(src->pid_list->content)));
 	current = *head;
-	printf("copy state: %p %p %d\n", current, current->content, *((int *)(current->content)));
+	printf("copy start\n");
+	// printf("copy state: %p %p %d\n", current, current->content, *((int *)(current->content)));
 	while (current->next != *head)
 	{	
 		ft_cir_lstadd_back(&dst->pid_list, current);
@@ -113,6 +117,7 @@ void	copy_queue(t_context *dst, t_context *src)
 		current = current->next;
 	}
 	ft_cir_lstadd_back(&dst->pid_list, current);
+	printf("copy end\n");
 	dst->pid_size = src->pid_size;
 	dst->exit_status = src->exit_status;
 }
@@ -133,28 +138,31 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-	// *p_ctx와 aux가 pid_list의 주소를 공유하고 있음
-	// *p_ctx에 새로 복사하기 위해 초기화
-	p_ctx->pid_list = NULL;
-	copy_queue(p_ctx, &aux);
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue복사
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
+	
+	// // clear dst
+	// if (p_ctx->pid_list)
+	// {
+	// 	ft_cir_lstclear(p_ctx);
+	// 	p_ctx->pid_list = NULL;
+	// }
+	// p_ctx->pid_list = NULL;
+	// copy_queue(p_ctx, &aux);
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
-	printf("aux state: %p %p %d\n", aux.pid_list, aux.pid_list->content, *((int *)(aux.pid_list->content)));
-	// *p_ctx와 aux가 pid_list의 주소를 공유하고 있음
-	// *p_ctx에 새로 복사하기 위해 초기화
-	p_ctx->pid_list = NULL;
-	copy_queue(p_ctx, &aux);
-	printf("not seg\n");
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue 복사
-	
-
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
+	// // clear dst
+	// if (p_ctx->pid_list)
+	// {
+	// 	ft_cir_lstclear(p_ctx);
+	// 	p_ctx->pid_list = NULL;
+	// }
+	// p_ctx->pid_list = NULL;
+	// copy_queue(p_ctx, &aux);
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -202,11 +210,16 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_regular_file(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
@@ -252,11 +265,16 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -276,11 +294,16 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
+	{
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
+	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		// set_exit_status(p_ctx->exit_status);
+		fork_error(p_ctx);
 		return ;
 	}
 	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
@@ -313,6 +336,7 @@ char	*make_order(char **path, char **argv)
 	return (order);
 }
 
+
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
 	char	*order;
@@ -341,8 +365,13 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
 		p_ctx->exit_status = 127;
+		// @  error fork not error msg
+		fork_error(p_ctx);
+		// set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
+	
+
 }
 
 void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
@@ -379,14 +408,14 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	int		builtin_exit_status;
 
 	pid = fork();
-	sigact_fork_parent();
+	sigact_fork_mode();
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
 		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
 		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
 		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
-		sigact_fork_child();
+		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -402,6 +431,7 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	enqueue_after(pid, p_ctx);
+
 }
 
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
@@ -420,29 +450,21 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	if (builtin_func)
 	{
 		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
+		// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 		if (p_ctx->is_piped_cmd)
-		{
-			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
-			// @ fork후 builtin_func(argv); 실행
-			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
 			forked_builtin(p_ctx, builtin_func, argv);
-			// @ sigint(2) 컨트롤+c -> exit(2)
-			// @ sigquit(3) 컨트롤+d -> exit(3)
-			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
-		}
 		else
 		{
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
-			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
 			// @ redirect 및 redirect 정보 복구
-			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
+			set_last_exit_status(p_ctx->exit_status);
 		}
 		can_builtin = TRUE;
 	}
@@ -491,6 +513,8 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
+	else
+		fork_error(p_ctx);
 	set_exit_status(p_ctx->exit_status);
 	free_argv(argv);
 }
