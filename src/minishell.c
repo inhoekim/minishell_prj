@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "../libft/libft.h"
 #include "../include/minishell.h"
 #include "../include/parser.h"
@@ -62,6 +61,7 @@ void	minishell_loop(void)
 			set_heredoc_visit_flag(FALSE);
 			root = parser(line);
 			execute(root);
+			free_tree(root);
 			free(line);
 		}
 	}

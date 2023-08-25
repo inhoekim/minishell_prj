@@ -15,7 +15,7 @@
 #define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
-{ 
+{
 	if (*tokenizer->start == '<')
 	{
 		if (match(tokenizer, '<'))
@@ -61,7 +61,8 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 	}
 	// ex. ls & ls일 때, word token '&'는 tokenizer->start == tokenizer->end이므로 false
 	// 나머지는 DELIMETER에 속할 경우 end를 왼쪽으로 한칸 밀어야 함.
-	if (tokenizer->start != tokenizer->end && ft_strchr(DELIMETER, *tokenizer->end))
+	if (tokenizer->start != tokenizer->end \
+		&& ft_strchr(DELIMETER, *tokenizer->end))
 		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }

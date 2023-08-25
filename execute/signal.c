@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <termios.h>
+#include "../include/execute.h"
 #include "../include/minishell.h"
 #include "../include/execute.h"
 
@@ -16,26 +17,29 @@ void	ms_signal(int signum, void *handler)
 
 void	fork_mode_handler(int signum)
 {
+	struct termios	attributes;
+
+	tcgetattr(STDIN, &attributes);
+	attributes.c_lflag |= (ECHOCTL);
+	tcsetattr(STDIN, TCSANOW, &attributes);
 	if (signum == SIGINT)
 		printf("fork\n");
 	if (signum == SIGQUIT)
 		printf("Quit: %d\n", signum);
 }
 
-void	sigact_fork_mode()
+void	sigact_fork_mode(void)
 {
-	struct termios attributes;
+	struct termios	attributes;
 
 	tcgetattr(STDIN, &attributes);
-    attributes.c_lflag |= (ECHOCTL);
+	attributes.c_lflag |= (ECHOCTL);
 	tcsetattr(STDIN, TCSANOW, &attributes);
 	ms_signal(SIGINT, fork_mode_handler);
 	ms_signal(SIGQUIT, fork_mode_handler);
 }
 
-
-
-void	sigact_modeoff()
+void	sigact_modeoff(void)
 {
 	ms_signal(SIGINT, SIG_DFL);
 	ms_signal(SIGQUIT, SIG_DFL);

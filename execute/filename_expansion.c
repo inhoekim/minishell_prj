@@ -3,6 +3,8 @@
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 
+extern int	amb_flag;
+
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
 	t_list	*expanded_list;
@@ -68,7 +70,8 @@ t_list	*globbing(char *pattern)
 		dir = readdir(dp);
 		if (dir && dir->d_name[0] == '.')
 			dir->d_type = DT_UNKNOWN;
-		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) && is_match(pattern, dir->d_name, 0, 0))
+		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) \
+			&& is_match(pattern, dir->d_name, 0, 0))
 		{
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 			file_cnt++;

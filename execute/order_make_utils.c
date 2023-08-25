@@ -93,6 +93,6 @@ static char	*abc_1(int start, int end, char *str)
 static int	find_cs_1(char c, char charset)
 {
 	if (c == charset)
-		return (1);	
+		return (1);
 	return (0);
 }

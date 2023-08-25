@@ -7,9 +7,10 @@
 
 void	free_delete_heredoc(t_context *p_ctx);
 
-int *get_last_pid()
+int	*get_last_pid(void)
 {
-	static int last_pid;
+	static int	last_pid;
+
 	return (&last_pid);
 }
 
@@ -18,9 +19,10 @@ void	set_last_pid(int pid)
 	*get_last_pid() = pid;
 }
 
-int *get_last_exit_status()
+int	*get_last_exit_status(void)
 {
-	static int last_exit_status;
+	static int	last_exit_status;
+
 	return (&last_exit_status);
 }
 

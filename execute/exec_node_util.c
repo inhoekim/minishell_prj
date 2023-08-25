@@ -88,7 +88,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	exec_node(lhs, &aux);
 	p_ctx->pid_list = aux.pid_list;
 	p_ctx->pid_size = aux.pid_size;
-
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
@@ -167,7 +166,9 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = \
+		open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], \
+		O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -237,7 +238,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 		fork_error(p_ctx);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -266,7 +267,6 @@ char	*make_order(char **path, char **argv)
 	}
 	return (order);
 }
-
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
@@ -309,7 +309,7 @@ void redirect_fd(int dst[2])
 	dup2(dst[STDOUT], STDOUT);
 }
 
-void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
+void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 {
 	int		pid;
 	int		builtin_exit_status;
@@ -338,7 +338,6 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	enqueue_after(pid, p_ctx);
-
 }
 
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
@@ -349,7 +348,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]); 
+	builtin_func = check_builtin(argv[0]);
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
