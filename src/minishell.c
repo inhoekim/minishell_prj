@@ -38,13 +38,13 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-int	*get_heredoc_exit_flag(void);
-void set_heredoc_exit_flag(int flag);
+int		*get_heredoc_exit_flag(void);
+void	set_heredoc_exit_flag(int flag);
 
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-        return ;
+		return ;
 	if (*get_heredoc_exit_flag() == 0)
 		printf("\n");
 	rl_on_new_line();
@@ -82,7 +82,7 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");		
+	line = ft_strdup("");
 	while (line)
 	{
 		line = readline("prompt> ");

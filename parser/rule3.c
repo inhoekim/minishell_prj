@@ -123,7 +123,7 @@ void	sigact_heredoc_mode(void)
 
 	// rl_catch_signals = 1;
 	intsig.sa_handler = quit_heredoc;
-  	sigemptyset(&intsig.sa_mask);
+	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &intsig, 0);
 	quitsig.sa_handler = SIG_IGN;
