@@ -10,7 +10,7 @@ static int		find_cs_1(char c, char charset);
 static int		size_count_1(char *str, char c);
 static char		**ft_free2_1(char **newstr, int idx);
 
-char	**ft_split2(char const *s, char c)
+char	**ft_split2(char *s, char c)
 {
 	char	**newstr;
 	int		idx;

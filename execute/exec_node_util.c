@@ -206,6 +206,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
+
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -369,6 +370,8 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		// set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
+	free_argv(path);
+	free(temp_path);
 }
 
 void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)

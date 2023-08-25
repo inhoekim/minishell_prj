@@ -74,6 +74,7 @@ void	execute(t_node *root)
 	ctx.queue_size = 0;
 	ctx.pid_list = NULL;
 	ctx.pid_size = 0;
+	sigact_default_mode();
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);

@@ -64,8 +64,8 @@ char	*ft_getenv(char *pos)
 	cur_env = getenv_list(pos, pos_len, get_envp());
 	if (cur_env)
 	{
-		temp = ft_strdup((char *)cur_env->content);
-		return (temp + pos_len + 1);
+		temp = ft_strdup((char *)cur_env->content + pos_len + 1);
+		return (temp);
 	}
 	return (NULL);
 }

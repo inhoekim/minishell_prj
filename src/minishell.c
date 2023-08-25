@@ -10,13 +10,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	// init_paser();
-	// envp -> env_list
 	init_envp(envp);
 	minishell_loop();
 	// free_parser();
 	// free_tree();
-	// set_exit_status();
 }
 
 void	init_envp(char **envp)
@@ -41,22 +38,15 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
+int	*get_heredoc_exit_flag(void);
+void set_heredoc_exit_flag(int flag);
+
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-		return ;
-	// if (*get_heredoc_exit_flag() == 0)
-	// 	printf("default\n");
-
-	// @ 현상
-	// heredoc readline종료이후
-	// readline buffer의 입력커서포인터가 프롬프트 아래 라인에 있음.
-	// stdin buffer에 뭔가를 입력하면,
-	// readline buffer의 입력커서포인터가 프롬프트 오른쪽에 위치하게 됨.
-
-	// ft_putstr_fd("def\nault",1);
-	printf("default\n");
-	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
+        return ;
+	if (*get_heredoc_exit_flag() == 0)
+		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
@@ -92,21 +82,16 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");
+	line = ft_strdup("");		
 	while (line)
 	{
 		line = readline("prompt> ");
-		// ctrl+d(eof trigger)시 if 블록 pass
 		if (line)
 		{
-			// 히스토리 기록 -> readline의 함수
 			if (*line != '\0')
 				add_history(line);
-			// parser를 통해 트리생성
 			root = parser(line);
-			// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
 			execute(root);
-			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
 			free(line);
 		}
 	}
