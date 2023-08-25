@@ -7,8 +7,14 @@
 #include "../include/here_doc.h"
 #include "../include/ms_signal.h"
 
+static void	test()
+{
+	system("leaks minishell");
+}
+
 int main(int argc, char **argv, char **envp)
 {
+	atexit(test);
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
@@ -45,7 +51,8 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");
+	//line = ft_strdup("");
+	line = "";
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
