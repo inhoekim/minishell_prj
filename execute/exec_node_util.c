@@ -303,7 +303,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	free(temp_path);
 }
 
-
 void redirect_fd(int dst[2])
 {
 	dup2(dst[STDIN], STDIN);

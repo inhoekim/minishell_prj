@@ -98,6 +98,7 @@ char	**list_to_arr(t_list *node)
 	char	**arr;
 	int		i;
 	int		len;
+	t_list	*prev;
 
 	i = 0;
 	len = ft_lstsize(node);
@@ -106,8 +107,10 @@ char	**list_to_arr(t_list *node)
 		exit(ENOMEM);
 	while (node)
 	{
+		prev = node;
 		arr[i++] = node->content;
 		node = node->next;
+		free(prev);
 	}
 	return (arr);
 }
