@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 11:48:17 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/24 17:01:38 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/25 16:02:31 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ typedef struct s_context
 	int		fd_close;
 	int		heredoc_file_idx;
 	char	**heredoc_file_name;
-	pid_t	queue[PROC_MAX];
-	int		queue_size;
 	t_list	*pid_list;
 	int		pid_size;
 	t_bool	is_piped_cmd;

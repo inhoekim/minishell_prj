@@ -50,8 +50,6 @@ char	*concatenate(t_list *list)
 	return (pattern);
 }
 
-extern int amb_flag;
-
 t_list	*globbing(char *pattern)
 {
 	t_list			*matches;

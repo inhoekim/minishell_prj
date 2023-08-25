@@ -16,7 +16,6 @@ int main(int argc, char **argv, char **envp)
 	minishell_loop();
 	// free_parser();
 	// free_tree();
-	// set_exit_status();
 }
 void	init_envp(char **envp)
 {
