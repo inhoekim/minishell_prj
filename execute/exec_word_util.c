@@ -101,7 +101,9 @@ char	**list_to_arr(t_list *node)
 
 	i = 0;
 	len = ft_lstsize(node);
-	arr = ft_calloc(len + 1, sizeof(t_list));
+	arr = ft_calloc(len + 1 ,sizeof(t_list));
+	if (!arr)
+		exit(ENOMEM);
 	while (node)
 	{
 		arr[i++] = node->content;

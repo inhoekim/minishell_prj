@@ -48,6 +48,8 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 		return ;
 	}
 	_pid = (int *)malloc(sizeof(int));
+	if (!_pid)
+		exit(ENOMEM);
 	*_pid = pid;
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
@@ -55,9 +57,8 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 {
-	t_list *prev;
-	t_list *current;
-	// t_list *tmp;
+	t_list	*prev;
+	t_list	*current;
 
 	prev = *head;
 	current = (*head)->next;
@@ -75,14 +76,6 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	// list의 원소가 하나가 아니고 *head == d_node인 경우
 	else if (current == *head)
 	{
-		/*---------------@ 이 주석은 테스트 후 지워야 함.--------*/
-		// tmp = *head;
-		// while (tmp->next != *head)
-		// 	tmp = tmp->next;
-		// *head = current->next;
-		// tmp->next = *head;
-		// ft_lstdelone(current, free);
-		/*---------------@ 이 주석은 테스트 후 지워야 함.--------*/
 		*head = current->next;
 		prev->next = *head;
 		ft_lstdelone(current, free);

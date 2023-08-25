@@ -56,6 +56,8 @@ char	*str_replace(char *str, char *old, char *new)
 	new_len = ft_strlen(new);
 	res = malloc(ft_strlen(str) + \
 			word_cnt(str, old) * (new_len - old_len) + 1);
+	if (!res)
+		exit(ENOMEM);
 	i = 0;
 	while (*str)
 	{
@@ -100,6 +102,8 @@ char	*get_value(char *key)
 	char	*value;
 
 	status = ft_calloc(4, sizeof(char *));
+	if (!status)
+		exit(ENOMEM);
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_last_exit_status());

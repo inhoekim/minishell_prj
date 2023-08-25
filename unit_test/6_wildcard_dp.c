@@ -21,9 +21,12 @@ int	ft_strlen(const char *s)
 	return (i);
 }
 
-int **allocate_dp(int row, int col) {
+int **allocate_dp(int row, int col)
+{
 	int **dp;
 	dp = ft_calloc(row + 1, sizeof(int *));
+	if (!dp)
+		exit(ENOMEM);
 	for (int i = 0; i <= row; i++)
 	{
 		dp[i] = ft_calloc(col + 1, sizeof(int));

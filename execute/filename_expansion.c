@@ -94,10 +94,14 @@ int	**allocate_dp(int row, int col)
 	int	idx;
 
 	dp = ft_calloc(row + 1, sizeof(int *));
+	if (!dp)
+		exit(ENOMEM);
 	idx = 0;
 	while (idx <= row)
 	{
 		dp[idx] = ft_calloc(col + 1, sizeof(int));
+		if (!(dp[idx]))
+			exit(ENOMEM);
 		idx++;
 	}
 	return (dp);

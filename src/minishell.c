@@ -12,15 +12,17 @@ static void	test()
 	system("leaks minishell");
 }
 
-int main(int argc, char **argv, char **envp)
+void __leak()
 {
-	atexit(test);
+	system("leaks minishell");
+}
+
+int	main(int argc, char **argv, char **envp)
+{
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	// free_parser();
-	// free_tree();
 }
 
 void	init_envp(char **envp)
@@ -51,8 +53,7 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	//line = ft_strdup("");
-	line = "";
+	line = ft_strdup("");
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
@@ -71,7 +72,6 @@ void	minishell_loop(void)
 	ft_putstr_fd("\033[1A", STDOUT);
 	for (int i = 1; i <= get_heredoc_data()->cursor_size; i++)
 		ft_putstr_fd("\033[2C", STDOUT);
-	
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }
