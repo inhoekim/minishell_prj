@@ -84,8 +84,6 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
-static void	delete_heredoc(t_tokenizer *tokenizer);
-
 int *get_tmp_stdin_fd(void)
 {
 	static int tmp_stdin_fd;
@@ -102,33 +100,40 @@ void	quit_heredoc(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	ft_putstr_fd("heredoc\n",1);
-
+	ft_putstr_fd("\n",1);
 	set_tmp_stdin_fd(dup(STDIN));
-	// @ 껏다켜는 순간, readline buffer의 입력커서포인터에 대한 stdout buffer의
-	// @ 상대위치는 아래라인으로 고정됨?
 	close(STDIN);
 	set_heredoc_exit_flag(1);
+}
+
+void	term_handler(int signum)
+{
+	if (signum != SIGTERM)
+		return ;
+	printf("sigteddddddddddddddddddddddddddddddrm\n");
 }
 
 void	sigact_heredoc_mode(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
+	struct sigaction	termsig;
 
-	// rl_catch_signals = 1;
-	
 	intsig.sa_handler = quit_heredoc;
-	// intsig.sa_handler = SIG_DFL;
   	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
 	sigaction(SIGINT, &intsig, 0);
 
 	quitsig.sa_handler = SIG_IGN;
-	// quitsig.sa_handler = SIG_DFL;
   	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
 	sigaction(SIGQUIT, &quitsig, 0);
+
+	termsig.sa_handler = term_handler;
+  	sigemptyset(&termsig.sa_mask);
+	termsig.sa_flags = 0;
+	sigaction(SIGTERM, &termsig, 0);
+
 }
 
 //io_here ::= DLESS WORD
@@ -161,7 +166,8 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		{
 			dup2(*get_tmp_stdin_fd(), STDIN);
 			close(*get_tmp_stdin_fd());
-			delete_heredoc(tokenizer);
+			rl_on_new_line(); 
+    		rl_replace_line("", 1);
 			sigact_default_mode();
 			return (NULL);
 		}
@@ -172,7 +178,7 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
-static void	delete_heredoc(t_tokenizer *tokenizer)
+void	delete_heredoc(t_tokenizer *tokenizer)
 {
 	int	i;
 

@@ -11,3 +11,4 @@ int 	*get_heredoc_exit_flag(void);
 void 	set_heredoc_exit_flag(int flag);
 void	here_doc(char *delimiter, t_tokenizer *tokenizer);
 char	**alloc_heredoc_name(void);
+void	delete_heredoc(t_tokenizer *tokenizer);

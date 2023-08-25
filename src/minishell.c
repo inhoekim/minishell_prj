@@ -44,25 +44,13 @@ void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	
-	
-	// if (*get_heredoc_exit_flag() == 0)
-	// 	printf("default\n");
-
-	// @ 현상
-	// heredoc readline종료이후
-	// readline buffer의 입력커서포인터가 프롬프트 아래 라인에 있음.
-	// stdin buffer에 뭔가를 입력하면,
-	// readline buffer의 입력커서포인터가 프롬프트 오른쪽에 위치하게 됨.
-
-	// ft_putstr_fd("def\nault",1);
-	
+	// if (!*get_heredoc_exit_flag())
+		// printf("\n");
 	printf("default\n");
-	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
 	rl_on_new_line(); 
     rl_replace_line("", 1);
     rl_redisplay();
-	set_exit_status(1);
+	set_last_exit_status(1);
 }
 
 // @ sigaction set(default mode)

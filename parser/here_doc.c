@@ -29,7 +29,7 @@ int	*get_heredoc_exit_flag(void)
 	return (&heredoc_exit_flag);
 }
 
-void set_heredoc_exit_flag(int flag)
+void	set_heredoc_exit_flag(int flag)
 {
 	*get_heredoc_exit_flag() = flag;
 }
