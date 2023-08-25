@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/18 12:11:59 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/25 19:08:00 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../include/tokenizer.h"
 
 static char	**make_word_data(char *src, int len);
+static void	free_node(t_node *node);
 
 /* Only WORD type can come to the leaf node */
 t_node	*make_leaf(t_tokenizer *tokenizer)
@@ -61,4 +62,33 @@ static char	**make_word_data(char *src, int len)
 	}
 	new_str[1] = NULL;
 	return (new_str);
+}
+
+void	free_tree(t_node *root)
+{
+	t_node	*node_left;
+	t_node	*node_right;
+
+	if (root)
+	{	
+		node_left = root->left;
+		node_right = root->right;
+		free_node(root);
+		free_tree(node_left);
+		free_tree(node_right);
+	}
+}
+
+static void	free_node(t_node *node)
+{	
+	int	idx;
+
+	idx = -1;
+	if (node)
+	{
+		while (node->word && (node->word)[++idx])
+			free((node->word)[idx]);
+		free(node->word);
+		free(node);
+	}
 }

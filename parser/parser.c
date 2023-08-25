@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 16:57:11 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/25 18:44:52 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ t_node	*parser(char *line)
 	}
 	free_tokenizer(&tokenizer);
 	return (root);
-}
-
-void	free_tree(t_node *root)
-{
-	(void)root;
-	return ;
 }
 
 void	syntax_error(t_tokenizer *tokenizer)

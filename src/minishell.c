@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "../libft/libft.h"
 #include "../include/minishell.h"
 #include "../include/parser.h"
@@ -7,14 +6,12 @@
 #include "../include/here_doc.h"
 #include "../include/ms_signal.h"
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	// free_parser();
-	// free_tree();
 }
 
 void	init_envp(char **envp)
@@ -63,13 +60,13 @@ void	minishell_loop(void)
 			set_heredoc_visit_flag(FALSE);
 			root = parser(line);
 			execute(root);
+			free_tree(root);
 			free(line);
 		}
 	}
 	ft_putstr_fd("\033[1A", STDOUT);
 	for (int i = 1; i <= get_heredoc_data()->cursor_size; i++)
 		ft_putstr_fd("\033[2C", STDOUT);
-	
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }

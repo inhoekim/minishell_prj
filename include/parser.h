@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 12:33:04 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/18 14:59:33 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/25 18:44:00 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ t_node	*parser(char *line);
 t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token);
 void	free_tree(t_node *root);
 void	syntax_error(t_tokenizer *tokenizer);
-
+void	free_tree(t_node *root);
 #endif
