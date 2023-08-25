@@ -21,3 +21,9 @@ void	set_tmp_stdin_fd(int fd)
 {
 	get_heredoc_data()->temp_stdin_fd = fd;
 }
+
+void	set_heredoc_size(int size)
+{
+	get_heredoc_data()->heredoc_size = size;
+}
+

@@ -10,6 +10,7 @@ typedef struct s_heredoc_data{
 	int	heredoc_fault_flag;
 	int	heredoc_visit_flag;
 	int	temp_stdin_fd;
+	int	heredoc_size;
 }t_heredoc_data;
 void			set_delimiter(t_node *node, char buf[]);
 char			*quote_removal(char *word);
@@ -19,5 +20,6 @@ t_heredoc_data	*get_heredoc_data(void);
 void			set_tmp_stdin_fd(int fd);
 void			set_heredoc_fault_flag(int flag);
 void			set_heredoc_visit_flag(int flag);
+void			set_heredoc_size(int size);
 void			delete_heredoc(t_tokenizer *tokenizer);
 #endif
