@@ -6,7 +6,7 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 18:06:33 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/25 18:35:38 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,16 @@ void	free_tokenizer(t_tokenizer *tokenizer)
 
 	free(tokenizer->curr_token);
 	i = 0;
-	while (i < tokenizer->heredoc_file_idx)
-		free(tokenizer->heredoc_file_name[i++]);
-	free(tokenizer->heredoc_file_name);
+	if (!(tokenizer->heredoc_file_idx))
+	{
+		while (i < 16)
+			free(tokenizer->heredoc_file_name[i++]);
+		free(tokenizer->heredoc_file_name);
+	}
+	else
+	{
+		while (i < tokenizer->heredoc_file_idx)
+			free(tokenizer->heredoc_file_name[i++]);
+		free(tokenizer->heredoc_file_name);
+	}
 }

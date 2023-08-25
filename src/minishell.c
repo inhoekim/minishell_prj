@@ -14,7 +14,7 @@ void __leak()
 
 int	main(int argc, char **argv, char **envp)
 {
-	// atexit(__leak);
+	atexit(__leak);
 	(void)argc;
 	(void)argv;
 	init_envp(envp);

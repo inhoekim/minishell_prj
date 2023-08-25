@@ -83,12 +83,20 @@ void	free_delete_heredoc(t_context *p_ctx)
 	int	i;
 
 	i = 0;
-	while (i < p_ctx->heredoc_file_idx)
+	if (!p_ctx->heredoc_file_idx)
 	{
-		unlink(p_ctx->heredoc_file_name[i]);
-		free(p_ctx->heredoc_file_name[i++]);
+		while (i < 16)
+			free(p_ctx->heredoc_file_name[i++]);
 	}
-	free(p_ctx->heredoc_file_name);
+	else
+	{
+		while (i < p_ctx->heredoc_file_idx)
+		{
+			unlink(p_ctx->heredoc_file_name[i]);
+			free(p_ctx->heredoc_file_name[i++]);
+		}
+		free(p_ctx->heredoc_file_name);
+	}
 }
 
 void	exec_node(t_node *node, t_context *p_ctx)
