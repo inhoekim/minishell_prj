@@ -9,7 +9,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 INC_DIRS = $(shell brew --prefix readline)/include
 INC_DIRS += include
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
-SRC_DIRS = src builtin_func execute parser
+SRC_DIRS = src builtin_func execute parser signal
 
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
@@ -19,9 +19,10 @@ HEADERS = arg_expansion.h execute.h libft.h rule.h exec_node_util.h execute_util
 HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h minishell.h here_doc.h wait_queue.h
 
 SRCS = minishell.c msh_utils.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
-SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c signal.c
-SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c
+SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
+SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c here_doc_static.c
 SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c here_doc.c wait_queue.c
+SRCS += signal_default.c signal_fork.c signal_heredoc.c 
 
 OBJS = $(SRCS:.c=.o)
 
@@ -53,4 +54,6 @@ fclean: clean
 	@make fclean -C libft
 	@rm -f $(NAME)
 
-re: fclean all
+re: 
+	@make fclean
+	@make all

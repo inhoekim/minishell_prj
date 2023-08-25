@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/18 12:32:04 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:24:58 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static t_node	*insert_left(t_node *parent, t_node *child)
 	dock_node->left = child;
 	return (parent);
 }
+
 /* It combines two-dimensional arrangements into one */
 static char	**append_cmd(char **front, char **back)
 {

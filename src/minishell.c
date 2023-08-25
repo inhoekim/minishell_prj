@@ -4,9 +4,9 @@
 #include "../include/parser.h"
 #include "../include/execute.h"
 #include "../include/execute_util.h"
-#include "../include/here_doc.h"
 
-int	main(int argc, char **argv, char **envp)
+
+int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
@@ -38,13 +38,13 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-int		*get_heredoc_exit_flag(void);
-void	set_heredoc_exit_flag(int flag);
+int	*get_heredoc_exit_flag(void);
+void set_heredoc_exit_flag(int flag);
 
 void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
-		return ;
+        return ;
 	if (*get_heredoc_exit_flag() == 0)
 		printf("\n");
 	rl_on_new_line();
@@ -85,11 +85,13 @@ void	minishell_loop(void)
 	line = ft_strdup("");
 	while (line)
 	{
+		set_heredoc_fault_flag(FALSE);
 		line = readline("prompt> ");
 		if (line)
 		{
 			if (*line != '\0')
 				add_history(line);
+			set_heredoc_visit_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free(line);

@@ -7,6 +7,7 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
