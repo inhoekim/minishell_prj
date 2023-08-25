@@ -39,6 +39,7 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->end = line;
 	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
 	tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->str = "";
 	tokenizer->curr_token = get_next_token(tokenizer);
 	tokenizer->heredoc_file_idx = 0;
 	tokenizer->heredoc_file_name = alloc_heredoc_name();
