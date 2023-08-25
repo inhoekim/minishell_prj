@@ -7,15 +7,20 @@
 #include "../include/here_doc.h"
 #include "../include/ms_signal.h"
 
-int main(int argc, char **argv, char **envp)
+void __leak()
 {
+	system("leaks minishell");
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	// atexit(__leak);
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	// free_parser();
-	// free_tree();
 }
+
 void	init_envp(char **envp)
 {
 	t_list	**env;
@@ -38,18 +43,13 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void __leak()
-{
-	system("leaks minishell");
-}
 void	minishell_loop(void)
 {
 	t_node		*root;
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");
-	atexit(__leak);
+	line = "";
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
@@ -68,7 +68,6 @@ void	minishell_loop(void)
 	ft_putstr_fd("\033[1A", STDOUT);
 	for (int i = 1; i <= get_heredoc_data()->cursor_size; i++)
 		ft_putstr_fd("\033[2C", STDOUT);
-	
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }

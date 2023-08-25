@@ -9,6 +9,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
+# include <errno.h> 
 
 typedef enum e_bool
 {

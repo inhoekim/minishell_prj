@@ -13,7 +13,7 @@ char	*ft_strnjoin(char const *s1, char const *s2)
 	total = ft_strlen(s1) + ft_strlen(s2) + 2;
 	res = (char *)malloc(sizeof(char) * total);
 	if (!res)
-		return (0);
+		exit(ENOMEM);
 	res[total - 1] = '\0';
 	i = 0;
 	while (*s1)

@@ -48,6 +48,8 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 		return ;
 	}
 	_pid = (int *)malloc(sizeof(int));
+	if (!_pid)
+		exit(ENOMEM);
 	*_pid = pid;
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
