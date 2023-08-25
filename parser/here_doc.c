@@ -21,7 +21,7 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	}
 	fd = open(tokenizer->heredoc_file_name[tokenizer->heredoc_file_idx++], \
 	O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	set_heredoc_size(tokenizer->heredoc_file_idx);
+	set_cursor_size(tokenizer->heredoc_file_idx);
 	if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
 	{
 		msh_error(NULL, "maximum here-document count exceeded", 1);

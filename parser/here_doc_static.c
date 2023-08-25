@@ -22,8 +22,8 @@ void	set_tmp_stdin_fd(int fd)
 	get_heredoc_data()->temp_stdin_fd = fd;
 }
 
-void	set_heredoc_size(int size)
+void	set_cursor_size(int size)
 {
-	get_heredoc_data()->heredoc_size = size;
+	get_heredoc_data()->cursor_size = size;
 }
 

@@ -48,7 +48,7 @@ void	minishell_loop(void)
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
-		set_heredoc_size(0);
+		set_cursor_size(0);
 		line = readline("prompt> ");
 		if (line)
 		{
@@ -61,7 +61,7 @@ void	minishell_loop(void)
 		}
 	}
 	ft_putstr_fd("\033[1A", STDOUT);
-	for (int i = 1; i <= get_heredoc_data()->heredoc_size; i++)
+	for (int i = 1; i <= get_heredoc_data()->cursor_size; i++)
 		ft_putstr_fd("\033[2C", STDOUT);
 	
 	ft_putstr_fd("\033[8C", STDOUT);
