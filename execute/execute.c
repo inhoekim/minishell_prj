@@ -46,10 +46,8 @@ void	find_last_pid(t_context	*p_ctx)
 		prev = current;
 		current = current->next;
 	}
-	// list의 원소가 하나인 경우
 	if (current == *head && prev == *head)
 		set_last_pid(*((int *)current->content));
-	// list의 원소가 하나가 아닌 경우
 	else if (current == *head)
 	{
 		tmp = *head;

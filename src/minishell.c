@@ -38,6 +38,10 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
+void __leak()
+{
+	system("leaks minishell");
+}
 void	minishell_loop(void)
 {
 	t_node		*root;
@@ -45,6 +49,7 @@ void	minishell_loop(void)
 
 	sigact_default_mode();
 	line = ft_strdup("");
+	atexit(__leak);
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
