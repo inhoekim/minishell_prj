@@ -7,6 +7,7 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
@@ -140,6 +141,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
+
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -193,7 +195,6 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -298,7 +299,8 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		fork_error(p_ctx);
 		msh_error(argv[0], "command not found", 0);
 	}
-
+	free_argv(path);
+	free(temp_path);
 }
 
 

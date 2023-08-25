@@ -3,6 +3,7 @@
 #include "../include/exec_node_util.h"
 #include "../include/here_doc.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 void	free_delete_heredoc(t_context *p_ctx);
 
@@ -71,6 +72,7 @@ void	execute(t_node *root)
 	ctx.heredoc_file_name = alloc_heredoc_name();
 	ctx.pid_list = NULL;
 	ctx.pid_size = 0;
+	sigact_default_mode();
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);

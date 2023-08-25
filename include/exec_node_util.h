@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 14:38:34 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/25 16:01:51 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/25 16:36:15 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef t_bool	(*t_builtin)(char **args);
 void		exec_word(t_node *node, t_context *p_ctx);
 t_builtin	check_builtin(char *argv);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
-char		**ft_split2(char const *s, char c);
+char		**ft_split2(char *s, char c);
 char		*make_order(char **path, char **argv);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		exec_or(t_node *node, t_context *p_ctx);

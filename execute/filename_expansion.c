@@ -10,7 +10,7 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 
 	pattern = concatenate(list);
 	if (!pattern)
-		set_exit_status(ENOMEM);
+		exit(ENOMEM);
 	if (glob_flag)
 	{
 		expanded_list = globbing(pattern);
@@ -132,7 +132,6 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 	}
 	return (dp[len_p][len_w]);
 }
-
 
 void	msh_error(char *name, char *msg, int error)
 {

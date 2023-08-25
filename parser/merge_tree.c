@@ -6,7 +6,7 @@
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/18 12:32:04 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:24:58 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static char		**append_cmd(char **front, char **back);
 static int		get_wrapper_len(char **str, char **str2);
 static int		str_copy(char **dest, char *src);
 
+/* The child is joined to the left branch of the parent */
 t_node	*merge_tree(t_node *parent, t_node *child)
 {
 	if (!child)
@@ -29,6 +30,8 @@ t_node	*merge_tree(t_node *parent, t_node *child)
 	return (NULL);
 }
 
+/* The child is joined to the left branch of the parent */
+/* If both nodes are WORD type, they merge into one array */
 static t_node	*insert_left(t_node *parent, t_node *child)
 {
 	t_node	*dock_node;
@@ -45,6 +48,7 @@ static t_node	*insert_left(t_node *parent, t_node *child)
 	return (parent);
 }
 
+/* It combines two-dimensional arrangements into one */
 static char	**append_cmd(char **front, char **back)
 {
 	char	**new_str;
@@ -71,17 +75,18 @@ static char	**append_cmd(char **front, char **back)
 	return (new_str);
 }
 
-static int	get_wrapper_len(char **str, char **str2)
+/* Count the size of a two-dimensional array */
+static int	get_wrapper_len(char **arr, char **arr2)
 {
 	int	idx;
 	int	ret;
 
 	idx = -1;
 	ret = 0;
-	while (str[++idx])
+	while (arr[++idx])
 		ret++;
 	idx = -1;
-	while (str2[++idx])
+	while (arr2[++idx])
 		ret++;
 	return (ret);
 }

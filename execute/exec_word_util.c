@@ -6,6 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 char	**make_argv(char **word_arr)
 {
@@ -31,23 +32,55 @@ char	**make_argv(char **word_arr)
 	return (list_to_arr(argv_list));
 }
 
+void	sigact_fork(void)
+{
+	struct sigaction	intsig;
+	struct sigaction	quitsig;
+
+	intsig.sa_handler = 0;
+	sigemptyset(&intsig.sa_mask);
+	intsig.sa_flags = 0;
+	sigaction(SIGINT, &intsig, 0);
+	quitsig.sa_handler = 0;
+	sigemptyset(&quitsig.sa_mask);
+	quitsig.sa_flags = 0;
+	sigaction(SIGQUIT, &quitsig, 0);
+}
+
+void	sigact_forkset(void)
+{
+	struct sigaction	intsig;
+	struct sigaction	quitsig;
+	struct termios		attributes;
+
+	tcgetattr(STDIN, &attributes);
+	attributes.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN, TCSANOW, &attributes);
+	intsig.sa_handler = SIG_IGN;
+	quitsig.sa_handler = SIG_IGN;
+	sigemptyset(&intsig.sa_mask);
+	sigemptyset(&quitsig.sa_mask);
+	intsig.sa_flags = 0;
+	quitsig.sa_flags = 0;
+	sigaction(SIGINT, &intsig, 0);
+	sigaction(SIGQUIT, &quitsig, 0);
+}
+
 void	fork_exec(char **argv, t_context *p_ctx)
 {
 	int		pid;
 	t_list	*envl;
 
 	envl = *get_envp();
+	sigact_forkset();
 	pid = fork();
 	sigact_fork_mode();
 	if (pid == 0)
 	{
-		// @ sigaction set(fork interactive mode)
-		// @ sigint(2) 컨트롤+c -> 개행하고 default mode전환
-		// @ sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
-		// @ eof 		컨트롤+ d -> eof (건들필요 x )
 		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
+		sigact_fork();
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
 		execve(argv[0], argv, list_to_arr(envl));
