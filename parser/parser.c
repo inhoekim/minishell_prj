@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/22 16:09:12 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/25 14:24:44 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_node	*parser(char *line)
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
-	set_heredoc_exit_flag(0);
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
@@ -30,14 +29,14 @@ t_node	*parser(char *line)
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
-	if (get_curr_token(&tokenizer)->type != E0F)
+	if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 	{
-		syntax_error(&tokenizer);
 		free_tree(root);
 		root = NULL;
 	}
-	else if (*get_heredoc_exit_flag() == 1)
+	else if (get_curr_token(&tokenizer)->type != E0F)
 	{
+		syntax_error(&tokenizer);
 		free_tree(root);
 		root = NULL;
 	}
