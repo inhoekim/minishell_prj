@@ -6,7 +6,7 @@
 #include "../include/execute_util.h"
 #include "../include/here_doc.h"
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
@@ -18,6 +18,7 @@ int main(int argc, char **argv, char **envp)
 	// free_tree();
 	// set_exit_status();
 }
+
 void	init_envp(char **envp)
 {
 	t_list	**env;
@@ -44,8 +45,6 @@ void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	
-	
 	// if (*get_heredoc_exit_flag() == 0)
 	// 	printf("default\n");
 
@@ -56,12 +55,11 @@ void	new_prompt(int signum)
 	// readline buffer의 입력커서포인터가 프롬프트 오른쪽에 위치하게 됨.
 
 	// ft_putstr_fd("def\nault",1);
-	
 	printf("default\n");
 	// 입력문이 '\n'를 포함할때만 trigger되는 뭔가가 있는거같음.
-	rl_on_new_line(); 
-    rl_replace_line("", 1);
-    rl_redisplay();
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
 	set_exit_status(1);
 }
 
@@ -73,25 +71,22 @@ void	sigact_default_mode(void)
 {
 	struct sigaction	intsig;
 	struct sigaction	quitsig;
+	struct termios		attributes;
 
-	struct termios attributes;
-
-    tcgetattr(STDIN, &attributes);
-    attributes.c_lflag &= (~ECHOCTL);
-    tcsetattr(STDIN, TCSANOW, &attributes);
-
+	tcgetattr(STDIN, &attributes);
+	attributes.c_lflag &= (~ECHOCTL);
+	tcsetattr(STDIN, TCSANOW, &attributes);
 	intsig.sa_handler = new_prompt;
-  	sigemptyset(&intsig.sa_mask);
+	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
-	sigaction(SIGINT, &intsig, 0); 
-
+	sigaction(SIGINT, &intsig, 0);
 	quitsig.sa_handler = SIG_IGN;
-  	sigemptyset(&quitsig.sa_mask);
+	sigemptyset(&quitsig.sa_mask);
 	quitsig.sa_flags = 0;
 	sigaction(SIGQUIT, &quitsig, 0);
 }
 
-void	minishell_loop(void) 
+void	minishell_loop(void)
 {
 	t_node		*root;
 	char		*line;
@@ -111,7 +106,7 @@ void	minishell_loop(void)
 			root = parser(line);
 			// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
 			execute(root);
- 			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
+			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
 			free(line);
 		}
 	}

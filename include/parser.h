@@ -18,4 +18,5 @@ t_node	*parser(char *line);
 t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token);
 void	free_tree(t_node *root);
 void	syntax_error(t_tokenizer *tokenizer);
+
 #endif

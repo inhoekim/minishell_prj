@@ -31,9 +31,9 @@
 
 void	ft_cir_lstclear(t_context *p_ctx)
 {
-	t_list *current;
-	t_list *tmp;
-	t_list **head;
+	t_list	*current;
+	t_list	*tmp;
+	t_list	**head;
 
 	head = &(p_ctx->pid_list);
 	current = (*head);
@@ -77,9 +77,9 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 {
-	t_list *prev;
-	t_list *current;
-	t_list *tmp;
+	t_list	*prev;
+	t_list	*current;
+	t_list	*tmp;
 
 	prev = *head;
 	current = (*head)->next;
@@ -159,11 +159,10 @@ void	wait_queue_after(t_context *p_ctx)
 	{
 		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
 		if (!_pid_list)
-			break;
+			break ;
 		_pid_list = _pid_list->next;
 	}
 	p_ctx->pid_list = NULL;
 	sigact_default_mode();
 }
 #endif
-

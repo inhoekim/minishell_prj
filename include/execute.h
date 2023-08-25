@@ -16,7 +16,7 @@
 # define STDOUT 1
 # define PATH_MAX 1024
 # define PROC_MAX 1024
-#include "minishell.h"
+# include "minishell.h"
 
 typedef struct s_context
 {
@@ -50,10 +50,10 @@ void	delete_node(t_list **head, t_list *node_to_delete);
 char	*ft_getenv(char *pos);
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env);
 void	set_envp(char *pos, char *pwd);
-int		*get_last_pid();
+int		*get_last_pid(void);
 void	set_last_pid(int pid);
 void	find_last_pid(t_context	*p_ctx);
-int *get_last_exit_status();
+int		*get_last_exit_status(void);
 void	set_last_exit_status(int exit_status);
 
 #endif

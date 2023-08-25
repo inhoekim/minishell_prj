@@ -26,6 +26,7 @@ char	*quote_removal(char *word)
 int	*get_heredoc_exit_flag(void)
 {
 	static int	heredoc_exit_flag;
+
 	return (&heredoc_exit_flag);
 }
 

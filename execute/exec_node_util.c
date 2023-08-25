@@ -99,7 +99,7 @@ void	copy_queue(t_context *dst, t_context *src)
 #if WORKING == 1
 void	copy_queue(t_context *dst, t_context *src)
 {
-	t_list *current;
+	t_list	*current;
 	t_list	**head;
 
 	head = &(src->pid_list);
@@ -109,7 +109,6 @@ void	copy_queue(t_context *dst, t_context *src)
 	while (current->next != *head)
 	{	
 		ft_cir_lstadd_back(&dst->pid_list, current);
-		
 		// printf("pid: %d\n", *(int *)(current->content));
 		// ft_cir_lstadd_back(&dst->pid_list, ft_lstnew(current->content));
 		// free(current->content);
@@ -140,7 +139,6 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	exec_node(lhs, &aux);
 	p_ctx->pid_list = aux.pid_list;
 	p_ctx->pid_size = aux.pid_size;
-	
 	// // clear dst
 	// if (p_ctx->pid_list)
 	// {
@@ -186,13 +184,14 @@ static t_bool	is_regular_file(char *filename, t_context *p_ctx)
 	return (TRUE);
 }
 
-t_bool *get_redirect_ambiguity(void)
+t_bool	*get_redirect_ambiguity(void)
 {
-	static t_bool redirect_ambiguity;
+	static t_bool	redirect_ambiguity;
+
 	return (&redirect_ambiguity);
 }
 
-void set_redirect_ambiguity(t_bool value)
+void	set_redirect_ambiguity(t_bool value)
 {
 	*get_redirect_ambiguity() = value;
 }
@@ -233,7 +232,9 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = \
+		open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], \
+		O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -261,7 +262,6 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -306,7 +306,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 		fork_error(p_ctx);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND| O_WRONLY, 0644);
+	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -335,7 +335,6 @@ char	*make_order(char **path, char **argv)
 	}
 	return (order);
 }
-
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
@@ -370,8 +369,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		// set_exit_status(p_ctx->exit_status);
 		msh_error(argv[0], "command not found", 0);
 	}
-	
-
 }
 
 void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
@@ -396,13 +393,13 @@ void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
 	}
 }
 
-void redirect_fd(int dst[2])
+void	redirect_fd(int dst[2])
 {
 	dup2(dst[STDIN], STDIN);
 	dup2(dst[STDOUT], STDOUT);
 }
 
-void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
+void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 {
 	int		pid;
 	int		builtin_exit_status;
@@ -431,7 +428,6 @@ void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	enqueue_after(pid, p_ctx);
-
 }
 
 t_bool	exec_builtin(char **argv, t_context *p_ctx)
@@ -442,7 +438,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]); 
+	builtin_func = check_builtin(argv[0]);
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨

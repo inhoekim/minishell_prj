@@ -51,7 +51,6 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {
 	tokenizer->curr_token->type = type;
-
 	tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
 	tokenizer->curr_token->str = tokenizer->start;
 	tokenizer->end++;

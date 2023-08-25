@@ -44,12 +44,11 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->heredoc_file_name = alloc_heredoc_name();
 }
 
-
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
 	if (!tokenizer->end || !*tokenizer->end)
 	{
-        tokenizer->curr_token->type = E0F;
+		tokenizer->curr_token->type = E0F;
 		return ;
 	}
 	while ((*tokenizer->end) && ((*tokenizer->end) == ' ' || \

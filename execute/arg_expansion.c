@@ -140,4 +140,3 @@ t_list	*search_key(char *str, int i)
 	}
 	return (head);
 }
-
