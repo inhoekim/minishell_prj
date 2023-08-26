@@ -252,14 +252,12 @@ char	*make_order(char **path, char **argv)
 {
 	struct stat	buff;
 	int			idx;
-	int			total;
 	char		*order;
 
 	idx = 0;
 	order = NULL;
 	while (path[idx])
 	{
-		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
 		order = ft_strjoin(path[idx], argv[0]);
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)

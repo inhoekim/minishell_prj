@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/26 14:45:37 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/26 16:12:54 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ void	free_tree(t_node *root)
 	t_node	*node_left;
 	t_node	*node_right;
 
+	node_left = NULL;
+	node_right = NULL;
 	if (root)
-	{	
+	{
 		node_left = root->left;
 		node_right = root->right;
 		free_node(root);

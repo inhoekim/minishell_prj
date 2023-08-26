@@ -116,4 +116,6 @@ void	set_delimiter(t_node *node, char buf[])
 	word = node->right->word[0];
 	ft_strlcpy(buf, word, DELIMLEN);
 	free(word);
+	free(node->right);
+	node->right = NULL;
 }
