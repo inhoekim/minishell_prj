@@ -261,11 +261,11 @@ char	*make_order(char **path, char **argv)
 		order = ft_strjoin(path[idx], argv[0]);
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
-			break ;
+			return (order);
 		free(order);
 		idx++;
 	}
-	return (order);
+	return (NULL);
 }
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
@@ -282,10 +282,12 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		fork_error(p_ctx);
 		return ;
 	}
+	
 	path = ft_split2(temp_path, ':');
 	order = make_order(path, argv);
 	if (order)
 	{
+		printf("here:%s\n", order);
 		free(argv[0]);
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
