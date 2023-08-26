@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/25 19:08:00 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/26 14:45:37 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_node	*make_leaf(t_tokenizer *tokenizer)
 	t_token	*token;
 
 	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
+		exit(ENOMEM);
 	node->type = WORD;
 	node->left = NULL;
 	node->right = NULL;

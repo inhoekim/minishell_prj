@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/25 12:24:58 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/26 15:07:56 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static t_node	*insert_left(t_node *parent, t_node *child)
 	if (dock_node->type == COMMAND && child->type == COMMAND)
 	{
 		dock_node->word = append_cmd(child->word, dock_node->word);
+		free(child);
 		return (parent);
 	}
 	dock_node->left = child;

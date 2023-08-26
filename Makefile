@@ -28,8 +28,8 @@ OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) 
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g# -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3 # -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
 
 .PHONY: clean, fclean, re, all
 

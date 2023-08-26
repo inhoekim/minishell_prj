@@ -151,12 +151,14 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_regular_file(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 void	exec_heredoc(t_node *node, t_context *p_ctx)
@@ -206,12 +208,14 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 void	exec_append(t_node *node, t_context *p_ctx)
@@ -234,12 +238,14 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 char	*make_order(char **path, char **argv)
@@ -254,15 +260,11 @@ char	*make_order(char **path, char **argv)
 	while (path[idx])
 	{
 		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
-		order = (char *)malloc(sizeof(char) * total + 1);
-		if (!order)
-			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
 			break ;
 		free(order);
-		order = NULL;
 		idx++;
 	}
 	return (order);
@@ -277,8 +279,9 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	temp_path = ft_getenv("PATH");
 	if (!temp_path)
 	{
-		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
+		p_ctx->exit_status = 127;
+		fork_error(p_ctx);
 		return ;
 	}
 	path = ft_split2(temp_path, ':');
@@ -295,9 +298,9 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 			close(p_ctx->fd[STDIN]);
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
+		msh_error(argv[0], "command not found", 0);
 		p_ctx->exit_status = 127;
 		fork_error(p_ctx);
-		msh_error(argv[0], "command not found", 0);
 	}
 	free_argv(path);
 	free(temp_path);
