@@ -36,7 +36,7 @@ void	find_last_pid(t_context	*p_ctx)
 	t_list	**head;
 	t_list	*prev;
 	t_list	*current;
-	t_list	*tmp;
+	// t_list	*tmp;
 
 	head = &(p_ctx->pid_list);
 	if (!(*head))
@@ -48,15 +48,16 @@ void	find_last_pid(t_context	*p_ctx)
 		prev = current;
 		current = current->next;
 	}
-	if (current == *head && prev == *head)
-		set_last_pid(*((int *)current->content));
-	else if (current == *head)
-	{
-		tmp = *head;
-		while (tmp->next != *head)
-			tmp = tmp->next;
-		set_last_pid(*((int *)tmp->content));
-	}
+	// if (current == *head && prev == *head)
+	// 	set_last_pid(*((int *)current->content));
+	// else if (current == *head)
+	// {
+	// 	tmp = *head;
+	// 	while (tmp->next != *head)
+	// 		tmp = tmp->next;
+	// 	set_last_pid(*((int *)tmp->content));
+	// }
+	set_last_pid(*((int *)prev->content));
 	return ;
 }
 
@@ -73,6 +74,7 @@ void	execute(t_node *root)
 	ctx.pid_list = NULL;
 	ctx.pid_size = 0;
 	sigact_default_mode();
+	set_is_subshell(FALSE);
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);

@@ -72,7 +72,8 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	t_list	*envl;
 
 	envl = *get_envp();
-	sigact_fork_mode();
+	if (!*get_is_subshell())
+		sigact_fork_mode();
 	pid = fork();
 	if (pid == 0)
 	{

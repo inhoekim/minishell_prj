@@ -27,15 +27,21 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
+	// @ signal 종료시 메시지 출력 오류 수정: > ((cat))
+	if (!*get_is_subshell())
+		sigact_fork_mode();
+	set_is_subshell(TRUE);
 	pid = fork();
 	if (pid == 0)
 	{
-		exec_node(lhs, p_ctx);
+		sigact_modeoff();
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
+		exec_node(lhs, p_ctx);
 		wait_queue_after(p_ctx);
 		exit(p_ctx->exit_status);
 	}
+	set_is_subshell(FALSE);
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -315,14 +321,11 @@ void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	int		pid;
 	int		builtin_exit_status;
 
-	sigact_fork_mode();
+	if (!*get_is_subshell())
+		sigact_fork_mode();
 	pid = fork();
 	if (pid == 0)
 	{
-		// @ sigaction set(fork interactive mode)
-		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
-		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
-		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
 		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);

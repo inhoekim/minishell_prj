@@ -2,22 +2,22 @@
 #include "../include/execute.h"
 #include "../include/ms_signal.h"
 
-void	ft_cir_lstclear(t_context *p_ctx)
-{
-	t_list	*current;
-	t_list	*tmp;
-	t_list	**head;
+// void	ft_cir_lstclear(t_context *p_ctx)
+// {
+// 	t_list	*current;
+// 	t_list	*tmp;
+// 	t_list	**head;
 
-	head = &(p_ctx->pid_list);
-	current = (*head);
-	while (current->next != *head)
-	{
-		tmp = current;
-		current = current->next;
-		ft_lstdelone(tmp, free);
-	}
-	ft_lstdelone(current, free);
-}
+// 	head = &(p_ctx->pid_list);
+// 	current = (*head);
+// 	while (current->next != *head)
+// 	{
+// 		tmp = current;
+// 		current = current->next;
+// 		ft_lstdelone(tmp, free);
+// 	}
+// 	ft_lstdelone(current, free);
+// }
 
 void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
@@ -100,6 +100,7 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	pid = *((int *)node->content);
 	status = 0;
 	wnohang_ret = waitpid(pid, &status, flag);
+	// printf("wait end: %d\n", pid);
 	if (!wnohang_ret)
 		return (ret);
 	else if (WIFEXITED(status))
@@ -127,10 +128,12 @@ void	wait_queue_after(t_context *p_ctx)
 {
 	t_list	*_pid_list;
 
+	// sigact_zobmie_setmode();
 	_pid_list = p_ctx->pid_list;
 	while (_pid_list && p_ctx->pid_size)
 	{
 		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
+		// _pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
 		if (!_pid_list)
 			break ;
 		_pid_list = _pid_list->next;
