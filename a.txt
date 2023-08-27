@@ -1,0 +1,13 @@
+Makefile
+README.md
+a.txt
+builtin_func
+data
+execute
+include
+libft
+minishell
+parser
+signal
+src
+unit_test
