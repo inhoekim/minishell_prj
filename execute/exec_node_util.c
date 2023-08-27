@@ -27,7 +27,6 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
-	// @ signal 종료시 메시지 출력 오류 수정: > ((cat))
 	if (!*get_is_subshell())
 		sigact_fork_mode();
 	set_is_subshell(TRUE);

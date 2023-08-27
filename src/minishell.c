@@ -13,11 +13,11 @@ void __leak()
 
 int	main(int argc, char **argv, char **envp)
 {
-	// atexit(__leak);
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
+	atexit(__leak);
 }
 
 void	init_envp(char **envp)
