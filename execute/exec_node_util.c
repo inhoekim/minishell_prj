@@ -282,12 +282,10 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		fork_error(p_ctx);
 		return ;
 	}
-	
 	path = ft_split2(temp_path, ':');
 	order = make_order(path, argv);
 	if (order)
 	{
-		printf("here:%s\n", order);
 		free(argv[0]);
 		argv[0] = order;
 		fork_exec(argv, p_ctx);
@@ -317,8 +315,8 @@ void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	int		pid;
 	int		builtin_exit_status;
 
-	pid = fork();
 	sigact_fork_mode();
+	pid = fork();
 	if (pid == 0)
 	{
 		// @ sigaction set(fork interactive mode)
