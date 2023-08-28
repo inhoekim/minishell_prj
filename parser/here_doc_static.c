@@ -26,4 +26,3 @@ void	set_cursor_size(int size)
 {
 	get_heredoc_data()->cursor_size = size;
 }
-

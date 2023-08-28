@@ -51,18 +51,18 @@ void	minishell_loop(void)
 	line = "";
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);
-		set_cursor_size(0);
+		set_heredoc_fault_flag(FALSE);		
 		line = readline("prompt> ");
 		if (line)
 		{
 			if (*line != '\0')
 				add_history(line);
+			set_cursor_size(0);
 			set_heredoc_visit_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);
-			free(line);
+			free(line);			
 		}
 	}
 	ft_putstr_fd("\033[1A", STDOUT);
