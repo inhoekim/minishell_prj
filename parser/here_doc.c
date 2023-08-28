@@ -44,19 +44,19 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 			}
 			else
 			{
-				if (tokenizer->heredoc_file_idx == 1)
+				// if (tokenizer->heredoc_file_idx == 1)
+				// {
+				// 	ft_putstr_fd("\033[1A", STDOUT);
+				// 	ft_putstr_fd("\033[2C", STDOUT);
+				// }
+				// else
+				// {
+				ft_putstr_fd("\033[1A", STDOUT);
+				for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
 				{
-					ft_putstr_fd("\033[1A", STDOUT);
 					ft_putstr_fd("\033[2C", STDOUT);
 				}
-				else
-				{
-					ft_putstr_fd("\033[1A", STDOUT);
-					for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
-					{
-						ft_putstr_fd("\033[2C", STDOUT);
-					}
-				}
+				// }
 			}
 			if (is_same_str(input, delimiter))
 				set_heredoc_visit_flag(FALSE);
