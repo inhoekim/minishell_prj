@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/28 17:09:21 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/28 17:18:14 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ void	check_env(char **argv, t_list **env)
 			}
 			check = check->next;
 		}
+		free(temp);
 	}
-	free(temp);
+	
 }
 
 char	*make_temp(char *s1)
