@@ -3,6 +3,8 @@
 #include "../include/execute_util.h"
 #include "../include/filename_expansion.h"
 
+extern int	amb_flag;
+
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
 	t_list	*expanded_list;
@@ -10,7 +12,7 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 
 	pattern = concatenate(list);
 	if (!pattern)
-		set_exit_status(ENOMEM);
+		exit(ENOMEM);
 	if (glob_flag)
 	{
 		expanded_list = globbing(pattern);
@@ -50,8 +52,6 @@ char	*concatenate(t_list *list)
 	return (pattern);
 }
 
-extern int amb_flag;
-
 t_list	*globbing(char *pattern)
 {
 	t_list			*matches;
@@ -70,7 +70,8 @@ t_list	*globbing(char *pattern)
 		dir = readdir(dp);
 		if (dir && dir->d_name[0] == '.')
 			dir->d_type = DT_UNKNOWN;
-		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) && is_match(pattern, dir->d_name, 0, 0))
+		if (dir && (dir->d_type == DT_REG || dir->d_type == DT_DIR) \
+			&& is_match(pattern, dir->d_name, 0, 0))
 		{
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
 			file_cnt++;
@@ -93,10 +94,14 @@ int	**allocate_dp(int row, int col)
 	int	idx;
 
 	dp = ft_calloc(row + 1, sizeof(int *));
+	if (!dp)
+		exit(ENOMEM);
 	idx = 0;
 	while (idx <= row)
 	{
 		dp[idx] = ft_calloc(col + 1, sizeof(int));
+		if (!(dp[idx]))
+			exit(ENOMEM);
 		idx++;
 	}
 	return (dp);

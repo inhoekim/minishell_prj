@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_scan.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/22 16:09:27 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/25 17:00:51 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #define DELIMETER "<>&|() \t\n"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
-{ 
+{
 	if (*tokenizer->start == '<')
 	{
 		if (match(tokenizer, '<'))
@@ -52,6 +52,7 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
+				// @ 수정필
 				syntax_error(tokenizer);
 				return (make_token(tokenizer, SYNTAX_ERR));
 			}
@@ -60,7 +61,8 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 	}
 	// ex. ls & ls일 때, word token '&'는 tokenizer->start == tokenizer->end이므로 false
 	// 나머지는 DELIMETER에 속할 경우 end를 왼쪽으로 한칸 밀어야 함.
-	if (tokenizer->start != tokenizer->end && ft_strchr(DELIMETER, *tokenizer->end))
+	if (tokenizer->start != tokenizer->end \
+		&& ft_strchr(DELIMETER, *tokenizer->end))
 		tokenizer->end--;
 	return (make_token(tokenizer, WORD));
 }

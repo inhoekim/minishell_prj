@@ -6,6 +6,7 @@
 #include "../include/arg_expansion.h"
 #include "../include/make_argv_util.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 char	**make_argv(char **word_arr)
 {
@@ -71,13 +72,14 @@ void	fork_exec(char **argv, t_context *p_ctx)
 	t_list	*envl;
 
 	envl = *get_envp();
-	sigact_forkset();
+	if (!*get_is_subshell())
+		sigact_fork_mode();
 	pid = fork();
 	if (pid == 0)
 	{
+		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
-		sigact_fork();
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
 		execve(argv[0], argv, list_to_arr(envl));
@@ -95,14 +97,19 @@ char	**list_to_arr(t_list *node)
 	char	**arr;
 	int		i;
 	int		len;
+	t_list	*prev;
 
 	i = 0;
 	len = ft_lstsize(node);
 	arr = ft_calloc(len + 1 ,sizeof(t_list));
+	if (!arr)
+		exit(ENOMEM);
 	while (node)
 	{
+		prev = node;
 		arr[i++] = node->content;
 		node = node->next;
+		free(prev);
 	}
 	return (arr);
 }

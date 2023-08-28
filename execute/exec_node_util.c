@@ -7,8 +7,19 @@
 #include "../include/filename_expansion.h"
 #include "../include/arg_expansion.h"
 #include "../include/wait_queue.h"
+#include "../include/ms_signal.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
+
+void	fork_error(t_context *p_ctx)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(p_ctx->exit_status);
+	enqueue_after(pid, p_ctx);
+}
 
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
@@ -16,19 +27,20 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
+	if (!*get_is_subshell())
+		sigact_fork_mode();
+	set_is_subshell(TRUE);
 	pid = fork();
 	if (pid == 0)
 	{
-		exec_node(lhs, p_ctx);
-		//여기서 자식쉘의 pipe[stdin]과 fork할 ls의 pipe[stdin]은 닫힘
+		sigact_modeoff();
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
+		exec_node(lhs, p_ctx);
 		wait_queue_after(p_ctx);
 		exit(p_ctx->exit_status);
 	}
-	//(ls) | cat 에서 exec_subshell은 1번만 호출되는데
-	//여기서 들어갈때 p_ctx->fd[0] = stdin / p_ctx->fd[1] = pipe[stdout]
-	//그래서 부모쉘의 pipe[stdout]은 닫히는데 pipe[stdin]이 안닫히는 것 같아요
+	set_is_subshell(FALSE);
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -44,11 +56,10 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	if (*get_exit_status() != 0)
-	{
+	if (*get_last_exit_status() != 0)
 		exec_node(rhs, p_ctx);
-	}
 }
 
 void	exec_and(t_node *node, t_context *p_ctx)
@@ -59,50 +70,11 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
+	find_last_pid(p_ctx);
 	wait_queue_after(p_ctx);
-	if (*get_exit_status() == 0)
-	{
+	if (*get_last_exit_status() == 0)
 		exec_node(rhs, p_ctx);
-	}
 }
-
-#if WORKING == 0
-void	copy_queue(t_context *dst, t_context *src)
-{
-	int	idx;
-	int	size;
-
-	idx = 0;
-	size = src->queue_size;
-	while (idx < size)
-	{
-		dst->queue[idx] = src->queue[idx];
-		idx++;
-	}
-	dst->queue_size = idx;
-	dst->exit_status = src->exit_status;
-}
-#endif
-
-#if WORKING == 1
-void	copy_queue(t_context *dst, t_context *src)
-{
-	t_list *tmp;
-
-	// clear dst
-	tmp = src.pid_list;
-	while (tmp->next != *head)
-	{
-
-		ft_cir_lstadd_back(&dst->pid_list, tmp->content);
-		tmp = src->next;
-	}
-	
-
-	dst->queue_size = idx;
-	dst->exit_status = src->exit_status;
-}
-#endif
 
 void	exec_pipe(t_node *node, t_context *p_ctx)
 {
@@ -119,18 +91,15 @@ void	exec_pipe(t_node *node, t_context *p_ctx)
 	aux.fd[STDOUT] = pipe_fd[STDOUT];
 	aux.fd_close = pipe_fd[STDIN];
 	exec_node(lhs, &aux);
-	copy_queue(p_ctx, &aux);
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue복사
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
 	aux = *p_ctx;
 	aux.fd[STDIN] = pipe_fd[STDIN];
 	aux.fd_close = pipe_fd[STDOUT];
 	exec_node(rhs, &aux);
-	copy_queue(p_ctx, &aux);
-	// @ piped_command에서 fork된 pid는 aux.queue에 반영되어있음.
-	// @ ctx.queue에도 반영해야 함.
-	// @ aux.queue -> ctx.queue 로 queue 복사
+	p_ctx->pid_list = aux.pid_list;
+	p_ctx->pid_size = aux.pid_size;
+
 	p_ctx->is_piped_cmd = FALSE;
 }
 
@@ -154,13 +123,14 @@ static t_bool	is_regular_file(char *filename, t_context *p_ctx)
 	return (TRUE);
 }
 
-t_bool *get_redirect_ambiguity(void)
+t_bool	*get_redirect_ambiguity(void)
 {
-	static t_bool redirect_ambiguity;
+	static t_bool	redirect_ambiguity;
+
 	return (&redirect_ambiguity);
 }
 
-void set_redirect_ambiguity(t_bool value)
+void	set_redirect_ambiguity(t_bool value)
 {
 	*get_redirect_ambiguity() = value;
 }
@@ -179,15 +149,21 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
-		return ;
-	set_redirect_ambiguity(FALSE);
-	if (!is_regular_file(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
 	}
-	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
-	exec_node(lhs, p_ctx);
+	set_redirect_ambiguity(FALSE);
+	if (!is_regular_file(filename[0], p_ctx))
+		fork_error(p_ctx);
+	else
+	{
+		p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
+		exec_node(lhs, p_ctx);
+	}
+	free_argv(filename);
+	return ;
 }
 
 void	exec_heredoc(t_node *node, t_context *p_ctx)
@@ -197,7 +173,9 @@ void	exec_heredoc(t_node *node, t_context *p_ctx)
 	lhs = node->left;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	p_ctx->fd[STDIN] = open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], O_RDONLY, 0644);
+	p_ctx->fd[STDIN] = \
+		open(p_ctx->heredoc_file_name[p_ctx->heredoc_file_idx++], \
+		O_RDONLY, 0644);
 	exec_node(lhs, p_ctx);
 }
 
@@ -228,15 +206,21 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
-		return ;
-	set_redirect_ambiguity(FALSE);
-	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	set_redirect_ambiguity(FALSE);
+	if (!is_not_directory(filename[0], p_ctx))
+		fork_error(p_ctx);
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
+	}
+	free_argv(filename);
+	return ;
 }
 
 void	exec_append(t_node *node, t_context *p_ctx)
@@ -252,41 +236,41 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	set_redirect_ambiguity(TRUE);
 	filename = make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
-		return ;
-	set_redirect_ambiguity(FALSE);
-	if (!is_not_directory(filename[0], p_ctx))
 	{
-		set_exit_status(p_ctx->exit_status);
+		p_ctx->exit_status = 1;
+		fork_error(p_ctx);
 		return ;
 	}
-	p_ctx->fd[STDOUT] = open(filename, O_CREAT | O_APPEND| O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	set_redirect_ambiguity(FALSE);
+	if (!is_not_directory(filename[0], p_ctx))
+		fork_error(p_ctx);
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
+	}
+	free_argv(filename);
+	return ;
 }
 
 char	*make_order(char **path, char **argv)
 {
 	struct stat	buff;
 	int			idx;
-	int			total;
 	char		*order;
 
 	idx = 0;
 	order = NULL;
 	while (path[idx])
 	{
-		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
-		order = (char *)malloc(sizeof(char) * total + 1);
-		if (!order)
-			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
-			break ;
+			return (order);
 		free(order);
-		order = NULL;
 		idx++;
 	}
-	return (order);
+	return (NULL);
 }
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
@@ -298,8 +282,9 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	temp_path = ft_getenv("PATH");
 	if (!temp_path)
 	{
-		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
+		p_ctx->exit_status = 127;
+		fork_error(p_ctx);
 		return ;
 	}
 	path = ft_split2(temp_path, ':');
@@ -316,37 +301,12 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 			close(p_ctx->fd[STDIN]);
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
-		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
+		p_ctx->exit_status = 127;
+		fork_error(p_ctx);
 	}
 	free_argv(path);
 	free(temp_path);
-}
-
-void	wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag)
-{
-	int	status;
-
-	waitpid(pid, &status, flag);
-	if (WIFEXITED(status))
-	{
-		p_ctx->exit_status = WEXITSTATUS(status);
-		set_exit_status(p_ctx->exit_status);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		p_ctx->exit_status = WTERMSIG(status) + 128;
-		if (status == 13)
-		{
-			set_exit_status(p_ctx->exit_status);
-			return ;
-		}
-		if (p_ctx->exit_status == 130)
-			printf("\n");
-		else if (p_ctx->exit_status == 131)
-			printf("Quit: 3\n");
-		set_exit_status(p_ctx->exit_status);
-	}
 }
 
 void redirect_fd(int dst[2])
@@ -355,19 +315,17 @@ void redirect_fd(int dst[2])
 	dup2(dst[STDOUT], STDOUT);
 }
 
-void forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
+void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 {
 	int		pid;
 	int		builtin_exit_status;
 
+	if (!*get_is_subshell())
+		sigact_fork_mode();
 	pid = fork();
 	if (pid == 0)
 	{
-		// @ sigaction set(fork interactive mode)
-		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
-		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
-		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
-		// sigact_fork();
+		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
@@ -393,7 +351,7 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	int			tmp_fd[2];
 
 	can_builtin = FALSE;
-	builtin_func = check_builtin(argv[0]); 
+	builtin_func = check_builtin(argv[0]);
 	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
        pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
 	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
@@ -401,29 +359,21 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 	if (builtin_func)
 	{
 		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
+		// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 		if (p_ctx->is_piped_cmd)
-		{
-			// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
-			// @ fork후 builtin_func(argv); 실행
-			// @ "fork후 builtin_func(argv)"에는 sigaction set(fork interactive mode) 포함해야 함.
 			forked_builtin(p_ctx, builtin_func, argv);
-			// @ sigint(2) 컨트롤+c -> exit(2)
-			// @ sigquit(3) 컨트롤+d -> exit(3)
-			// @ is_piped_cmd는 가장 조상 pipe가 끝나면서(재귀적으로는 첫번째 pipe함수) 0으로 초기화 되어야함
-		}
 		else
 		{
 			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
 			// @ redirect 및 redirect 정보 백업
-			// redirect_and_p_ctx_fd_copy(p_ctx, tmp);
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
 			// @ redirect 및 redirect 정보 복구
-			// p_ctx_fd_copy(tmp, p_ctx);
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
+			set_last_exit_status(p_ctx->exit_status);
 		}
 		can_builtin = TRUE;
 	}
@@ -472,6 +422,7 @@ void	exec_word(t_node *node, t_context *p_ctx)
 	}
 	else if (can_access(argv[0], p_ctx))
 		fork_exec(argv, p_ctx);
-	set_exit_status(p_ctx->exit_status);
+	else
+		fork_error(p_ctx);
 	free_argv(argv);
 }

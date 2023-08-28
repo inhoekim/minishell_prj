@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/22 16:09:12 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/25 19:16:41 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_node	*parser(char *line)
 	t_node		*root;
 	t_tokenizer	tokenizer;
 
-	set_heredoc_exit_flag(0);
 	set_tokenizer(&tokenizer, line);
 	if (get_curr_token(&tokenizer)->type == E0F)
 	{
@@ -30,25 +29,19 @@ t_node	*parser(char *line)
 		return (NULL);
 	}
 	root = msh_grammar(&tokenizer);
-	if (get_curr_token(&tokenizer)->type != E0F)
+	if (get_heredoc_data()->heredoc_fault_flag == TRUE)
+	{
+		free_tree(root);
+		root = NULL;
+	}
+	else if (get_curr_token(&tokenizer)->type != E0F)
 	{
 		syntax_error(&tokenizer);
 		free_tree(root);
 		root = NULL;
 	}
-	else if (*get_heredoc_exit_flag() == 1)
-	{
-		free_tree(root);
-		root = NULL;
-	}
 	free_tokenizer(&tokenizer);
 	return (root);
-}
-
-void	free_tree(t_node *root)
-{
-	(void)root;
-	return ;
 }
 
 void	syntax_error(t_tokenizer *tokenizer)
@@ -81,7 +74,7 @@ void	free_tokenizer(t_tokenizer *tokenizer)
 
 	free(tokenizer->curr_token);
 	i = 0;
-	while (i < tokenizer->heredoc_file_idx)
+	while (i < 16)
 		free(tokenizer->heredoc_file_name[i++]);
 	free(tokenizer->heredoc_file_name);
 }

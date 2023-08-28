@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_node_util.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 14:38:34 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/23 19:00:22 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/25 16:36:15 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void		exec_output(t_node *node, t_context *p_ctx);
 void		exec_append(t_node *node, t_context *p_ctx);
 void		check_env(char **argv, t_list **env);
 char		*make_temp(char *s1);
-void	    wait_and_set_exit_status(pid_t pid, t_context *p_ctx, int flag);
 t_bool	    exec_builtin(char **argv, t_context *p_ctx);
 
 #endif

@@ -16,7 +16,7 @@
 #include "../include/parser.h"
 #include "../include/filename_expansion.h"
 #include "../include/here_doc.h"
-
+#include "../include/ms_signal.h"
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty
 t_node	*io_redirect_dg_after_simple_cmd(t_tokenizer *tokenizer)
@@ -84,45 +84,6 @@ t_node	*io_file(t_tokenizer *tokenizer)
 	return (NULL);
 }
 
-static void	delete_heredoc(t_tokenizer *tokenizer);
-
-int *get_tmp_stdin_fd(void)
-{
-	static int tmp_stdin_fd;
-	return (&tmp_stdin_fd);
-}
-
-void set_tmp_stdin_fd(int fd)
-{
-	*get_tmp_stdin_fd() = fd;
-}
-
-void	quit_heredoc(int signum)
-{
-	if (signum != SIGINT)
-        return ;
-	printf("\n");
-	set_heredoc_exit_flag(1);
-	set_tmp_stdin_fd(dup(0));
-	close(STDIN_FILENO);
-}
-
-void	sigact_heredoc(void)
-{
-	struct sigaction	intsig;
-	struct sigaction	quitsig;
-
-	intsig.sa_handler = quit_heredoc;
-  	sigemptyset(&intsig.sa_mask);
-	intsig.sa_flags = 0;
-	sigaction(SIGINT, &intsig, 0);
-
-	quitsig.sa_handler = SIG_IGN;
-  	sigemptyset(&quitsig.sa_mask);
-	quitsig.sa_flags = 0;
-	sigaction(SIGQUIT, &quitsig, 0);
-}
-
 //io_here ::= DLESS WORD
 t_node	*io_here(t_tokenizer *tokenizer)
 {
@@ -132,38 +93,18 @@ t_node	*io_here(t_tokenizer *tokenizer)
 	if (match_token(DLESS, tokenizer, TRUE) \
 	&& get_curr_token(tokenizer)->type == WORD)
 	{
-		if (*get_heredoc_exit_flag() == 1)
+		if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
-		if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
-		{
-			msh_error(NULL, "maximum here-document count exceeded", 1);
-			delete_heredoc(tokenizer);
-			set_heredoc_exit_flag(1);
-			return (NULL);
-		}
 		set_delimiter(node, delim);
-		sigact_heredoc();
+		set_heredoc_visit_flag(TRUE);
+		sigact_heredoc_mode();
 		here_doc(delim, tokenizer);
-		if (*get_heredoc_exit_flag() == 1)
-		{
-			dup2(*get_tmp_stdin_fd(), STDIN_FILENO);
-			close(*get_tmp_stdin_fd());
-			delete_heredoc(tokenizer);
+		sigact_default_mode();
+		if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 			return (NULL);
-		}
-			
 		return (node);
 	}
 	syntax_error(tokenizer);
 	return (NULL);
-}
-
-static void	delete_heredoc(t_tokenizer *tokenizer)
-{
-	int	i;
-
-	i = 0;
-	while (i < tokenizer->heredoc_file_idx)
-		unlink(tokenizer->heredoc_file_name[i++]);
 }

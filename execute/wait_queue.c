@@ -1,34 +1,24 @@
 #include "../include/wait_queue.h"
 #include "../include/execute.h"
+#include "../include/ms_signal.h"
 
-#define WORKING 0
+// void	ft_cir_lstclear(t_context *p_ctx)
+// {
+// 	t_list	*current;
+// 	t_list	*tmp;
+// 	t_list	**head;
 
-#if WORKING == 0
-void	enqueue_after(pid_t pid, t_context *p_ctx)
-{
-	if (PROC_MAX <= p_ctx->queue_size)
-		exit(1);
-	p_ctx->queue[p_ctx->queue_size] = pid;
-	p_ctx->queue_size++;
-}
+// 	head = &(p_ctx->pid_list);
+// 	current = (*head);
+// 	while (current->next != *head)
+// 	{
+// 		tmp = current;
+// 		current = current->next;
+// 		ft_lstdelone(tmp, free);
+// 	}
+// 	ft_lstdelone(current, free);
+// }
 
-void	wait_queue_after(t_context *p_ctx)
-{
-	int	idx;
-	int	size;
-
-	idx = 0;
-	size = p_ctx->queue_size;
-	while (idx < size)
-	{
-		wait_and_set_exit_status(p_ctx->queue[idx], p_ctx, 0);
-		idx++;
-		p_ctx->queue_size--;
-	}
-}
-#endif
-
-#if WORKING == 1
 void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
 	t_list	*tmp;
@@ -50,19 +40,25 @@ void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 
 void	enqueue_after(pid_t pid, t_context *p_ctx)
 {
-	int	*_pid = (int *)malloc(sizeof(int));
+	int	*_pid;
 
+	if (PROC_MAX <= p_ctx->pid_size)
+	{
+		printf("minishell: Process size over.\n");
+		return ;
+	}
+	_pid = (int *)malloc(sizeof(int));
+	if (!_pid)
+		exit(ENOMEM);
 	*_pid = pid;
 	ft_cir_lstadd_back(&p_ctx->pid_list, ft_lstnew(_pid));
 	p_ctx->pid_size++;
-	printf("added size: %d\n", p_ctx->pid_size);
 }
 
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 {
-	t_list *prev;
-	t_list *current;
-	t_list *tmp;
+	t_list	*prev;
+	t_list	*current;
 
 	prev = *head;
 	current = (*head)->next;
@@ -74,18 +70,14 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	// list의 원소가 하나이고 *head == d_node인 경우
 	if (current == *head && prev == *head)
 	{
-		head = NULL;
 		ft_lstdelone(d_node, free);
 		return (NULL);
 	}
 	// list의 원소가 하나가 아니고 *head == d_node인 경우
 	else if (current == *head)
 	{
-		tmp = *head;
-		while (tmp->next != *head)
-			tmp = tmp->next;
 		*head = current->next;
-		tmp->next = *head;
+		prev->next = *head;
 		ft_lstdelone(current, free);
 	}
 	// 그 외
@@ -97,69 +89,55 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	return (prev);
 }
 
-void	wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
+void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 {
 	int		status;
 	pid_t	pid;
+	t_list	*ret;
+	int		wnohang_ret;
 
+	ret = node;
 	pid = *((int *)node->content);
-	waitpid(pid, &status, flag);
-	if (WIFEXITED(status))
+	status = 0;
+	wnohang_ret = waitpid(pid, &status, flag);
+	// printf("wait end: %d\n", pid);
+	if (!wnohang_ret)
+		return (ret);
+	else if (WIFEXITED(status))
 	{
-		printf("exit: %d\n", WEXITSTATUS(status));
+		// printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
-		set_exit_status(p_ctx->exit_status);
-		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
+		if (pid == *get_last_pid())
+			set_last_exit_status(p_ctx->exit_status);
 	}
-	else if (WIFSIGNALED(status) && WTERMSIG(status) != 88)
+	else if (WIFSIGNALED(status))
 	{
-		printf("signal: %d\n", WTERMSIG(status));
+		// printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
-		set_exit_status(p_ctx->exit_status);
-		ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
+		if (pid == *get_last_pid())
+			set_last_exit_status(p_ctx->exit_status);
 	}
+	return (ret);
 }
-// #include <setjmp.h>
-
-// sigjmp_buf env;
-// struct sigaction sa;
-
-// void delete_zombies(void);
-
-// sigfillset(&sa.sa_mask);
-// sa.sa_handler = delete_zombies;
-// sa.sa_flags = 0;
-// sigaction(SIGCHLD, &sa, NULL);
-
-// void delete_zombies(void)
-// {
-//     pid_t kidpid;
-//     int status;
-
-//     printf("Inside zombie deleter:  ");
-//     while ((kidpid = waitpid(-1, &status, WNOHANG)) > 0)
-//     {
-//          printf("Child %ld terminated\n", kidpid);
-//     }
-//     siglongjmp(env,1);
-// }
 
 void	wait_queue_after(t_context *p_ctx)
 {
 	t_list	*_pid_list;
 
+	// sigact_zobmie_setmode();
 	_pid_list = p_ctx->pid_list;
-	printf("size: %d\n", p_ctx->pid_size);
 	while (_pid_list && p_ctx->pid_size)
 	{
-		printf("start\n");
-		wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
+		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
+		// _pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
+		if (!_pid_list)
+			break ;
 		_pid_list = _pid_list->next;
-		printf("end\n");
 	}
+	p_ctx->pid_list = NULL;
+	sigact_default_mode();
 }
-
-#endif
-

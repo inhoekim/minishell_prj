@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 15:37:08 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/25 18:10:32 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	**alloc_heredoc_name(void)
 	int		i;
 
 	file_name = (char **)ft_calloc(HEREDOC_MAX + 1, sizeof(char *));
+	if (!file_name)
+		exit(ENOMEM);
 	i = 0;
 	while (i < HEREDOC_MAX)
 	{
@@ -39,17 +41,17 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->end = line;
 	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
 	tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->str = "";
 	tokenizer->curr_token = get_next_token(tokenizer);
 	tokenizer->heredoc_file_idx = 0;
 	tokenizer->heredoc_file_name = alloc_heredoc_name();
 }
 
-
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
 	if (!tokenizer->end || !*tokenizer->end)
 	{
-        tokenizer->curr_token->type = E0F;
+		tokenizer->curr_token->type = E0F;
 		return ;
 	}
 	while ((*tokenizer->end) && ((*tokenizer->end) == ' ' || \

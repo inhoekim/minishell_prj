@@ -1,7 +1,8 @@
 ## minishell
 NAME = minishell
 
-CYAN  := \33[1;36m
+# ANSI escape code
+CYAN  := \033[1;36;40m
 RESET := \033[0m
 LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
@@ -9,7 +10,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 INC_DIRS = $(shell brew --prefix readline)/include
 INC_DIRS += include
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
-SRC_DIRS = src builtin_func execute parser
+SRC_DIRS = src builtin_func execute parser signal
 
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
@@ -20,15 +21,16 @@ HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h mi
 
 SRCS = minishell.c msh_utils.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
 SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
-SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c
+SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c here_doc_static.c
 SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c here_doc.c wait_queue.c
+SRCS += signal_default.c signal_fork.c signal_heredoc.c 
 
 OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3 
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3#-fsanitize=address#-g3 
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft # -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
 
 .PHONY: clean, fclean, re, all
 
@@ -53,4 +55,7 @@ fclean: clean
 	@make fclean -C libft
 	@rm -f $(NAME)
 
-re: fclean all
+re:
+	@$(LOG) "re"
+	@make fclean
+	@make all
