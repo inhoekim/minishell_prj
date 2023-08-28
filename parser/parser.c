@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 19:16:41 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/28 15:42:36 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	syntax_error(t_tokenizer *tokenizer)
 {
 	t_token	*token;
 
+	set_last_exit_status(1);
 	token = tokenizer->curr_token;
 	if (token->type != SYNTAX_ERR)
 	{	
