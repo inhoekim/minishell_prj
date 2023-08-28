@@ -1,4 +1,3 @@
-#include "../libft/libft.h"
 #include "../include/minishell.h"
 #include "../include/parser.h"
 #include "../include/execute.h"
@@ -42,6 +41,18 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
+void	print_eof_exit()
+{
+	int	idx;
+
+	ft_putstr_fd("\033[1A", STDOUT);
+	idx = 1;
+	while (idx++ <= get_heredoc_data()->cursor_size)
+		ft_putstr_fd("\033[2C", STDOUT);
+	ft_putstr_fd("\033[8C", STDOUT);
+	printf("exit\n");
+}
+
 void	minishell_loop(void)
 {
 	t_node		*root;
@@ -65,9 +76,5 @@ void	minishell_loop(void)
 			free(line);			
 		}
 	}
-	ft_putstr_fd("\033[1A", STDOUT);
-	for (int i = 1; i <= get_heredoc_data()->cursor_size; i++)
-		ft_putstr_fd("\033[2C", STDOUT);
-	ft_putstr_fd("\033[8C", STDOUT);
-	printf("exit\n");
+	print_eof_exit();
 }
