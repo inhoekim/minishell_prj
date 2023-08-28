@@ -31,15 +31,19 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	set_cursor_size(tokenizer->heredoc_file_idx);
 	while (TRUE)
 	{
+		// @ 현재커서위치(글로벌) 업데이트
+		// @ SIGWINCH핸들러로 윈도우 사이즈 변경시마다,현재커서위치(글로벌) 업데이트
 		input = readline("> ");
 		if (!input || is_same_str(input, delimiter))
 		{
-			if (is_same_str(input, delimiter))
-				set_heredoc_visit_flag(FALSE);
 			if (input)
+			{
+				set_heredoc_visit_flag(FALSE);
 				free(input);
+			}
 			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 			{
+				// heredoc operator가 2개 이상인 경우, sigint시 개행이 추가됨을 방지
 				if (tokenizer->heredoc_file_idx > 1)
 					ft_putstr_fd("\033[1A", STDOUT);
 				dup2(get_heredoc_data()->temp_stdin_fd, STDIN);
@@ -48,19 +52,12 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 			}
 			else
 			{
-				// if (tokenizer->heredoc_file_idx == 1)
-				// {
-				// 	ft_putstr_fd("\033[1A", STDOUT);
-				// 	ft_putstr_fd("\033[2C", STDOUT);
-				// }
-				// else
-				// {
 				ft_putstr_fd("\033[1A", STDOUT);
-				for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
-				{
-					ft_putstr_fd("\033[2C", STDOUT);
-				}
-				// }
+				// @ 현재커서위치(글로벌)로 커서를 옮김 
+				// ft_putstr_fd("> ", STDOUT);
+				
+				// for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
+				// 	ft_putstr_fd("\033[2C", STDOUT);
 			}
 			break ;
 		}

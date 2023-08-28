@@ -17,6 +17,7 @@
 #include "../include/filename_expansion.h"
 #include "../include/here_doc.h"
 #include "../include/ms_signal.h"
+
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty
 t_node	*io_redirect_dg_after_simple_cmd(t_tokenizer *tokenizer)
