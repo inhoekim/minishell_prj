@@ -69,7 +69,7 @@ void	minishell_loop(void)
 			if (*line != '\0')
 				add_history(line);
 			set_cursor_size(0);
-			set_heredoc_visit_flag(FALSE);
+			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);
