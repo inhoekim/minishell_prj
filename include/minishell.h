@@ -4,7 +4,7 @@
 # define STDERR_FD 2
 # include <stdio.h>
 # include <fcntl.h>
-# include "libft.h"
+# include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
