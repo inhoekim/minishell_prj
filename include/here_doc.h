@@ -5,6 +5,7 @@
 # include "../include/arg_expansion.h"
 # include "../include/filename_expansion.h"
 # include "../include/exec_word_util.h"
+# include "../gnl/get_next_line.h"
 
 typedef struct s_heredoc_data{
 	int	heredoc_fault_flag;
