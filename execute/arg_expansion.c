@@ -39,6 +39,7 @@ char	*parameter_expansion(char *str)
 		n_str = str_replace(str, key, value);
 		free(str);
 		str = n_str;
+		free(value);
 		list = list->next;
 	}
 	ft_lstclear(&head, free);
@@ -98,18 +99,12 @@ int	word_cnt(char *str, char *word)
 
 char	*get_value(char *key)
 {
-	char	*status;
 	char	*value;
 
-	status = ft_calloc(4, sizeof(char *));
-	if (!status)
-		exit(ENOMEM);
 	if (key[1] == '?')
 	{
 		value = ft_itoa(*get_last_exit_status());
-		ft_strlcpy(status, value, ft_strlen(value) + 1);
-		free(value);
-		return (status);
+		return (value);
 	}
 	value = ft_getenv(&key[1]);
 	if (!value)
