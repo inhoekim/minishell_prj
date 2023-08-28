@@ -10,6 +10,13 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	t_list	*list;
 	t_bool	can_expansion;
 
+	if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
+	{
+		msh_error(NULL, "maximum here-document count exceeded", 1);
+		delete_heredoc(tokenizer);
+		set_heredoc_fault_flag(TRUE);
+		return ;
+	}
 	can_expansion = TRUE;
 	// delimeter에 quotation이 포함된 경우, 파일내용은 expansion되지 않는다.
 	if (ft_strchr(delimiter, '"') || ft_strchr(delimiter, '\''))
@@ -22,13 +29,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	fd = open(tokenizer->heredoc_file_name[tokenizer->heredoc_file_idx++], \
 	O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	set_cursor_size(tokenizer->heredoc_file_idx);
-	if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
-	{
-		msh_error(NULL, "maximum here-document count exceeded", 1);
-		delete_heredoc(tokenizer);
-		set_heredoc_fault_flag(TRUE);
-		return ;
-	}
 	while (TRUE)
 	{
 		input = readline("> ");

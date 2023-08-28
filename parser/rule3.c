@@ -102,7 +102,10 @@ t_node	*io_here(t_tokenizer *tokenizer)
 		here_doc(delim, tokenizer);
 		sigact_default_mode();
 		if (get_heredoc_data()->heredoc_fault_flag == TRUE)
+		{
+			free(node);
 			return (NULL);
+		}
 		return (node);
 	}
 	syntax_error(tokenizer);

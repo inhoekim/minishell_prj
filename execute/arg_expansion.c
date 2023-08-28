@@ -38,6 +38,7 @@ char	*parameter_expansion(char *str)
 		value = get_value(key);
 		n_str = str_replace(str, key, value);
 		free(str);
+		free(value);
 		str = n_str;
 		free(value);
 		list = list->next;
