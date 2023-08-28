@@ -38,26 +38,35 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		{
 			if (input)
 			{
-				set_heredoc_visit_flag(FALSE);
+				set_heredoc_eof_flag(FALSE);
 				free(input);
 			}
 			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 			{
-				// heredoc operator가 2개 이상인 경우, sigint시 개행이 추가됨을 방지
-				if (tokenizer->heredoc_file_idx > 1)
+				if (get_heredoc_data()->heredoc_eof_flag)
 					ft_putstr_fd("\033[1A", STDOUT);
+				set_heredoc_eof_flag(TRUE);
 				dup2(get_heredoc_data()->temp_stdin_fd, STDIN);
 				close(get_heredoc_data()->temp_stdin_fd);
 				delete_heredoc(tokenizer);
 			}
 			else
 			{
-				ft_putstr_fd("\033[1A", STDOUT);
-				// @ 현재커서위치(글로벌)로 커서를 옮김 
-				// ft_putstr_fd("> ", STDOUT);
-				
-				// for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
-				// 	ft_putstr_fd("\033[2C", STDOUT);
+				set_heredoc_eof_flag(TRUE);
+				if (tokenizer->heredoc_file_idx == 1)
+				{
+					ft_putstr_fd("\033[1A", STDOUT);
+					ft_putstr_fd("\033[2C", STDOUT);
+				}
+				else
+				{
+					ft_putstr_fd("\033[1A", STDOUT);
+					// @ 현재커서위치(글로벌)로 커서를 옮김 
+					// ft_putstr_fd("> ", STDOUT);
+					
+					// for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
+					// 	ft_putstr_fd("\033[2C", STDOUT);
+				}
 			}
 			break ;
 		}

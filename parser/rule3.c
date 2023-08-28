@@ -98,7 +98,6 @@ t_node	*io_here(t_tokenizer *tokenizer)
 			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
 		set_delimiter(node, delim);
-		set_heredoc_visit_flag(TRUE);
 		sigact_heredoc_mode();
 		here_doc(delim, tokenizer);
 		sigact_default_mode();

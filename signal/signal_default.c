@@ -32,7 +32,7 @@ static void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	if (!get_heredoc_data()->heredoc_visit_flag)
+	if (!get_heredoc_data()->heredoc_eof_flag)
 		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);
