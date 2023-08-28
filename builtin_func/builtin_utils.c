@@ -46,7 +46,7 @@ void	delete_node(t_list **head, t_list *node_to_delete)
 				*head = current->next;
 			else
 				prev->next = current->next;
-			free(current);
+			ft_lstdelone(current, free);
 			break ;
 		}
 		prev = current;
