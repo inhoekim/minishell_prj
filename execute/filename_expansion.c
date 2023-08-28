@@ -107,12 +107,25 @@ int	**allocate_dp(int row, int col)
 	return (dp);
 }
 
+void free_dp(int **dp, int row_size)
+{
+	int i;
+
+	i = 0;
+	while (i <= row_size)
+	{
+		free(dp[i++]);
+	}
+	free(dp);
+}
+
 int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 {
 	int	len_p;
 	int	len_w;
 	int	**dp;
 	int	pos;
+	int match_flag;
 
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);
@@ -137,7 +150,9 @@ int	is_match(char *pattern, char *word, int p_idx, int w_idx)
 				dp[p_idx][w_idx] = dp[p_idx - 1][w_idx - 1];
 		}
 	}
-	return (dp[len_p][len_w]);
+	match_flag = dp[len_p][len_w];
+	free_dp(dp, len_p);
+	return (match_flag);
 }
 
 void	msh_error(char *name, char *msg, int error)
