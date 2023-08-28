@@ -34,10 +34,14 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		input = readline("> ");
 		if (!input || is_same_str(input, delimiter))
 		{
+			if (is_same_str(input, delimiter))
+				set_heredoc_visit_flag(FALSE);
 			if (input)
 				free(input);
 			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
 			{
+				if (tokenizer->heredoc_file_idx > 1)
+					ft_putstr_fd("\033[1A", STDOUT);
 				dup2(get_heredoc_data()->temp_stdin_fd, STDIN);
 				close(get_heredoc_data()->temp_stdin_fd);
 				delete_heredoc(tokenizer);
@@ -58,8 +62,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 				}
 				// }
 			}
-			if (is_same_str(input, delimiter))
-				set_heredoc_visit_flag(FALSE);
 			break ;
 		}
 		if (can_expansion)
