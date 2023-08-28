@@ -34,6 +34,8 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		input = readline("> ");
 		if (!input || is_same_str(input, delimiter))
 		{
+			if (is_same_str(input, delimiter))
+				set_heredoc_visit_flag(FALSE);
 			if (input)
 				free(input);
 			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
@@ -58,8 +60,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 					}
 				}
 			}
-			if (is_same_str(input, delimiter))
-				set_heredoc_visit_flag(FALSE);
 			break ;
 		}
 		if (can_expansion)
