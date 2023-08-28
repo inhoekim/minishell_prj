@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/22 13:33:06 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/28 16:03:35 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,22 @@ t_bool	ft_export(char **argv)
 	else
 	{
 		env = get_envp();
-		check_env(argv, env);
 		while (argv[++idx])
-			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+		{
+			// key = value 형태인지 확인하는 조건문
+			if (check_argv(argv))
+			{
+				check_env(argv, env);
+				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+			}
+		}
 	}
 	return (0);
+}
+
+int check_env(char **argv)
+{
+	int idx;
 }
 
 void	check_env(char **argv, t_list **env)
