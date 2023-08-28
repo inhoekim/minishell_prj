@@ -5,6 +5,7 @@ static t_bool	is_same_str(char *word1, char *word2);
 void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 {
 	char	*input;
+	char	*raw_input;
 	char	*expanded;
 	int		fd;
 	t_list	*list;
@@ -28,21 +29,22 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	}
 	fd = open(tokenizer->heredoc_file_name[tokenizer->heredoc_file_idx++], \
 	O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	set_cursor_size(tokenizer->heredoc_file_idx);
 	while (TRUE)
 	{
 		ft_putstr_fd("> ", STDOUT);
-		input = get_next_line(STDIN);
+		raw_input = get_next_line(STDIN);
+		input = raw_input;
+		if (raw_input)
+		{
+			input = ft_substr(raw_input, 0, ft_strlen(raw_input) - 1);
+			free(raw_input);
+		}
 		if (!input || is_same_str(input, delimiter))
 		{
 			if (input)
 				free(input);
 			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
-			{
-				dup2(get_heredoc_data()->temp_stdin_fd, STDIN);
-				close(get_heredoc_data()->temp_stdin_fd);
 				delete_heredoc(tokenizer);
-			}
 			break ;
 		}
 		if (can_expansion)

@@ -43,12 +43,9 @@ t_list	**get_envp(void)
 
 void	print_eof_exit()
 {
-	int	idx;
-
 	ft_putstr_fd("\033[1A", STDOUT);
-	idx = 1;
-	while (idx++ <= get_heredoc_data()->cursor_size)
-		ft_putstr_fd("\033[2C", STDOUT);
+	// if (get_heredoc_data()->heredoc_fault_flag == FALSE)
+	// 	ft_putstr_fd("\033[2C", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }
@@ -68,8 +65,6 @@ void	minishell_loop(void)
 		{
 			if (*line != '\0')
 				add_history(line);
-			set_cursor_size(0);
-			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);
