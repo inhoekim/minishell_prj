@@ -36,7 +36,6 @@ void	find_last_pid(t_context	*p_ctx)
 	t_list	**head;
 	t_list	*prev;
 	t_list	*current;
-	// t_list	*tmp;
 
 	head = &(p_ctx->pid_list);
 	if (!(*head))
@@ -48,15 +47,6 @@ void	find_last_pid(t_context	*p_ctx)
 		prev = current;
 		current = current->next;
 	}
-	// if (current == *head && prev == *head)
-	// 	set_last_pid(*((int *)current->content));
-	// else if (current == *head)
-	// {
-	// 	tmp = *head;
-	// 	while (tmp->next != *head)
-	// 		tmp = tmp->next;
-	// 	set_last_pid(*((int *)tmp->content));
-	// }
 	set_last_pid(*((int *)prev->content));
 	return ;
 }
