@@ -27,15 +27,20 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 	t_node	*lhs;
 
 	lhs = node->left;
+	if (!*get_is_subshell())
+		sigact_fork_mode();
+	set_is_subshell(TRUE);
 	pid = fork();
 	if (pid == 0)
 	{
-		exec_node(lhs, p_ctx);
+		sigact_modeoff();
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
+		exec_node(lhs, p_ctx);
 		wait_queue_after(p_ctx);
 		exit(p_ctx->exit_status);
 	}
+	set_is_subshell(FALSE);
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -151,12 +156,14 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_regular_file(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDIN] = open(filename[0], O_RDONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 void	exec_heredoc(t_node *node, t_context *p_ctx)
@@ -206,12 +213,14 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 void	exec_append(t_node *node, t_context *p_ctx)
@@ -234,38 +243,34 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	}
 	set_redirect_ambiguity(FALSE);
 	if (!is_not_directory(filename[0], p_ctx))
-	{
 		fork_error(p_ctx);
-		return ;
+	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
+		exec_node(lhs, p_ctx);
 	}
-	p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_APPEND | O_WRONLY, 0644);
-	exec_node(lhs, p_ctx);
+	free_argv(filename);
+	return ;
 }
 
 char	*make_order(char **path, char **argv)
 {
 	struct stat	buff;
 	int			idx;
-	int			total;
 	char		*order;
 
 	idx = 0;
 	order = NULL;
 	while (path[idx])
 	{
-		total = ft_strlen(path[idx]) + ft_strlen(argv[0]) + 1;
-		order = (char *)malloc(sizeof(char) * total + 1);
-		if (!order)
-			return (NULL);
 		order = ft_strjoin(path[idx], argv[0]);
 		stat(order, &buff);
 		if (access(order, X_OK) == 0 && (buff.st_mode & S_IFMT) != S_IFDIR)
-			break ;
+			return (order);
 		free(order);
-		order = NULL;
 		idx++;
 	}
-	return (order);
+	return (NULL);
 }
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
@@ -277,8 +282,9 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 	temp_path = ft_getenv("PATH");
 	if (!temp_path)
 	{
-		p_ctx->exit_status = 127;
 		msh_error(argv[0], "command not found", 0);
+		p_ctx->exit_status = 127;
+		fork_error(p_ctx);
 		return ;
 	}
 	path = ft_split2(temp_path, ':');
@@ -295,9 +301,9 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 			close(p_ctx->fd[STDIN]);
 		if (p_ctx->fd[STDOUT] != STDOUT)
 			close(p_ctx->fd[STDOUT]);
+		msh_error(argv[0], "command not found", 0);
 		p_ctx->exit_status = 127;
 		fork_error(p_ctx);
-		msh_error(argv[0], "command not found", 0);
 	}
 	free_argv(path);
 	free(temp_path);
@@ -314,14 +320,11 @@ void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 	int		pid;
 	int		builtin_exit_status;
 
+	if (!*get_is_subshell())
+		sigact_fork_mode();
 	pid = fork();
-	sigact_fork_mode();
 	if (pid == 0)
 	{
-		// @ sigaction set(fork interactive mode)
-		// @ (구현x)sigint(2) 컨트롤+c -> 개행하고 default mode전환
-		// @ (구현x)sigquit(3) 컨트롤+\ -> Quit: 3\n 출력 후 default mode전환
-		// @ (구현o)eof 		컨트롤+ d -> eof (건들필요 x )
 		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
