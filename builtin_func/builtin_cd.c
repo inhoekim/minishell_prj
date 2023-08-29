@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
+
+static char	*vaild_env(char **temp);
+static char	*special_case(char **temp);
 
 t_bool	ft_cd(char **argv)
 {
@@ -27,7 +28,7 @@ t_bool	ft_cd(char **argv)
 	return (0);
 }
 
-char	*vaild_env(char **temp)
+static char	*vaild_env(char **temp)
 {
 	int		size;
 	char	*parameter;
@@ -46,7 +47,7 @@ char	*vaild_env(char **temp)
 	return (parameter);
 }
 
-char	*special_case(char **temp)
+static char	*special_case(char **temp)
 {
 	size_t	temp_len;
 	char	*parameter;

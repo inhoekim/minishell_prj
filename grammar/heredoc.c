@@ -1,0 +1,63 @@
+#include "../include/minishell.h"
+
+void	heredoc(char *delimiter, t_tokenizer *tokenizer)
+{
+	char	*input;
+	char	*expanded;
+	int		fd;
+	t_list	*list;
+	t_bool	can_expansion;
+
+	if (tokenizer->heredoc_file_idx == HEREDOC_MAX)
+	{
+		msh_error(NULL, "maximum here-document count exceeded", 1);
+		delete_heredoc(tokenizer);
+		set_heredoc_fault_flag(TRUE);
+		return ;
+	}
+	can_expansion = TRUE;
+	if (ft_strchr(delimiter, '"') || ft_strchr(delimiter, '\''))
+	{
+		list = split_quotes(delimiter);
+		unquote(list);
+		delimiter = concatenate(list);
+		can_expansion = FALSE;
+	}
+	fd = open(tokenizer->heredoc_file_name[tokenizer->heredoc_file_idx++], \
+	O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	set_cursor_size(tokenizer->heredoc_file_idx);
+	while (TRUE)
+	{
+		input = readline("> ");
+		if (!input || is_same_str(input, delimiter))
+		{
+			if (input)
+			{
+				set_heredoc_eof_flag(FALSE);
+				free(input);
+			}
+			else if (get_heredoc_data()->heredoc_fault_flag == TRUE)
+			{
+				if (get_heredoc_data()->heredoc_eof_flag)
+					ft_putstr_fd("\033[1A", STDOUT);
+				set_heredoc_eof_flag(TRUE);
+				dup2(get_heredoc_data()->temp_stdin_fd, STDIN);
+				close(get_heredoc_data()->temp_stdin_fd);
+				delete_heredoc(tokenizer);
+			}
+			else
+				set_heredoc_eof_flag(TRUE);
+			break ;
+		}
+		if (can_expansion)
+		{
+			expanded = parameter_expansion(input);
+			ft_putendl_fd(expanded, fd);
+			free(expanded);
+		}
+		else
+			ft_putendl_fd(input, fd);
+		free(input);
+	}
+	close(fd);
+}

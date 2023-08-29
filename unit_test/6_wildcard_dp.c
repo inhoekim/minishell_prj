@@ -34,12 +34,6 @@ int **allocate_dp(int row, int col)
 	return (dp);
 }
 
-// 1. pattern의 현재 캐릭터가 '?'이거나 word의 현재 캐릭터가 일치하면 넘어간다.
-// 2. pattern을 다읽었는데 word를 덜 읽었으면 false
-// 3. word를 다읽었는데 pattern을 덜 읽었으면 false
-// 4. pattern의 현재 캐릭터가 '*'이면
-//    return (wildcard(그 이후의 pattern, 현재부터의 word) || wildcard(현재부터의 pattern, 그 이후의 word))
-
 int wildcard(char *pattern, char *word) {
 	int len_p, len_w;
 	int **dp;
@@ -56,18 +50,14 @@ int wildcard(char *pattern, char *word) {
 	{
 		for (int word_idx = 1; word_idx <= len_w; word_idx++)
 		{
-			// 캐릭터가 일치하거나 '?'이면
 			if (pattern[pattern_idx - 1] == '?' || \
 					pattern[pattern_idx - 1] == word[word_idx - 1])
 			{
 				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
 			}
-			// 4. pattern의 현재 캐릭터가 '*'이면
 			else if (pattern[pattern_idx - 1] == '*') {
 				dp[pattern_idx][word_idx] = \
 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-//				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
-//				-> 현재까지의 부분패턴과 word
 			}
 		}
 	}

@@ -6,16 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/28 15:42:36 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 18:28:00 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/rule.h"
-#include "../include/tokenizer.h"
-#include "../include/parser.h"
-#include "../include/filename_expansion.h"
-#include "../include/here_doc.h"
 
 t_node	*parser(char *line)
 {
@@ -78,4 +73,35 @@ void	free_tokenizer(t_tokenizer *tokenizer)
 	while (i < 16)
 		free(tokenizer->heredoc_file_name[i++]);
 	free(tokenizer->heredoc_file_name);
+}
+
+// first_set() Details
+/* It checks which terminal character 
+the first letter of the nonterminal function results in */
+/*	set[10] =
+	{WORD, LESS, GREAT, DGREAT, DLESS, AND_IF, OR_IF, PIPE, SUBSHELL_LEFT, E0F}
+*/
+t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token)
+{
+	static int	table[8][10] = {
+	[PIPELINE] = {WORD, LESS, GREAT, DGREAT, DLESS, \
+	NONE, NONE, NONE, SUBSHELL_LEFT, NONE},
+	[SIMPLE_CMD] = {WORD, LESS, GREAT, DGREAT, DLESS, \
+	NONE, NONE, NONE, NONE, NONE},
+	[IO_REDIRECT] = {NONE, LESS, GREAT, DGREAT, DLESS, \
+	NONE, NONE, NONE, NONE, NONE},
+	[CONDITIONAL] = {NONE, NONE, NONE, NONE, NONE, \
+	AND_IF, OR_IF, NONE, NONE, NONE},
+	[PIPED_COMMAND] = {NONE, NONE, NONE, NONE, NONE, \
+	NONE, NONE, PIPE, NONE, NONE},
+	[IO_REDIRECT_DG_AFTER_SIMPLE_CMD] = {WORD, NONE, NONE, \
+	NONE, NONE, NONE, NONE, NONE, NONE, NONE},
+	[IO_FILE] = {NONE, LESS, GREAT, DGREAT, NONE, NONE, NONE, NONE, NONE, NONE},
+	[IO_HERE] = {NONE, NONE, NONE, NONE, DLESS, NONE, NONE, NONE, NONE, NONE},
+	};
+
+	if (table[idx][curr_token] != NONE)
+		return (TRUE);
+	else
+		return (FALSE);
 }

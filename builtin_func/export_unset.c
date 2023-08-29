@@ -6,14 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/28 17:18:14 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 16:37:09 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
 
 t_bool	ft_export(char **argv)
 {
