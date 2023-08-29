@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/execute.h"
 
 void	free_argv(char **argv)
 {

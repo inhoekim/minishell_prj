@@ -1,6 +1,5 @@
 #include "../include/minishell2.h"
-#include <readline/readline.h>
-#include <readline/history.h>
+
 // void __leak()
 // {
 // 	system("leaks minishell");

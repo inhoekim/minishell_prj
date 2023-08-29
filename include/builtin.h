@@ -1,11 +1,8 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
-# include "../libft/libft.h"
-typedef enum e_bool
-{
-	FALSE,
-	TRUE,
-}t_bool;
+
+#include "util.h"
+
 t_bool	ft_cd(char **argv);
 char	*ft_strnjoin(char const *s1, char const *s2);
 void	delete_node(t_list **head, t_list *node_to_delete);
@@ -22,4 +19,5 @@ int     check_argv(char *argv);
 void	check_env(char **argv, t_list **env);
 char	*make_temp(char *s1);
 t_bool	ft_unset(char **argv);
+
 #endif

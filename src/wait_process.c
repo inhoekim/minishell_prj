@@ -1,5 +1,4 @@
 #include "../include/minishell2.h"
-#include <errno.h>
 
 void	wait_list(t_context *p_ctx)
 {

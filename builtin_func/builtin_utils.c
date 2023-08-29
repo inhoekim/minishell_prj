@@ -1,5 +1,4 @@
 #include "../include/builtin.h"
-#include <errno.h>
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {

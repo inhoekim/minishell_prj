@@ -1,6 +1,17 @@
 
+#ifdef UTIL_H
+#define UTIL_H
+
 # define NONE -1
 # define STDERR_FD 2
+# define PATH_MAX 1024
+# define PROC_MAX 1024
+# define DELIMLEN 1024
+# define HEREDOC_MAX 16
+# define TOKEN_SIZE 1024
+# define DELIMETER "<>&|() \t\n"
+# define STDIN 0
+# define STDOUT 1
 
 # include <stdio.h>
 # include <fcntl.h>
@@ -13,16 +24,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <dirent.h>
-
-# define PATH_MAX 1024
-# define PROC_MAX 1024
-# define DELIMLEN 1024
-# define HEREDOC_MAX 16
-# define TOKEN_SIZE 1024
-# define DELIMETER "<>&|() \t\n"
-
-# define STDIN 0
-# define STDOUT 1
 
 typedef enum e_bool
 {
@@ -111,3 +112,5 @@ typedef struct s_heredoc_data{
 	int	temp_stdin_fd;
 	int	cursor_size;
 } t_heredoc_data;
+
+#endif

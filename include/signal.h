@@ -1,17 +1,7 @@
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
-# define STDIN 0
-# define STDOUT 1
-
-# include <signal.h>
-# include <termios.h>
-
-typedef enum e_bool
-{
-	FALSE,
-	TRUE,
-}	t_bool;
+#include "util.h"
 
 void	sigact_default_mode(void);
 void	sigact_fork_mode(void);

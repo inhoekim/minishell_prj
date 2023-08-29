@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/execute.h"
 
 void	execute(t_node *root)
 {
