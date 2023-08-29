@@ -1,5 +1,5 @@
-// #include "../include/minishell.h"
 #include "../include/signal.h"
+#include "../include/grammar.h"
 
 static void	new_prompt(int signum);
 
