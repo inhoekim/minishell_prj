@@ -81,5 +81,5 @@ void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue_after(pid, p_ctx);
+	cir_lstadd(pid, p_ctx);
 }

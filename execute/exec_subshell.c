@@ -16,7 +16,7 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
 		exec_node(lhs, p_ctx);
-		wait_queue_after(p_ctx);
+		wait_list(p_ctx);
 		exit(p_ctx->exit_status);
 	}
 	set_is_subshell(FALSE);
@@ -24,5 +24,5 @@ void	exec_subshell(t_node *node, t_context *p_ctx)
 		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
-	enqueue_after(pid, p_ctx);
+	cir_lstadd(pid, p_ctx);
 }

@@ -6,11 +6,21 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 16:39:57 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 18:37:13 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
+{
+	tokenizer->curr_token->type = type;
+	tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
+	tokenizer->curr_token->str = tokenizer->start;
+	tokenizer->end++;
+	tokenizer->start = tokenizer->end;
+	return (tokenizer->curr_token);
+}
 
 t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move)
 {
@@ -34,7 +44,7 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 	if (tokenizer->token_size == TOKEN_SIZE)
 	{
 		ft_putstr_fd("minishell : ", STDERR_FILENO);
-		ft_putstr_fd("too many command~~\n", STDERR_FILENO);
+		ft_putstr_fd("too many command\n", STDERR_FILENO);
 		exit(1);
 	}
 	skip_whitespace(tokenizer);
@@ -51,14 +61,4 @@ t_token	*get_next_token(t_tokenizer *tokenizer)
 	if (*tokenizer->start == ')')
 		return (make_token(tokenizer, SUBSHELL_RIGHT));
 	return (scan_char_token(tokenizer));
-}
-
-t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
-{
-	tokenizer->curr_token->type = type;
-	tokenizer->curr_token->len = tokenizer->end - tokenizer->start + 1;
-	tokenizer->curr_token->str = tokenizer->start;
-	tokenizer->end++;
-	tokenizer->start = tokenizer->end;
-	return (tokenizer->curr_token);
 }

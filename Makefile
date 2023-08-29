@@ -10,7 +10,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 INC_DIRS = $(shell brew --prefix readline)/include
 INC_DIRS += include # libft
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
-SRC_DIRS = src builtin_func execute parser signal expansion
+SRC_DIRS = src builtin_func execute parser signal expansion grammar
 
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
@@ -19,11 +19,12 @@ vpath %.c $(SRC_DIRS)
 HEADERS = minishell.h
 
 SRCS = minishell.c arg_expansion.c exec_util.c exec_word_util.c
-SRCS += exec_etc.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
-SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c here_doc_static.c
-SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c here_doc.c wait_queue.c
+SRCS += exec_etc.c execute.c filename_expansion.c rule3.c tokenizer_utils.c
+SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c
+SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c heredoc.c wait_process.c
 SRCS += signal_default.c signal_fork.c signal_heredoc.c parameter_expansion.c exec_redirect.c exec_subshell.c exec_redirect_util.c
-SRCS += exec_fork.c exec_builtin.c exec_word.c wildcard.c
+SRCS += exec_fork.c exec_builtin.c exec_word.c wildcard.c wait_process_util.c heredoc_util.c heredoc_static.c
+SRCS += signal_util.c
 
 OBJS = $(SRCS:.c=.o)
 

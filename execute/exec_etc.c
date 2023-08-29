@@ -9,7 +9,7 @@ void	exec_or(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
 	find_last_pid(p_ctx);
-	wait_queue_after(p_ctx);
+	wait_list(p_ctx);
 	if (*get_last_exit_status() != 0)
 		exec_node(rhs, p_ctx);
 }
@@ -23,7 +23,7 @@ void	exec_and(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	exec_node(lhs, p_ctx);
 	find_last_pid(p_ctx);
-	wait_queue_after(p_ctx);
+	wait_list(p_ctx);
 	if (*get_last_exit_status() == 0)
 		exec_node(rhs, p_ctx);
 }

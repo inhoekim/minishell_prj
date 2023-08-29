@@ -180,7 +180,7 @@ void	msh_error(char *name, char *msg, int error);
 
 void			set_delimiter(t_node *node, char buf[]);
 char			*quote_removal(char *word);
-void			here_doc(char *delimiter, t_tokenizer *tokenizer);
+void			heredoc(char *delimiter, t_tokenizer *tokenizer);
 char			**alloc_heredoc_name(void);
 t_heredoc_data	*get_heredoc_data(void);
 void			set_tmp_stdin_fd(int fd);
@@ -227,17 +227,14 @@ t_node	*io_here(t_tokenizer *tokenizer);
 t_node	*merge_tree(t_node *parent, t_node *child);
 t_node	*make_leaf(t_tokenizer *tokenizer);
 t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right);
-
-
-t_bool		match_token(t_symbol type, \
-t_tokenizer *tokenizer, t_bool token_move);
+t_bool	is_match(t_tokenizer *tokenizer, char matchword);
+t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move);
 t_token		*get_curr_token(t_tokenizer *tokenizer);
 t_token		*get_next_token(t_tokenizer *tokenizer);
 t_token		*make_token(t_tokenizer *tokenizer, t_symbol type);
 void		set_tokenizer(t_tokenizer *tokenizer, char *line);
 void		reset_start_ptr(t_tokenizer *tokenizer);
 void		skip_whitespace(t_tokenizer *tokenizer);
-t_bool		match(t_tokenizer *tokenizer, char matchword);
 t_token		*scan_char_token(t_tokenizer *tokenizer);
 t_token		*scan_word_token(t_tokenizer *tokenizer);
 t_bool		string_close(t_tokenizer *tokenizer, char c);
@@ -247,18 +244,24 @@ void		free_tokenizer(t_tokenizer *tokenizer);
 
 void	enqueue(pid_t pid, t_context *p_ctx);
 void	wait_queue(t_context *p_ctx);
-void	ft_cir_lstadd_back(t_list **head, t_list *n_node);
-void	enqueue_after(pid_t pid, t_context *p_ctx);
-void	wait_queue_after(t_context *p_ctx);
+void	cir_lstadd_back(t_list **head, t_list *n_node);
+void	cir_lstadd(pid_t pid, t_context *p_ctx);
+void	wait_list(t_context *p_ctx);
 
 void	set_redirect_ambiguity(t_bool value);
 t_bool	*get_redirect_ambiguity(void);
 t_bool	is_regular_file(char *filename, t_context *p_ctx);
 t_bool	is_not_directory(char *filename, t_context *p_ctx);
 
-
 void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv);
 void	free_delete_heredoc(t_context *p_ctx);
 int		wildcard(char *pattern, char *word, int p_idx, int w_idx);
+void	*wait_process(t_list *node, t_context *p_ctx, int flag);
+t_list	*_delete_process(t_list **head, t_list *d_node);
+t_list	*make_key_list(char *str, int i);
+t_bool	is_same_str(char *word1, char *word2);
+
+t_bool	*get_is_subshell(void);
+void	set_is_subshell(t_bool flag);
 
 #endif

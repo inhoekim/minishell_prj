@@ -14,18 +14,6 @@ void	sigact_fork_mode(void)
 	signal_changer(SIGQUIT, fork_mode_handler);
 }
 
-t_bool	*get_is_subshell(void)
-{
-	static t_bool	is_subshell;
-
-	return (&is_subshell);
-}
-
-void	set_is_subshell(t_bool flag)
-{
-	*get_is_subshell() = flag;
-}
-
 void	sigact_modeoff(void)
 {
 	signal_changer(SIGINT, SIG_DFL);

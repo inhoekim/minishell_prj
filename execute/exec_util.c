@@ -34,7 +34,7 @@ void	fork_error(t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 		exit(p_ctx->exit_status);
-	enqueue_after(pid, p_ctx);
+	cir_lstadd(pid, p_ctx);
 }
 
 void	msh_error(char *name, char *msg, int error)

@@ -22,3 +22,5 @@ exec_redirect.c
 exec_fork.c
 wildcard.c
 filename_expansion.c
+wait_process.c
+heredoc.c

@@ -6,11 +6,24 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 16:39:49 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 18:36:21 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	set_tokenizer(t_tokenizer *tokenizer, char *line)
+{
+	tokenizer->start = line;
+	tokenizer->end = line;
+	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
+	tokenizer->curr_token->type = E0F;
+	tokenizer->curr_token->str = "";
+	tokenizer->curr_token = get_next_token(tokenizer);
+	tokenizer->heredoc_file_idx = 0;
+	tokenizer->token_size = 0;
+	tokenizer->heredoc_file_name = alloc_heredoc_name();
+}
 
 char	**alloc_heredoc_name(void)
 {
@@ -34,19 +47,6 @@ char	**alloc_heredoc_name(void)
 	return (file_name);
 }
 
-void	set_tokenizer(t_tokenizer *tokenizer, char *line)
-{
-	tokenizer->start = line;
-	tokenizer->end = line;
-	tokenizer->curr_token = (t_token *)malloc(sizeof(t_token));
-	tokenizer->curr_token->type = E0F;
-	tokenizer->curr_token->str = "";
-	tokenizer->curr_token = get_next_token(tokenizer);
-	tokenizer->heredoc_file_idx = 0;
-	tokenizer->token_size = 0;
-	tokenizer->heredoc_file_name = alloc_heredoc_name();
-}
-
 void	skip_whitespace(t_tokenizer *tokenizer)
 {
 	if (!tokenizer->end || !*tokenizer->end)
@@ -60,7 +60,7 @@ void	skip_whitespace(t_tokenizer *tokenizer)
 	tokenizer->start = tokenizer->end;
 }
 
-t_bool	match(t_tokenizer *tokenizer, char matchword)
+t_bool	is_match(t_tokenizer *tokenizer, char matchword)
 {
 	tokenizer->end++;
 	if (tokenizer->end && *tokenizer->end == matchword)

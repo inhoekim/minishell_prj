@@ -17,7 +17,7 @@ void	execute(t_node *root)
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);
-	wait_queue_after(&ctx);
+	wait_list(&ctx);
 	free_delete_heredoc(&ctx);
 }
 
