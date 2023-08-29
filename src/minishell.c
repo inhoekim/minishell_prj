@@ -1,5 +1,6 @@
-#include "../include/minishell.h"
-
+#include "../include/minishell2.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 // void __leak()
 // {
 // 	system("leaks minishell");
@@ -36,7 +37,7 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	print_eof_exit()
+void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
@@ -58,8 +59,6 @@ void	minishell_loop(void)
 		{
 			if (*line != '\0')
 				add_history(line);
-			set_cursor_size(0);
-			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);

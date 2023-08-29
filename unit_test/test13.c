@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <termcap.h>
+#include <termios.h>
+
 # include "../libft/libft.h"
 
 
@@ -18,7 +20,17 @@ int	nbr_length(int n)
 	return (i);
 }
 
-void	get_cursor_position(int *col, int *rows)
+void	terminal_init(struct termios *term)
+{
+	tcgetattr(STDIN_FILENO, term);
+	term->c_lflag &= ~ICANON;		// non-canonical input 설정
+	term->c_lflag &= ~ECHO;			// 입력 시 터미널에서 보이지 않기
+	term->c_cc[VMIN] = 1;			// 최소 입력 버퍼 크기
+	term->c_cc[VTIME] = 0;			// 버퍼 비우는 시간(timeout)
+	tcsetattr(STDIN_FILENO, TCSANOW, term);
+}
+
+void	get_cursor_position(int *row, int *col)
 {
 	int		a = 0;
 	int		i = 1;
@@ -34,10 +46,10 @@ void	get_cursor_position(int *col, int *rows)
 		if (buf[i] >= '0' && buf[i] <= '9')
 		{
 			if (a == 0)
-				*rows = ft_atoi(&buf[i]) - 1;
+				*row = ft_atoi(&buf[i]) - 1;
 			else
 			{
-				temp = atoi(&buf[i]);
+				temp = ft_atoi(&buf[i]);
 				*col = temp - 1;
 			}
 			a++;
@@ -47,14 +59,15 @@ void	get_cursor_position(int *col, int *rows)
 	}
 }
 
-int row;
-int col;
 
 int main(void)
 {
-	// ;1R
-	// write(0, "\033[6n", 4);
-	get_cursor_position(&col, &row);
+	struct termios term;
+	int row;
+	int col;
+
+	terminal_init(&term);
+	get_cursor_position(&row, &col);
 	printf("row: %d, col: %d\n", row, col);
 }
 

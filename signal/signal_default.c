@@ -12,6 +12,7 @@ void	sigact_default_mode(void)
 	tcgetattr(STDIN, &attributes);
 	attributes.c_lflag &= (~ECHOCTL);
 	tcsetattr(STDIN, TCSANOW, &attributes);
+
 	intsig.sa_handler = new_prompt;
 	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;
@@ -26,8 +27,7 @@ static void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	if (!get_heredoc_data()->heredoc_eof_flag)
-		printf("\n");
+	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
