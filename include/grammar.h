@@ -1,7 +1,6 @@
 #ifndef GRAMMAR_H
 # define GRAMMAR_H
 
-# include "../libft/libft.h"
 # include "util.h"
 
 //heredoc

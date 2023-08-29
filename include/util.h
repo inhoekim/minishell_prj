@@ -1,4 +1,4 @@
-# ifndef UTIL_H
+#ifndef UTIL_H
 # define UTIL_H
 
 # define NONE -1
@@ -44,7 +44,7 @@ typedef enum e_nonterminal{
 	IO_REDIRECT_DAGGER = IO_REDIRECT,
 	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 6,
 	CONDITIONAL = 7,
-}t_nonterminal;
+} t_nonterminal;
 
 // word, <, >, >>, <<, &&, ||, |, (, eof, ssh, ), err
 // SUBSHELL_LEFT, SUBSHELL_RIGHT, E0F, SYNTAX_ERR 심볼은 오직 토크나이저에서만 사용하는 심벌
