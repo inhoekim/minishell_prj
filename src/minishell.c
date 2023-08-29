@@ -49,7 +49,7 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = "";
+	line = ft_strdup("");
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
