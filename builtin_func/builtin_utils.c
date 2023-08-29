@@ -1,4 +1,5 @@
-#include "../include/builtin.h"
+// #include "../include/minishellbuiltin.h"
+#include "../include/minishell.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {

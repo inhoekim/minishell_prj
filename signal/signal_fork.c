@@ -1,4 +1,4 @@
-#include "../include/signal.h"
+#include "../include/minishell.h"
 
 static void	signal_changer(int signum, void *handler);
 static void	fork_mode_handler(int signum);

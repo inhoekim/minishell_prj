@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "../include/libft.h"
+#include "../include/minishelllibft.h"
 #define PATH_MAX 1024
 void	set_envp(char *pos, char *pwd);
 void	init_envp(char **envp);

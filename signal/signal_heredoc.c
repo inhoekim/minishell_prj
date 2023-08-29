@@ -1,4 +1,4 @@
-#include "../include/signal.h"
+#include "../include/minishell.h"
 
 static void	quit_heredoc(int signum);
 

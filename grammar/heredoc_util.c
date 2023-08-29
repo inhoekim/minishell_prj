@@ -1,4 +1,4 @@
-#include "../include/grammar.h"
+#include "../include/minishell.h"
 
 static char	*quote_removal(char *word);
 

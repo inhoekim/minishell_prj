@@ -1,8 +1,8 @@
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
-# include "util.h"
-# include "grammar.h"
+// # include "util.h"
+// # include "grammar.h"
 
 void	sigact_default_mode(void);
 void	sigact_fork_mode(void);

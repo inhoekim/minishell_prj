@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/grammar.h"
+#include "../include/minishell.h"
 
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star

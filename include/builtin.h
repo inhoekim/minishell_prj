@@ -1,7 +1,7 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-#include "util.h"
+// #include "util.h"
 
 t_bool	ft_cd(char **argv);
 char	*ft_strnjoin(char const *s1, char const *s2);

@@ -1,7 +1,7 @@
 #ifndef MINISHELL2_H
 # define MINISHELL2_H
 
-#include "util.h"
+// #include "util.h"
 
 void	init_envp(char **envp);
 t_list	**get_envp(void);

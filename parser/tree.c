@@ -6,11 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/29 19:10:44 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 20:00:00 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parser.h"
+#include "../include/minishell.h"
 
 static char	**make_word_data(char *src, int len);
 static void	free_node(t_node *node);

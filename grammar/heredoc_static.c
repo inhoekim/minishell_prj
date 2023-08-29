@@ -1,4 +1,4 @@
-#include "../include/grammar.h"
+#include "../include/minishell.h"
 
 t_heredoc_data	*get_heredoc_data(void)
 {

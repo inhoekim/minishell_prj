@@ -1,5 +1,8 @@
-# include "../libft/libft.h"
-# include "util.h"
+#ifndef EXECUTE_H
+# define EXECUTE_H
+
+// # include "../libft/libft.h"
+// # include "util.h"
 
 t_bool	ft_cd(char **argv);
 t_bool	ft_echo(char **argv);
@@ -49,3 +52,4 @@ void	exec_node(t_node *node, t_context *p_ctx);
 void	find_last_pid(t_context	*p_ctx);
 void	free_delete_heredoc(t_context *p_ctx);
 
+#endif

@@ -1,4 +1,4 @@
-#include "../include/execute.h"
+#include "../include/minishell.h"
 
 void	exec_word(t_node *node, t_context *p_ctx)
 {

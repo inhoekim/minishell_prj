@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "../include/libft.h"
+#include "../include/minishelllibft.h"
 #include <dirent.h>
-#include "../include/minishell.h"
+#include "../include/minishellminishell.h"
 
 #define PATH_MAX 1024
 

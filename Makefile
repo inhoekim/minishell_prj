@@ -8,7 +8,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
 INC_DIRS = $(shell brew --prefix readline)/include
-INC_DIRS += include # libft
+INC_DIRS += include libft
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
 SRC_DIRS = src builtin_func execute parser signal expansion grammar
 
@@ -31,7 +31,7 @@ OBJS = $(SRCS:.c=.o)
 ## compile
 CC=	gcc
 CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft # -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
 
 .PHONY: clean, fclean, re, all
 

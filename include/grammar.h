@@ -1,7 +1,7 @@
 #ifndef GRAMMAR_H
 # define GRAMMAR_H
 
-# include "util.h"
+// # include "util.h"
 
 //heredoc
 void			heredoc(char *delimiter, t_tokenizer *tokenizer);

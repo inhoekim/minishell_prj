@@ -1,4 +1,4 @@
-#include "../include/execute.h"
+#include "../include/minishell.h"
 
 t_bool	*get_redirect_ambiguity(void)
 {

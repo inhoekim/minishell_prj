@@ -1,4 +1,4 @@
-#include "../include/expansion.h"
+#include "../include/minishell.h"
 
 static char		*make_arr(int start, int end, char *str);
 static int		if_c(char c, char charset);

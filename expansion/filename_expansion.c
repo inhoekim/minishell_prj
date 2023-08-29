@@ -1,4 +1,4 @@
-#include "../include/expansion.h"
+#include "../include/minishell.h"
 
 static t_list	*globbing(char *pattern);
 
