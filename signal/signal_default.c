@@ -1,4 +1,5 @@
-#include "../include/minishell.h"
+// #include "../include/minishell.h"
+#include "../include/signal.h"
 
 static void	new_prompt(int signum);
 

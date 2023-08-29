@@ -6,11 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 18:28:00 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 19:10:32 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parser.h"
 
 t_node	*parser(char *line)
 {

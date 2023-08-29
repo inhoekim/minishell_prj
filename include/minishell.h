@@ -25,11 +25,11 @@
 # define STDIN 0
 # define STDOUT 1
 
-typedef enum e_bool
-{
-	FALSE,
-	TRUE,
-} t_bool;
+// typedef enum e_bool
+// {
+// 	FALSE,
+// 	TRUE,
+// } t_bool;
 
 typedef t_bool	(*t_builtin)(char **args);
 

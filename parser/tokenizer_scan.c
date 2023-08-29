@@ -6,11 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 18:33:22 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 19:10:35 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parser.h"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
 {
