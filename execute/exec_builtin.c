@@ -1,4 +1,5 @@
-#include "../include/minishell.h"
+// #include "../include/minishell.h"
+#include "../include/execute.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 

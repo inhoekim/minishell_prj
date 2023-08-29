@@ -14,8 +14,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <dirent.h>
-# define STDIN 0
-# define STDOUT 1
+
 # define PATH_MAX 1024
 # define PROC_MAX 1024
 # define DELIMLEN 1024
@@ -23,11 +22,16 @@
 # define TOKEN_SIZE 1024
 # define DELIMETER "<>&|() \t\n"
 
+# define STDIN 0
+# define STDOUT 1
+
 typedef enum e_bool
 {
 	FALSE,
 	TRUE,
-}t_bool;
+} t_bool;
+
+typedef t_bool	(*t_builtin)(char **args);
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,
@@ -119,9 +123,7 @@ void	arg_expansion(t_list *list);
 char	*parameter_expansion(char *str);
 t_list	*make_key_listist(char *str, int i);
 
-typedef t_bool	(*t_builtin)(char **args);
 void		exec_word(t_node *node, t_context *p_ctx);
-t_builtin	check_builtin(char *argv);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
 char		**path_split(char *s, char c);
 char		*make_order(char **path, char **argv);
