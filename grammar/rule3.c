@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/grammar.h"
 
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty

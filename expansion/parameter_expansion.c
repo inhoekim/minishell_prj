@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
 static char	*str_replace(char *str, char *old, char *new);
 static int	word_cnt(char *str, char *word);

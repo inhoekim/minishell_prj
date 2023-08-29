@@ -1,7 +1,12 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "util.h"
+# include "util.h"
+# include "parser.h"
+# include "execute.h"
+# include "expansion.h"
+# include "grammar.h"
+# include "signal.h"
 
 void	init_envp(char **envp);
 t_list	**get_envp(void);
@@ -64,19 +69,12 @@ void	set_last_exit_status(int exit_status);
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag);
 char	*concatenate(t_list *list);
-t_list	*globbing(char *pattern);
-int		**allocate_dp(int row, int col);
 void	msh_error(char *name, char *msg, int error);
 
 void			set_delimiter(t_node *node, char buf[]);
 char			*quote_removal(char *word);
 void			heredoc(char *delimiter, t_tokenizer *tokenizer);
-char			**alloc_heredoc_name(void);
-t_heredoc_data	*get_heredoc_data(void);
-void			set_tmp_stdin_fd(int fd);
-void			set_heredoc_fault_flag(int flag);
-void			set_heredoc_eof_flag(int flag);
-void			set_cursor_size(int size);
+char			**alloc_heredoc_name(void);;
 void			delete_heredoc(t_tokenizer *tokenizer);
 
 t_list	*split_quotes(char *str);
@@ -84,36 +82,18 @@ t_list	*include_slice(char *str, int *i, char end);
 t_bool	check_glob(t_list *list);
 t_bool	list_search(t_list *list, char ch);
 void	unquote(t_list *list);
-
-
 void	sigact_default_mode(void);
 void	sigact_heredoc_mode(void);
 void	sigact_fork_mode(void);
 void	sigact_modeoff(void);
 t_bool	*get_is_subshell(void);
 void	set_is_subshell(t_bool flag);
-
-
 t_node	*parser(char *line);
 t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token);
 void	free_tree(t_node *root);
 void	syntax_error(t_tokenizer *tokenizer);
 void	free_tree(t_node *root);
 
-t_node	*msh_grammar(t_tokenizer *tokenizer);
-t_node	*conditional(t_tokenizer *tokenizer);
-t_node	*pipeline(t_tokenizer *tokenizer);
-t_node	*piped_command(t_tokenizer *tokenizer);
-t_node	*command(t_tokenizer *tokenizer);
-t_node	*ssh(t_tokenizer *tokenizer);
-t_node	*simple_cmd(t_tokenizer *tokenizer);
-t_node	*io_redirect_or_word_star(t_tokenizer *tokenizer);
-t_node	*io_redirect_dagger(t_tokenizer *tokenizer);
-t_node	*io_redirect_dg_after_simple_cmd(t_tokenizer *tokenizer);
-t_node	*io_redirect_star(t_tokenizer *tokenizer);
-t_node	*io_redirect(t_tokenizer *tokenizer);
-t_node	*io_file(t_tokenizer *tokenizer);
-t_node	*io_here(t_tokenizer *tokenizer);
 t_node	*merge_tree(t_node *parent, t_node *child);
 t_node	*make_leaf(t_tokenizer *tokenizer);
 t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right);

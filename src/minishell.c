@@ -52,7 +52,7 @@ void	minishell_loop(void)
 	line = ft_strdup("");
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);		
+		set_heredoc_fault_flag(FALSE);
 		line = readline("prompt> ");
 		if (line)
 		{

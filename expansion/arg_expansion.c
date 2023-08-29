@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
 void	arg_expansion(t_list *list)
 {

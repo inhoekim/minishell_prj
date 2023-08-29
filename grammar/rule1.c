@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rule1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/29 16:39:03 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 18:57:19 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/grammar.h"
 
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)

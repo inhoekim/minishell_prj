@@ -1,6 +1,5 @@
-
-#ifdef UTIL_H
-#define UTIL_H
+# ifndef UTIL_H
+# define UTIL_H
 
 # define NONE -1
 # define STDERR_FD 2

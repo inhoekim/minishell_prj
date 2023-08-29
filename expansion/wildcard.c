@@ -1,6 +1,9 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
-int	**allocate_dp(int row, int col)
+static int	**allocate_dp(int row, int col);
+static void	free_dp(int **dp, int row_size);
+
+static int	**allocate_dp(int row, int col)
 {
 	int	**dp;
 	int	idx;
@@ -19,7 +22,7 @@ int	**allocate_dp(int row, int col)
 	return (dp);
 }
 
-void	free_dp(int **dp, int row_size)
+static void	free_dp(int **dp, int row_size)
 {
 	int	i;
 
