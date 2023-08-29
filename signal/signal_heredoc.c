@@ -1,6 +1,4 @@
-#include <signal.h>
-#include <termios.h>
-#include "../include/here_doc.h"
+#include "../include/minishell.h"
 
 static void	quit_heredoc(int signum);
 
@@ -24,7 +22,7 @@ static void	quit_heredoc(int signum)
 	if (signum != SIGINT)
 		return ;
 	printf("\n");
-	set_heredoc_fault_flag(1);
+	set_heredoc_fault_flag(TRUE);
 	set_tmp_stdin_fd(dup(STDIN));
 	close(STDIN);
 }

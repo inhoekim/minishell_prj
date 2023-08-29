@@ -58,7 +58,6 @@ char	*make_pattern(t_list *list)
 		list = list->next;
 	}
 	pattern = ft_calloc(str_size + 1, sizeof(*pattern));
-	// pattern[str_size] = '\0';
 	list = head;
 	while (list)
 	{
@@ -76,17 +75,13 @@ t_list  *make_templist(char *dir, char *pattern)
 	t_list			*temp;
 
 	temp = NULL;
-	// temp = ft_lstnew(ft_strdup(""));
 
-	// .
 	dir_ptr = opendir(dir);
-	// ..
 	file = readdir(dir_ptr);
 	while (file)
 	{
 		file = readdir(dir_ptr);
 		if (file && file->d_type == DT_REG && wildcard2(pattern, file->d_name))
-		// if (file && file->d_type == DT_REG && wildcard(file->d_name, pattern))
 			ft_lstadd_back(&temp, ft_lstnew(ft_strdup(file->d_name)));
 	}
 	closedir(dir_ptr);
@@ -150,40 +145,6 @@ int main(int argc, char **argv, char **envp)
     }
     return 0;
 }
-
-// int wildcard2(char *pattern, char *word) 
-// {
-// 	int len_p, len_w;
-// 	int **dp;
-// 	len_p = ft_strlen(pattern);
-// 	len_w = ft_strlen(word);
-// 	dp = allocate_dp(len_p, len_w);
-// 	dp[0][0] = 1;
-// 	if (pattern[0] == '*')
-// 		dp[1][0] = 1;
-// 	else
-// 		dp[1][0] = 0;
-// 	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
-// 	{
-// 		for (int word_idx = 1; word_idx <= len_w; word_idx++)
-// 		{
-// 			// 캐릭터가 일치하거나 '?'이면
-// 			if (pattern[pattern_idx - 1] == '?' || \
-// 					pattern[pattern_idx - 1] == word[word_idx - 1])
-// 			{
-// 				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
-// 			}
-// 			// 4. pattern의 현재 캐릭터가 '*'이면
-// 			else if (pattern[pattern_idx - 1] == '*') {
-// 				dp[pattern_idx][word_idx] = \
-// 				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-// //				이전부분패턴에 대한, word의 현재부분의 match결과 || 현재까지의 부분패턴에 대한, word의 이전 부분의 match결과
-// //				-> 현재까지의 부분패턴과 word
-// 			}
-// 		}
-// 	}
-// 	return (dp[len_p][len_w]);
-// }
 
 int wildcard2(char *pattern, char *word) 
 {

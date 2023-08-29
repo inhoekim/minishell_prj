@@ -1,6 +1,4 @@
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
 
 t_bool	ft_echo(char **argv)
 {

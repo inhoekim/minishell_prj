@@ -1,4 +1,4 @@
-#include "here_doc.h"
+#include "../include/minishell.h"
 
 t_heredoc_data	*get_heredoc_data(void)
 {
@@ -12,9 +12,9 @@ void	set_heredoc_fault_flag(int flag)
 	get_heredoc_data()->heredoc_fault_flag = flag;
 }
 
-void	set_heredoc_visit_flag(int flag)
+void	set_heredoc_eof_flag(int flag)
 {
-	get_heredoc_data()->heredoc_visit_flag = flag;
+	get_heredoc_data()->heredoc_eof_flag = flag;
 }
 
 void	set_tmp_stdin_fd(int fd)
@@ -26,4 +26,3 @@ void	set_cursor_size(int size)
 {
 	get_heredoc_data()->cursor_size = size;
 }
-

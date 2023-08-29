@@ -1,6 +1,4 @@
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {
@@ -46,7 +44,7 @@ void	delete_node(t_list **head, t_list *node_to_delete)
 				*head = current->next;
 			else
 				prev->next = current->next;
-			free(current);
+			ft_lstdelone(current, free);
 			break ;
 		}
 		prev = current;

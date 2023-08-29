@@ -11,12 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/tokenizer.h"
-#include "../include/rule.h"
-#include "../include/parser.h"
-#include "../include/filename_expansion.h"
-#include "../include/here_doc.h"
-#include "../include/ms_signal.h"
+
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty
 t_node	*io_redirect_dg_after_simple_cmd(t_tokenizer *tokenizer)
@@ -97,12 +92,14 @@ t_node	*io_here(t_tokenizer *tokenizer)
 			return (NULL);
 		node = make_tree(DLESS, NULL, make_leaf(tokenizer));
 		set_delimiter(node, delim);
-		set_heredoc_visit_flag(TRUE);
 		sigact_heredoc_mode();
-		here_doc(delim, tokenizer);
+		heredoc(delim, tokenizer);
 		sigact_default_mode();
 		if (get_heredoc_data()->heredoc_fault_flag == TRUE)
+		{
+			free(node);
 			return (NULL);
+		}
 		return (node);
 	}
 	syntax_error(tokenizer);

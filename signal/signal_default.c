@@ -1,14 +1,7 @@
-#include <signal.h>
-#include <termios.h>
-#include "../include/here_doc.h"
-#include "../include/execute_util.h"
+#include "../include/minishell.h"
 
 static void	new_prompt(int signum);
 
-// @ sigaction set(default mode)
-// @(구현o) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
-// @(구현o) sigquit(3) 컨트롤+\ -> 아무동작안함 (무시)
-// @(구현o) eof 		컨트롤+ d -> minishell 종료 
 void	sigact_default_mode(void)
 {
 	struct sigaction	intsig;
@@ -32,7 +25,7 @@ static void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	if (!get_heredoc_data()->heredoc_visit_flag)
+	if (!get_heredoc_data()->heredoc_eof_flag)
 		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);

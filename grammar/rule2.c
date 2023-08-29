@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/tokenizer.h"
-#include "../include/rule.h"
-#include "../include/parser.h"
 
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star

@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
+
+static char	*vaild_env(char **temp);
+static char	*special_case(char **temp);
 
 t_bool	ft_cd(char **argv)
 {
@@ -23,10 +24,11 @@ t_bool	ft_cd(char **argv)
 	set_envp("OLDPWD", newpwd);
 	newpwd = getcwd(path, PATH_MAX);
 	set_envp("PWD", newpwd);
+	free(can_env);
 	return (0);
 }
 
-char	*vaild_env(char **temp)
+static char	*vaild_env(char **temp)
 {
 	int		size;
 	char	*parameter;
@@ -41,26 +43,22 @@ char	*vaild_env(char **temp)
 		return (ft_getenv("HOME"));
 	parameter = special_case(temp);
 	if (!parameter)
-		parameter = temp[1];
+		parameter = ft_strdup(temp[1]);
 	return (parameter);
 }
 
-char	*special_case(char **temp)
+static char	*special_case(char **temp)
 {
 	size_t	temp_len;
 	char	*parameter;
-	char	path[PATH_MAX];
 
 	temp_len = ft_strlen(temp[1]);
 	parameter = 0;
 	if (temp_len == 1 && ft_strncmp(temp[1], "~", 1) == 0)
 		parameter = ft_getenv("HOME");
 	else if (temp_len == 1 && ft_strncmp(temp[1], ".", 1) == 0)
-	{
-		getcwd(path, PATH_MAX);
-		return (ft_strdup(path));
-	}
+		return (ft_strdup("."));
 	else if (temp_len == 2 && ft_strncmp(temp[1], "..", 2) == 0)
-		parameter = "..";
+		parameter = ft_strdup("..");
 	return (parameter);
 }
