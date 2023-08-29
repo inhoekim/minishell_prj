@@ -1,8 +1,5 @@
 #ifndef MINISHELL2_H
 # define MINISHELL2_H
-# include "../libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
 # define STDIN 0
 # define STDOUT 1
 # define PROC_MAX 1024
