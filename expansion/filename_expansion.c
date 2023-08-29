@@ -1,4 +1,6 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
+
+static t_list	*globbing(char *pattern);
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
@@ -47,7 +49,7 @@ char	*concatenate(t_list *list)
 	return (pattern);
 }
 
-t_list	*globbing(char *pattern)
+static t_list	*globbing(char *pattern)
 {
 	t_list			*matches;
 	DIR				*dp;

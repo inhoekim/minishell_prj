@@ -36,7 +36,7 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	print_eof_exit()
+void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
@@ -52,7 +52,7 @@ void	minishell_loop(void)
 	line = "";
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);		
+		set_heredoc_fault_flag(FALSE);
 		line = readline("prompt> ");
 		if (line)
 		{

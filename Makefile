@@ -16,7 +16,7 @@ vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 ## file
-HEADERS = minishell.h
+HEADERS = minishell.h expansion.h
 
 SRCS = minishell.c arg_expansion.c exec_util.c exec_word_util.c
 SRCS += exec_etc.c execute.c filename_expansion.c rule3.c tokenizer_utils.c
