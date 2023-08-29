@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/parser.h"
+#include "../include/grammar.h"
 
 t_node	*parser(char *line)
 {
