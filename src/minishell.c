@@ -1,9 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/parser.h"
-#include "../include/execute.h"
-#include "../include/execute_util.h"
-#include "../include/here_doc.h"
-#include "../include/ms_signal.h"
 
 // void __leak()
 // {

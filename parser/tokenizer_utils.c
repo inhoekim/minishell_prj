@@ -6,12 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 14:17:17 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 16:39:49 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/tokenizer.h"
-#include "../include/here_doc.h"
+#include "../include/minishell.h"
 
 char	**alloc_heredoc_name(void)
 {

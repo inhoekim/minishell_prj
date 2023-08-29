@@ -1,9 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
-#include "../include/exec_word_util.h"
-#include "../include/make_argv_util.h"
-#include "../include/execute_util.h"
 
 static char		*abc_1(int start, int end, char *str);
 static int		find_cs_1(char c, char charset);

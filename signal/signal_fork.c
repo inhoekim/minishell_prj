@@ -1,7 +1,4 @@
-#include <signal.h>
-#include <termios.h>
-#include "../include/here_doc.h"
-#include "../include/execute_util.h"
+#include "../include/minishell.h"
 
 static void	signal_changer(int signum, void *handler);
 static void	fork_mode_handler(int signum);

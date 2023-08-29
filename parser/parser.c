@@ -6,16 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/28 15:42:36 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 16:38:58 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/rule.h"
-#include "../include/tokenizer.h"
-#include "../include/parser.h"
-#include "../include/filename_expansion.h"
-#include "../include/here_doc.h"
 
 t_node	*parser(char *line)
 {

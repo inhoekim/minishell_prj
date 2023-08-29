@@ -11,12 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/tokenizer.h"
-#include "../include/rule.h"
-#include "../include/parser.h"
-#include "../include/filename_expansion.h"
-#include "../include/here_doc.h"
-#include "../include/ms_signal.h"
 
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty

@@ -1,9 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
-#include "../include/here_doc.h"
-#include "../include/wait_queue.h"
-#include "../include/ms_signal.h"
 
 void	free_delete_heredoc(t_context *p_ctx);
 

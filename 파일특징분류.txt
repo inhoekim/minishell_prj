@@ -1,0 +1,17 @@
+총 30개
+
+built-in: 5개
+builtin_cd
+사용헤더파일:
+ft_cd선언부
+
+
+builtin_utils
+echo_pwd
+env_exit
+export_unset
+
+execute: 9개
+parser: 12개
+signal: 3개
+src: 1개

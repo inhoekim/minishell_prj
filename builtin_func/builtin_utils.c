@@ -1,6 +1,4 @@
 #include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {

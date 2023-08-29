@@ -8,7 +8,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
 INC_DIRS = $(shell brew --prefix readline)/include
-INC_DIRS += include libft
+INC_DIRS += include # libft
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
 SRC_DIRS = src builtin_func execute parser signal
 
@@ -16,14 +16,13 @@ vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 ## file
-HEADERS = arg_expansion.h execute.h libft.h rule.h exec_node_util.h execute_util.h parser.h 
-HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h minishell.h here_doc.h wait_queue.h
+HEADERS = minishell.h
 
 SRCS = minishell.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
 SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
 SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c here_doc_static.c
 SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c here_doc.c wait_queue.c
-SRCS += signal_default.c signal_fork.c signal_heredoc.c 
+SRCS += signal_default.c signal_fork.c signal_heredoc.c parameter_expansion.c
 
 OBJS = $(SRCS:.c=.o)
 

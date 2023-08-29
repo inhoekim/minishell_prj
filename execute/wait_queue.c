@@ -1,6 +1,4 @@
-#include "../include/wait_queue.h"
-#include "../include/execute.h"
-#include "../include/ms_signal.h"
+#include "../include/minishell.h"
 
 void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {

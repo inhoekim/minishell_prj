@@ -1,9 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/exec_word_util.h"
-#include "../include/execute_util.h"
-#include "../include/filename_expansion.h"
-
-extern int	amb_flag;
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {

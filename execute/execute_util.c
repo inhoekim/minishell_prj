@@ -1,5 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/execute_util.h"
 
 void	free_argv(char **argv)
 {
@@ -26,4 +25,14 @@ int	*get_exit_status(void)
 	static int	exit_status;
 
 	return (&exit_status);
+}
+
+void	fork_error(t_context *p_ctx)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+		exit(p_ctx->exit_status);
+	enqueue_after(pid, p_ctx);
 }

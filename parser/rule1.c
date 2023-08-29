@@ -6,14 +6,11 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/18 15:51:15 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 16:39:03 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "../include/tokenizer.h"
-#include "../include/rule.h"
-#include "../include/parser.h"
 
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)

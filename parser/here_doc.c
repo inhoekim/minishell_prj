@@ -1,4 +1,4 @@
-#include	"../include/here_doc.h"
+#include "../include/minishell.h"
 
 static t_bool	is_same_str(char *word1, char *word2);
 

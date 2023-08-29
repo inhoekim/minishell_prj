@@ -1,7 +1,4 @@
-#include <signal.h>
-#include <termios.h>
-#include "../include/here_doc.h"
-#include "../include/execute_util.h"
+#include "../include/minishell.h"
 
 static void	new_prompt(int signum);
 
