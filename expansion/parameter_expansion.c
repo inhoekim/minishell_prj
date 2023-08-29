@@ -1,24 +1,8 @@
 #include "../include/minishell.h"
-#include "../include/arg_expansion.h"
-#include "../include/execute_util.h"
-#include "../include/execute.h"
 
-void	arg_expansion(t_list *list)
-{
-	char	*content;
-
-	while (list)
-	{
-		content = list->content;
-		if (content[0] != '\'')
-		{
-			content = parameter_expansion(list->content);
-			free(list->content);
-			list->content = content;
-		}
-		list = list->next;
-	}
-}
+static char	*str_replace(char *str, char *old, char *new);
+static int	word_cnt(char *str, char *word);
+static char	*get_value(char *key);
 
 char	*parameter_expansion(char *str)
 {
@@ -30,7 +14,7 @@ char	*parameter_expansion(char *str)
 
 	str = ft_strdup(str);
 	n_str = str;
-	head = search_key(str, 0);
+	head = make_key_list(str, 0);
 	list = head;
 	while (list)
 	{
@@ -46,7 +30,7 @@ char	*parameter_expansion(char *str)
 	return (n_str);
 }
 
-char	*str_replace(char *str, char *old, char *new)
+static char	*str_replace(char *str, char *old, char *new)
 {
 	int		i;
 	int		new_len;
@@ -75,7 +59,7 @@ char	*str_replace(char *str, char *old, char *new)
 	return (res);
 }
 
-int	word_cnt(char *str, char *word)
+static int	word_cnt(char *str, char *word)
 {
 	int	i;
 	int	cnt;
@@ -97,7 +81,7 @@ int	word_cnt(char *str, char *word)
 	return (cnt);
 }
 
-char	*get_value(char *key)
+static char	*get_value(char *key)
 {
 	char	*value;
 
@@ -112,7 +96,7 @@ char	*get_value(char *key)
 	return (value);
 }
 
-t_list	*search_key(char *str, int i)
+t_list	*make_key_list(char *str, int i)
 {
 	int		base;
 	t_list	*head;

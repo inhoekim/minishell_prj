@@ -1,6 +1,4 @@
-#include <signal.h>
-#include <termios.h>
-#include "../include/here_doc.h"
+#include "../include/minishell.h"
 
 static void	quit_heredoc(int signum);
 

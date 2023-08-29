@@ -1,14 +1,9 @@
 #include "../include/minishell.h"
-#include "../include/parser.h"
-#include "../include/execute.h"
-#include "../include/execute_util.h"
-#include "../include/here_doc.h"
-#include "../include/ms_signal.h"
 
-void __leak()
-{
-	system("leaks minishell");
-}
+// void __leak()
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -16,7 +11,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	atexit(__leak);
+	// atexit(__leak);
 }
 
 void	init_envp(char **envp)
@@ -43,12 +38,7 @@ t_list	**get_envp(void)
 
 void	print_eof_exit()
 {
-	int	idx;
-
 	ft_putstr_fd("\033[1A", STDOUT);
-	idx = 1;
-	while (idx++ <= get_heredoc_data()->cursor_size)
-		ft_putstr_fd("\033[2C", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
 	printf("exit\n");
 }

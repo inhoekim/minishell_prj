@@ -1,55 +1,4 @@
 #include "../include/minishell.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
-#include "../include/here_doc.h"
-#include "../include/wait_queue.h"
-#include "../include/ms_signal.h"
-
-void	free_delete_heredoc(t_context *p_ctx);
-
-int	*get_last_pid(void)
-{
-	static int	last_pid;
-
-	return (&last_pid);
-}
-
-void	set_last_pid(int pid)
-{
-	*get_last_pid() = pid;
-}
-
-int	*get_last_exit_status(void)
-{
-	static int	last_exit_status;
-
-	return (&last_exit_status);
-}
-
-void	set_last_exit_status(int exit_status)
-{
-	*get_last_exit_status() = exit_status;
-}
-
-void	find_last_pid(t_context	*p_ctx)
-{
-	t_list	**head;
-	t_list	*prev;
-	t_list	*current;
-
-	head = &(p_ctx->pid_list);
-	if (!(*head))
-		return ;
-	prev = *head;
-	current = (*head)->next;
-	while (current != *head)
-	{
-		prev = current;
-		current = current->next;
-	}
-	set_last_pid(*((int *)prev->content));
-	return ;
-}
 
 void	execute(t_node *root)
 {
@@ -68,21 +17,8 @@ void	execute(t_node *root)
 	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
 	find_last_pid(&ctx);
-	wait_queue_after(&ctx);
+	wait_list(&ctx);
 	free_delete_heredoc(&ctx);
-}
-
-void	free_delete_heredoc(t_context *p_ctx)
-{
-	int	i;
-
-	i = 0;
-	while (i < p_ctx->heredoc_file_idx)
-		unlink(p_ctx->heredoc_file_name[i++]);
-	i = 0;
-	while (i < 16)
-		free(p_ctx->heredoc_file_name[i++]);
-	free(p_ctx->heredoc_file_name);
 }
 
 void	exec_node(t_node *node, t_context *p_ctx)
@@ -108,4 +44,37 @@ void	exec_node(t_node *node, t_context *p_ctx)
 	else if (node->type == SUBSHELL)
 		exec_subshell(node, p_ctx);
 	return ;
+}
+
+void	find_last_pid(t_context	*p_ctx)
+{
+	t_list	**head;
+	t_list	*prev;
+	t_list	*current;
+
+	head = &(p_ctx->pid_list);
+	if (!(*head))
+		return ;
+	prev = *head;
+	current = (*head)->next;
+	while (current != *head)
+	{
+		prev = current;
+		current = current->next;
+	}
+	set_last_pid(*((int *)prev->content));
+	return ;
+}
+
+void	free_delete_heredoc(t_context *p_ctx)
+{
+	int	i;
+
+	i = 0;
+	while (i < p_ctx->heredoc_file_idx)
+		unlink(p_ctx->heredoc_file_name[i++]);
+	i = 0;
+	while (i < 16)
+		free(p_ctx->heredoc_file_name[i++]);
+	free(p_ctx->heredoc_file_name);
 }
