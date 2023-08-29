@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 18:10:32 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/29 14:17:17 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 	tokenizer->curr_token->str = "";
 	tokenizer->curr_token = get_next_token(tokenizer);
 	tokenizer->heredoc_file_idx = 0;
+	tokenizer->token_size = 0;
 	tokenizer->heredoc_file_name = alloc_heredoc_name();
 }
 

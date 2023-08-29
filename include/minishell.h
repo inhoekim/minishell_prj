@@ -48,7 +48,7 @@ typedef enum e_symbol
 	SUBSHELL,
 	SUBSHELL_RIGHT,
 	SYNTAX_ERR
-}t_symbol;
+} t_symbol;
 
 /* binary tree */
 typedef struct s_node
@@ -74,6 +74,7 @@ typedef struct s_tokenizer
 	char	*end;
 	int		heredoc_file_idx;
 	char	**heredoc_file_name;
+	int		token_size;
 }t_tokenizer;
 
 void	init_envp(char **envp);

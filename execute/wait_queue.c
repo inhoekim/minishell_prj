@@ -2,23 +2,6 @@
 #include "../include/execute.h"
 #include "../include/ms_signal.h"
 
-// void	ft_cir_lstclear(t_context *p_ctx)
-// {
-// 	t_list	*current;
-// 	t_list	*tmp;
-// 	t_list	**head;
-
-// 	head = &(p_ctx->pid_list);
-// 	current = (*head);
-// 	while (current->next != *head)
-// 	{
-// 		tmp = current;
-// 		current = current->next;
-// 		ft_lstdelone(tmp, free);
-// 	}
-// 	ft_lstdelone(current, free);
-// }
-
 void	ft_cir_lstadd_back(t_list **head, t_list *n_node)
 {
 	t_list	*tmp;
@@ -55,6 +38,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	p_ctx->pid_size++;
 }
 
+// @ _delete_process
 t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 {
 	t_list	*prev;
@@ -64,23 +48,20 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	current = (*head)->next;
 	while (current != d_node)
 	{
-		prev = current;
+		prev = current;		
 		current = current->next;
 	}
-	// list의 원소가 하나이고 *head == d_node인 경우
 	if (current == *head && prev == *head)
 	{
 		ft_lstdelone(d_node, free);
 		return (NULL);
 	}
-	// list의 원소가 하나가 아니고 *head == d_node인 경우
 	else if (current == *head)
 	{
 		*head = current->next;
 		prev->next = *head;
 		ft_lstdelone(current, free);
 	}
-	// 그 외
 	else
 	{
 		prev->next = current->next;
@@ -89,6 +70,7 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	return (prev);
 }
 
+// @ wait_process
 void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 {
 	int		status;
@@ -100,12 +82,10 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	pid = *((int *)node->content);
 	status = 0;
 	wnohang_ret = waitpid(pid, &status, flag);
-	// printf("wait end: %d\n", pid);
 	if (!wnohang_ret)
 		return (ret);
 	else if (WIFEXITED(status))
 	{
-		// printf("exit: %d\n", WEXITSTATUS(status));
 		p_ctx->exit_status = WEXITSTATUS(status);
 		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
@@ -114,7 +94,6 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	}
 	else if (WIFSIGNALED(status))
 	{
-		// printf("signal: %d\n", WTERMSIG(status));
 		p_ctx->exit_status = WTERMSIG(status) + 128;
 		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
@@ -128,12 +107,10 @@ void	wait_queue_after(t_context *p_ctx)
 {
 	t_list	*_pid_list;
 
-	// sigact_zobmie_setmode();
 	_pid_list = p_ctx->pid_list;
 	while (_pid_list && p_ctx->pid_size)
 	{
 		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
-		// _pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, 0);
 		if (!_pid_list)
 			break ;
 		_pid_list = _pid_list->next;

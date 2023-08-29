@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 15:51:09 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 14:21:40 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ t_token	*get_curr_token(t_tokenizer *tokenizer)
 
 t_token	*get_next_token(t_tokenizer *tokenizer)
 {
+	tokenizer->token_size++;
+	if (tokenizer->token_size == TOKEN_SIZE)
+	{
+		ft_putstr_fd("minishell : ", STDERR_FILENO);
+		ft_putstr_fd("too many command~~\n", STDERR_FILENO);
+		exit(1);
+	}
 	skip_whitespace(tokenizer);
 	if (!tokenizer->end || !*tokenizer->end)
 		return (make_token(tokenizer, E0F));

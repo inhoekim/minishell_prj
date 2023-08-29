@@ -6,13 +6,14 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 16:12:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/18 17:22:07 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 14:21:44 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 # include "minishell.h"
+#define TOKEN_SIZE 1024
 
 t_bool		match_token(t_symbol type, \
 t_tokenizer *tokenizer, t_bool token_move);

@@ -11,7 +11,6 @@ char	*concatenate(t_list *list);
 t_list	*globbing(char *pattern);
 int		**allocate_dp(int row, int col);
 int		is_match(char *pattern, char *word, int p_idx, int w_idx);
-//int 	is_match(char *pattern, char *word);
 void	msh_error(char *name, char *msg, int error);
 
 #endif

@@ -18,7 +18,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 		return ;
 	}
 	can_expansion = TRUE;
-	// delimeter에 quotation이 포함된 경우, 파일내용은 expansion되지 않는다.
 	if (ft_strchr(delimiter, '"') || ft_strchr(delimiter, '\''))
 	{
 		list = split_quotes(delimiter);
@@ -31,8 +30,6 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 	set_cursor_size(tokenizer->heredoc_file_idx);
 	while (TRUE)
 	{
-		// @ 현재커서위치(글로벌) 업데이트
-		// @ SIGWINCH핸들러로 윈도우 사이즈 변경시마다,현재커서위치(글로벌) 업데이트
 		input = readline("> ");
 		if (!input || is_same_str(input, delimiter))
 		{
@@ -51,23 +48,7 @@ void	here_doc(char *delimiter, t_tokenizer *tokenizer)
 				delete_heredoc(tokenizer);
 			}
 			else
-			{
 				set_heredoc_eof_flag(TRUE);
-				if (tokenizer->heredoc_file_idx == 1)
-				{
-					ft_putstr_fd("\033[1A", STDOUT);
-					ft_putstr_fd("\033[2C", STDOUT);
-				}
-				else
-				{
-					ft_putstr_fd("\033[1A", STDOUT);
-					// @ 현재커서위치(글로벌)로 커서를 옮김 
-					// ft_putstr_fd("> ", STDOUT);
-					
-					// for (int i = 1; i <= tokenizer->heredoc_file_idx; i++)
-					// 	ft_putstr_fd("\033[2C", STDOUT);
-				}
-			}
 			break ;
 		}
 		if (can_expansion)

@@ -5,10 +5,6 @@
 
 static void	new_prompt(int signum);
 
-// @ sigaction set(default mode)
-// @(구현o) sigint(2) 	컨트롤+c -> 개행후 새로운 프롬프트 출력
-// @(구현o) sigquit(3) 컨트롤+\ -> 아무동작안함 (무시)
-// @(구현o) eof 		컨트롤+ d -> minishell 종료 
 void	sigact_default_mode(void)
 {
 	struct sigaction	intsig;

@@ -145,7 +145,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-
 	set_redirect_ambiguity(TRUE);
 	filename = (char **)make_argv(rhs->word);
 	if (*get_redirect_ambiguity() == FALSE)
@@ -352,25 +351,16 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 
 	can_builtin = FALSE;
 	builtin_func = check_builtin(argv[0]);
-	/* @ Built_in 함수도 fork 해야하는 경우가 있음. 관련사항 수정해야할 것들 주석
-       pipe 노드의 후손중에 빌트인 함수가 있다면 해당 빌트인은 fork된 쉘의 exec_word로 실행해야함
-	   pipe 노드의 후손이 아닌 빌트인 함수들은 원래처럼 우리의 부모 미니쉘이 그냥 실행하면됨
-	*/
 	if (builtin_func)
 	{
-		// @ exec_pipe내에서 재귀적으로 호출된 cmd라면
-		// @ piped_cmd는 IPC로 통신해야함.(sigpipe, eof)
 		if (p_ctx->is_piped_cmd)
 			forked_builtin(p_ctx, builtin_func, argv);
 		else
 		{
-			// @ builtin cmd에도 redirection이 필요함. 복구도 할 수 있어야 함.
-			// @ redirect 및 redirect 정보 백업
 			tmp_fd[STDIN] = dup(STDIN);
 			tmp_fd[STDOUT] = dup(STDOUT);
 			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
-			// @ redirect 및 redirect 정보 복구
 			redirect_fd(tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
 			set_last_exit_status(p_ctx->exit_status);

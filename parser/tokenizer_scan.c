@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 17:00:51 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 12:46:10 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,12 @@ t_token	*scan_word_token(t_tokenizer *tokenizer)
 		{
 			if (string_close(tokenizer, *tokenizer->end) == FALSE)
 			{
-				// @ 수정필
 				syntax_error(tokenizer);
 				return (make_token(tokenizer, SYNTAX_ERR));
 			}
 		}
 		tokenizer->end++;
 	}
-	// ex. ls & ls일 때, word token '&'는 tokenizer->start == tokenizer->end이므로 false
-	// 나머지는 DELIMETER에 속할 경우 end를 왼쪽으로 한칸 밀어야 함.
 	if (tokenizer->start != tokenizer->end \
 		&& ft_strchr(DELIMETER, *tokenizer->end))
 		tokenizer->end--;

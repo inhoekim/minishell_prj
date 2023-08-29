@@ -173,32 +173,3 @@ void	msh_error(char *name, char *msg, int error)
 	else if (error)
 		ft_putendl_fd(strerror(error), STDERR_FILENO);
 }
-
-// char	*cmd_path_find(char *cmd, char **envp)
-// {
-// 	char	**env_pt;
-// 	char	**res1;
-// 	char	**res2;
-// 	int		i;
-// 	char	*cmd_path;
-
-// 	env_pt = envp;
-// 	while (*env_pt)
-// 	{
-// 		res1 = ft_split(*(env_pt++), '=');
-// 		if (!ft_strncmp(res1[0], "PATH", 4))
-// 		{
-// 			res2 = ft_split(res1[1], ':');
-// 			i = 0;
-// 			while (res2[i])
-// 			{
-// 				cmd_path = ft_strjoin(res2[i++], cmd);
-// 				if (access(cmd_path, X_OK) != -1)
-// 					return (cmd_path);
-// 			}
-// 			free(res2);
-// 			free(res1);
-// 		}
-// 	}
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/26 16:12:54 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/29 13:57:47 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ static char	**make_word_data(char *src, int len)
 	int		idx;
 
 	new_str = (char **)malloc(sizeof(char *) * 2);
+	if (!new_str)
+		exit(ENOMEM);
 	new_str[0] = (char *)malloc(sizeof(char) * (len + 1));
+	if (!(new_str[0]))
+		exit(ENOMEM);
 	new_str[0][len] = '\0';
 	idx = 0;
 	while (idx < len)

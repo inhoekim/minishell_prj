@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:44:24 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/25 12:30:20 by inhkim           ###   ########.fr       */
+/*   Updated: 2023/08/29 12:52:20 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
 
 // first_set() Details
 /* It checks which terminal character 

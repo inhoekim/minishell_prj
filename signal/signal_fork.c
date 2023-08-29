@@ -52,18 +52,3 @@ static void	fork_mode_handler(int signum)
 	if (signum == SIGQUIT)
 		printf("Quit: %d\n", signum);
 }
-
-// void zobmie_handler(int signum)
-// {
-// 	pid_t pid;
-
-// 	if (signum != SIGCHLD)
-// 		return ;
-// 	pid = wait(0);
-// 	printf("%d terminated.\n", pid);
-
-// }
-// void	sigact_zobmie_setmode(void)
-// {
-// 	signal_changer(SIGCHLD, zobmie_handler);
-// }
