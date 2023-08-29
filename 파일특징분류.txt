@@ -15,3 +15,10 @@ execute: 9개
 parser: 12개
 signal: 3개
 src: 1개
+
+
+쪼갤파일들
+exec_redirect.c
+exec_fork.c
+wildcard.c
+filename_expansion.c

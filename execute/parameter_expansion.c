@@ -14,7 +14,7 @@ char	*parameter_expansion(char *str)
 
 	str = ft_strdup(str);
 	n_str = str;
-	head = search_key(str, 0);
+	head = make_key_list(str, 0);
 	list = head;
 	while (list)
 	{
@@ -96,7 +96,7 @@ static char	*get_value(char *key)
 	return (value);
 }
 
-t_list	*search_key(char *str, int i)
+t_list	*make_key_list(char *str, int i)
 {
 	int		base;
 	t_list	*head;

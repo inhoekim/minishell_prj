@@ -1,11 +1,10 @@
 #include "../include/minishell.h"
 
-static char		*abc_1(int start, int end, char *str);
-static int		find_cs_1(char c, char charset);
-static int		size_count_1(char *str, char c);
-static char		**ft_free2_1(char **newstr, int idx);
+static char		*make_arr(int start, int end, char *str);
+static int		if_c(char c, char charset);
+static int		chunk_size(char *str, char c);
 
-char	**ft_split2(char *s, char c)
+char	**path_split(char *s, char c)
 {
 	char	**newstr;
 	int		idx;
@@ -13,38 +12,26 @@ char	**ft_split2(char *s, char c)
 	int		start;
 
 	idx = 0;
-	newstr = (char **)malloc(sizeof(char *) * (size_count_1((char *)s, c) + 1));
+	newstr = (char **)malloc(sizeof(char *) * (chunk_size((char *)s, c) + 1));
 	if (!newstr)
-		return (NULL);
+		exit(ENOMEM);
 	num = 0;
-	while (s[num] && idx < (size_count_1((char *)s, c)))
+	while (s[num] && idx < (chunk_size((char *)s, c)))
 	{
-		while (s[num] && find_cs_1(s[num], c))
+		while (s[num] && if_c(s[num], c))
 			num++;
 		if (s[num] != 0)
 			start = num;
-		while (s[num] && (!(find_cs_1(s[num], c))))
+		while (s[num] && (!(if_c(s[num], c))))
 			num++;
-		newstr[idx] = abc_1(start, num, (char *)s);
-		if (!newstr[idx])
-			return (ft_free2_1(newstr, idx));
+		newstr[idx] = make_arr(start, num, (char *)s);
 		idx++;
 	}
 	newstr[idx] = 0;
 	return (newstr);
 }
 
-static char	**ft_free2_1(char **newstr, int idx)
-{
-	while (idx--)
-	{
-		free(newstr[idx]);
-	}
-	free(newstr);
-	return (NULL);
-}
-
-static int	size_count_1(char *str, char c)
+static int	chunk_size(char *str, char c)
 {
 	int	num;
 	int	count;
@@ -53,17 +40,17 @@ static int	size_count_1(char *str, char c)
 	count = 0;
 	while (str[num])
 	{
-		while (str[num] && (find_cs_1(str[num], c)))
+		while (str[num] && (if_c(str[num], c)))
 			num++;
 		if (str[num] != 0)
 			count++;
-		while (str[num] && (!find_cs_1(str[num], c)))
+		while (str[num] && (!if_c(str[num], c)))
 			num++;
 	}
 	return (count);
 }
 
-static char	*abc_1(int start, int end, char *str)
+static char	*make_arr(int start, int end, char *str)
 {
 	int		size;
 	int		idx;
@@ -72,8 +59,8 @@ static char	*abc_1(int start, int end, char *str)
 	size = end - start;
 	idx = 0;
 	arr = (char *)malloc(sizeof(char) * (size + 2));
-	if (arr == NULL)
-		return (NULL);
+	if (!arr)
+		exit(ENOMEM);
 	while (start < end)
 	{
 		arr[idx] = str[start];
@@ -85,7 +72,7 @@ static char	*abc_1(int start, int end, char *str)
 	return (arr);
 }
 
-static int	find_cs_1(char c, char charset)
+static int	if_c(char c, char charset)
 {
 	if (c == charset)
 		return (1);

@@ -1,135 +1,87 @@
 #include "../include/minishell.h"
 
-char	**make_argv(char **word_arr)
+t_list	*split_quotes(char *str)
 {
 	int		i;
-	t_list	*list;
-	t_list	*argv_list;
-	t_bool	glob_flag;
+	int		base;
+	char	*not_quote_str;
+	t_list	*head;
 
 	i = 0;
-	list = NULL;
-	argv_list = NULL;
-	glob_flag = FALSE;
-	while (word_arr[i])
+	head = NULL;
+	while (str[i])
 	{
-		list = split_quotes(word_arr[i]);
-		glob_flag = check_glob(list);
-		arg_expansion(list);
-		unquote(list);
-		ft_lstadd_back(&argv_list, filename_expansion(list, glob_flag));
-		ft_lstclear(&list, free);
+		if (str[i] == '"')
+			ft_lstadd_back(&head, include_slice(str, &i, '"'));
+		else if (str[i] == '\'')
+			ft_lstadd_back(&head, include_slice(str, &i, '\''));
+		else
+		{
+			base = i;
+			while (str[i] && str[i] != '\'' && str[i] != '"')
+				i++;
+			not_quote_str = ft_substr(&str[base], 0, i - base);
+			ft_lstadd_back(&head, ft_lstnew(not_quote_str));
+			i--;
+		}
 		i++;
 	}
-	return (list_to_arr(argv_list));
+	return (head);
 }
 
-void	sigact_fork(void)
+t_list	*include_slice(char *str, int *i, char end)
 {
-	struct sigaction	intsig;
-	struct sigaction	quitsig;
+	int	base;
 
-	intsig.sa_handler = 0;
-	sigemptyset(&intsig.sa_mask);
-	intsig.sa_flags = 0;
-	sigaction(SIGINT, &intsig, 0);
-	quitsig.sa_handler = 0;
-	sigemptyset(&quitsig.sa_mask);
-	quitsig.sa_flags = 0;
-	sigaction(SIGQUIT, &quitsig, 0);
+	base = (*i)++;
+	while (str[*i] != end)
+		(*i)++;
+	return (ft_lstnew(ft_substr(&str[base], 0, *i - base + 1)));
 }
 
-void	sigact_forkset(void)
+t_bool	check_glob(t_list *list)
 {
-	struct sigaction	intsig;
-	struct sigaction	quitsig;
-	struct termios		attributes;
-
-	tcgetattr(STDIN, &attributes);
-	attributes.c_lflag |= ECHOCTL;
-	tcsetattr(STDIN, TCSANOW, &attributes);
-	intsig.sa_handler = SIG_IGN;
-	quitsig.sa_handler = SIG_IGN;
-	sigemptyset(&intsig.sa_mask);
-	sigemptyset(&quitsig.sa_mask);
-	intsig.sa_flags = 0;
-	quitsig.sa_flags = 0;
-	sigaction(SIGINT, &intsig, 0);
-	sigaction(SIGQUIT, &quitsig, 0);
+	return (list_search(list, '*') || list_search(list, '?'));
 }
 
-void	fork_exec(char **argv, t_context *p_ctx)
+t_bool	list_search(t_list *list, char ch)
 {
-	int		pid;
-	t_list	*envl;
+	char	*content;
+	t_bool	pattern;
 
-	envl = *get_envp();
-	if (!*get_is_subshell())
-		sigact_fork_mode();
-	pid = fork();
-	if (pid == 0)
+	pattern = FALSE;
+	while (list)
 	{
-		sigact_modeoff();
-		dup2(p_ctx->fd[STDIN], STDIN);
-		dup2(p_ctx->fd[STDOUT], STDOUT);
-		if (p_ctx->fd_close >= 0)
-			close(p_ctx->fd_close);
-		execve(argv[0], argv, list_to_arr(envl));
-		exit(1);
+		content = list->content;
+		if (ft_strchr(content, ch))
+		{
+			if (!ft_strchr(content, '"') && !ft_strchr(content, '\''))
+				pattern = TRUE;
+		}
+		list = list->next;
 	}
-	if (p_ctx->fd[STDIN] != STDIN)
-		close(p_ctx->fd[STDIN]);
-	if (p_ctx->fd[STDOUT] != STDOUT)
-		close(p_ctx->fd[STDOUT]);
-	enqueue_after(pid, p_ctx);
+	return (pattern);
 }
 
-char	**list_to_arr(t_list *node)
+void	unquote(t_list *list)
 {
-	char	**arr;
-	int		i;
-	int		len;
-	t_list	*prev;
+	char	*content;
 
-	i = 0;
-	len = ft_lstsize(node);
-	arr = ft_calloc(len + 1 ,sizeof(t_list));
-	if (!arr)
-		exit(ENOMEM);
-	while (node)
+	while (list)
 	{
-		prev = node;
-		arr[i++] = node->content;
-		node = node->next;
-		free(prev);
+		content = list->content;
+		if (content[0] == '"')
+		{
+			content = ft_strtrim(content, "\"");
+			free(list->content);
+			list->content = content;
+		}
+		else if (content[0] == '\'')
+		{
+			content = ft_strtrim(content, "'");
+			free(list->content);
+			list->content = content;
+		}
+		list = list->next;
 	}
-	return (arr);
-}
-
-// S_IFMT	0170000	bitmask for the file type bitfields
-// S_IFDIR	0040000	directory
-t_bool	can_access(char *filename, t_context *p_ctx)
-{
-	struct stat	buff;
-
-	if (access(filename, F_OK) != 0)
-	{
-		msh_error(filename, NULL, ENOENT);
-		p_ctx->exit_status = 127;
-		return (FALSE);
-	}
-	stat(filename, &buff);
-	if ((buff.st_mode & S_IFMT) == S_IFDIR)
-	{
-		msh_error(filename, NULL, EISDIR);
-		p_ctx->exit_status = 126;
-		return (FALSE);
-	}
-	else if (access(filename, X_OK) != 0)
-	{
-		msh_error(filename, NULL, EACCES);
-		p_ctx->exit_status = 126;
-		return (FALSE);
-	}
-	return (TRUE);
 }

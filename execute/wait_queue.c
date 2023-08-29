@@ -36,8 +36,7 @@ void	enqueue_after(pid_t pid, t_context *p_ctx)
 	p_ctx->pid_size++;
 }
 
-// @ _delete_process
-t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
+t_list	*_delete_process(t_list **head, t_list *d_node)
 {
 	t_list	*prev;
 	t_list	*current;
@@ -68,8 +67,7 @@ t_list	*ft_cir_lstdelete_node(t_list **head, t_list *d_node)
 	return (prev);
 }
 
-// @ wait_process
-void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
+void	*wait_process(t_list *node, t_context *p_ctx, int flag)
 {
 	int		status;
 	pid_t	pid;
@@ -85,7 +83,7 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	else if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);
-		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		ret = _delete_process(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 		if (pid == *get_last_pid())
 			set_last_exit_status(p_ctx->exit_status);
@@ -93,7 +91,7 @@ void	*wait_and_set_exit_status_n(t_list *node, t_context *p_ctx, int flag)
 	else if (WIFSIGNALED(status))
 	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
-		ret = ft_cir_lstdelete_node(&p_ctx->pid_list, node);
+		ret = _delete_process(&p_ctx->pid_list, node);
 		p_ctx->pid_size--;
 		if (pid == *get_last_pid())
 			set_last_exit_status(p_ctx->exit_status);
@@ -108,11 +106,36 @@ void	wait_queue_after(t_context *p_ctx)
 	_pid_list = p_ctx->pid_list;
 	while (_pid_list && p_ctx->pid_size)
 	{
-		_pid_list = wait_and_set_exit_status_n(_pid_list, p_ctx, WNOHANG);
+		_pid_list = wait_process(_pid_list, p_ctx, WNOHANG);
 		if (!_pid_list)
 			break ;
 		_pid_list = _pid_list->next;
 	}
 	p_ctx->pid_list = NULL;
 	sigact_default_mode();
+}
+
+int	*get_last_pid(void)
+{
+	static int	last_pid;
+
+	return (&last_pid);
+}
+
+void	set_last_pid(int pid)
+{
+	*get_last_pid() = pid;
+}
+
+
+int	*get_last_exit_status(void)
+{
+	static int	last_exit_status;
+
+	return (&last_exit_status);
+}
+
+void	set_last_exit_status(int exit_status)
+{
+	*get_last_exit_status() = exit_status;
 }

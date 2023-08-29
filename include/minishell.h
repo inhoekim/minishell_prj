@@ -117,13 +117,13 @@ void	minishell_loop(void);
 
 void	arg_expansion(t_list *list);
 char	*parameter_expansion(char *str);
-t_list	*search_key(char *str, int i);
+t_list	*make_key_listist(char *str, int i);
 
 typedef t_bool	(*t_builtin)(char **args);
 void		exec_word(t_node *node, t_context *p_ctx);
 t_builtin	check_builtin(char *argv);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
-char		**ft_split2(char *s, char c);
+char		**path_split(char *s, char c);
 char		*make_order(char **path, char **argv);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		exec_or(t_node *node, t_context *p_ctx);
@@ -176,7 +176,6 @@ t_list	*filename_expansion(t_list *list, t_bool glob_flag);
 char	*concatenate(t_list *list);
 t_list	*globbing(char *pattern);
 int		**allocate_dp(int row, int col);
-int		is_match(char *pattern, char *word, int p_idx, int w_idx);
 void	msh_error(char *name, char *msg, int error);
 
 void			set_delimiter(t_node *node, char buf[]);
@@ -254,5 +253,12 @@ void	wait_queue_after(t_context *p_ctx);
 
 void	set_redirect_ambiguity(t_bool value);
 t_bool	*get_redirect_ambiguity(void);
+t_bool	is_regular_file(char *filename, t_context *p_ctx);
+t_bool	is_not_directory(char *filename, t_context *p_ctx);
+
+
+void	forked_builtin(t_context *p_ctx, t_builtin	builtin_func, char **argv);
+void	free_delete_heredoc(t_context *p_ctx);
+int		wildcard(char *pattern, char *word, int p_idx, int w_idx);
 
 #endif
