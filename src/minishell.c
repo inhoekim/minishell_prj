@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/minishell2.h"
 
 // void __leak()
 // {
@@ -36,7 +36,7 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	print_eof_exit()
+void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
