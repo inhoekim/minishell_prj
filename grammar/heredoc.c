@@ -1,4 +1,6 @@
-#include "../include/builtin.h"
+#include "../include/grammar.h"
+#include <fcntl.h>
+
 static void		read_heredoc(int fd, char *delimiter, \
 t_tokenizer *tokenizer, t_bool can_expansion);
 static t_bool	check_eof_heredoc(char *input, \

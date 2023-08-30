@@ -6,11 +6,12 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:07 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 14:09:06 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/builtin.h"
+#include "../include/grammar.h"
+
 //msh_grammar ::= pipeline conditional
 t_node	*msh_grammar(t_tokenizer *tokenizer)
 {

@@ -1,4 +1,5 @@
-#include "../include/builtin.h"
+#include "../include/grammar.h"
+
 static char	*quote_removal(char *word);
 
 void	delete_heredoc(t_tokenizer *tokenizer)

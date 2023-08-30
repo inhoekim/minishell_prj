@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/builtin.h"
+#include "../include/grammar.h"
+
 //command ::= simple_cmd
 //command ::= ssh io_redirect_star
 t_node	*command(t_tokenizer *tokenizer)
