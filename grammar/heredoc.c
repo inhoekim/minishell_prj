@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/grammar.h"
 
 void	heredoc(char *delimiter, t_tokenizer *tokenizer)
 {
@@ -25,7 +25,6 @@ void	heredoc(char *delimiter, t_tokenizer *tokenizer)
 	}
 	fd = open(tokenizer->heredoc_file_name[tokenizer->heredoc_file_idx++], \
 	O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	set_cursor_size(tokenizer->heredoc_file_idx);
 	while (TRUE)
 	{
 		input = readline("> ");

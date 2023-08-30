@@ -1,5 +1,4 @@
-
-#include "../include/minishell.h"
+#include "../include/execute.h"
 
 void	exec_input(t_node *node, t_context *p_ctx)
 {

@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
 int	**allocate_dp(int row, int col)
 {
@@ -35,7 +35,7 @@ int	wildcard(char *pattern, char *word, int p_idx, int w_idx)
 	int	len_w;
 	int	**dp;
 	int	pos;
-	int match_flag;
+	int	match_flag;
 
 	len_p = ft_strlen(pattern);
 	len_w = ft_strlen(word);

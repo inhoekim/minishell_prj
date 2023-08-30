@@ -1,17 +1,11 @@
 #include "../include/minishell.h"
 
-// void __leak()
-// {
-// 	system("leaks minishell");
-// }
-
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	// atexit(__leak);
 }
 
 void	init_envp(char **envp)
@@ -36,7 +30,7 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	print_eof_exit()
+void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[8C", STDOUT);
@@ -52,18 +46,17 @@ void	minishell_loop(void)
 	line = "";
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);		
+		set_heredoc_fault_flag(FALSE);	
 		line = readline("prompt> ");
 		if (line)
 		{
 			if (*line != '\0')
 				add_history(line);
-			set_cursor_size(0);
 			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);
-			free(line);			
+			free(line);
 		}
 	}
 	print_eof_exit();

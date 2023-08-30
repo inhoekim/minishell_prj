@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
