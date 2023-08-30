@@ -1,9 +1,6 @@
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
-// # include "minishell2.h"
-// # include "util.h"
-
 # define NONE -1
 # define STDERR_FD 2
 # define PATH_MAX 1024
