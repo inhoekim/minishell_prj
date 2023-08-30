@@ -10,14 +10,13 @@
 # define STDIN 0
 # define STDOUT 1
 
-
 typedef enum e_nonterminal		t_nonterminal;
 typedef enum e_symbol			t_symbol;
 
 typedef struct s_node			t_node;
 typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
-
+typedef t_bool					(*t_builtin)(char **args);
 
 typedef struct s_context
 {
@@ -31,7 +30,6 @@ typedef struct s_context
 	t_bool	is_piped_cmd;
 }	t_context;
 
-typedef t_bool	(*t_builtin)(char **args);
 t_builtin	check_builtin(char *argv);
 t_list		*split_quotes(char *str);
 t_list		*include_slice(char *str, int *i, char end);

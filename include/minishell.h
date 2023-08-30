@@ -17,7 +17,7 @@
 # define STDOUT 1
 # define STDIN 0
 
-typedef struct	s_context t_context;
+typedef struct s_context	t_context;
 
 t_list	*_delete_process(t_list **head, t_list *d_node);
 t_list	**get_envp(void);

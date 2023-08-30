@@ -11,14 +11,13 @@
 # include "expansion.h"
 # include <fcntl.h>
 
-
 typedef enum e_nonterminal		t_nonterminal;
 typedef enum e_symbol			t_symbol;
 
 typedef struct s_node			t_node;
 typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
-typedef	struct s_heredoc_data	t_heredoc_data;
+typedef struct s_heredoc_data	t_heredoc_data;
 
 //heredoc
 t_heredoc_data	*get_heredoc_data(void);
@@ -29,6 +28,7 @@ void			set_tmp_stdin_fd(int fd);
 void			set_heredoc_fault_flag(int flag);
 void			delete_heredoc(t_tokenizer *tokenizer);
 void			set_delimiter(t_node *node, char buf[]);
+void			set_tmp_stdin_fd(int fd);
 
 // rule
 t_node			*msh_grammar(t_tokenizer *tokenizer);

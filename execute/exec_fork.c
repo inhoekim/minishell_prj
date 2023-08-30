@@ -1,9 +1,9 @@
 #include "../include/execute.h"
 
+static void	order_check(char **argv, t_context *p_ctx, char *temp_path);
+
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
-	char	*order;
-	char	**path;
 	char	*temp_path;
 
 	temp_path = ft_getenv("PATH");
@@ -14,6 +14,15 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		fork_error(p_ctx);
 		return ;
 	}
+	order_check(argv, p_ctx, temp_path);
+	free(temp_path);
+}
+
+static void	order_check(char **argv, t_context *p_ctx, char *temp_path)
+{
+	char	*order;
+	char	**path;
+
 	path = path_split(temp_path, ':');
 	order = make_order(path, argv);
 	if (order)
@@ -33,7 +42,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		fork_error(p_ctx);
 	}
 	free_argv(path);
-	free(temp_path);
 }
 
 char	*make_order(char **path, char **argv)

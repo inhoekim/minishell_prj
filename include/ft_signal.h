@@ -10,7 +10,6 @@
 # include "../libft/libft.h"
 # include "minishell.h"
 
-
 //signal_default
 void	sigact_default_mode(void);
 

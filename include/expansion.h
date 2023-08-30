@@ -6,6 +6,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include "util.h"
+
 t_list	*filename_expansion(t_list *list, t_bool glob_flag);
 t_list	*make_key_list(char *str, int i);
 char	*concatenate(t_list *list);

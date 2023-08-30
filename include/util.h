@@ -1,7 +1,6 @@
 #ifndef UTIL_H
 # define UTIL_H
 
-
 typedef enum e_nonterminal{
 	PIPELINE = 0,
 	COMMAND = PIPELINE,

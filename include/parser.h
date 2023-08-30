@@ -20,8 +20,6 @@ typedef struct s_node			t_node;
 typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
 
-
-
 //merge_tree
 t_node	*merge_tree(t_node *parent, t_node *child);
 
