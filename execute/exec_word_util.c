@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/execute.h"
 
 t_list	*split_quotes(char *str)
 {
