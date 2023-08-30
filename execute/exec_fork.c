@@ -22,7 +22,7 @@ static void	order_check(char **argv, t_context *p_ctx, char *temp_path)
 {
 	char	*order;
 	char	**path;
-	
+
 	path = path_split(temp_path, ':');
 	order = make_order(path, argv);
 	if (order)
