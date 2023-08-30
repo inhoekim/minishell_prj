@@ -107,7 +107,7 @@ typedef struct s_heredoc_data{
 	int	heredoc_eof_flag;
 	int	temp_stdin_fd;
 	int	cursor_size;
-} t_heredoc_data;
+}t_heredoc_data;
 
 void	arg_expansion(t_list *list);
 t_list	*filename_expansion(t_list *list, t_bool glob_flag);

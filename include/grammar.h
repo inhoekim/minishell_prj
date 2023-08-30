@@ -5,6 +5,7 @@
 # define STDIN 0
 # define STDOUT 1
 # include "../libft/libft.h"
+
 // word, <, >, >>, <<, &&, ||, |, (, eof, ssh, ), err
 // SUBSHELL_LEFT, SUBSHELL_RIGHT, E0F, SYNTAX_ERR 심볼은 오직 토크나이저에서만 사용하는 심벌
 typedef enum e_symbol
