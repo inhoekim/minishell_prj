@@ -1,4 +1,8 @@
 #include "../include/execute.h"
+#include <errno.h>
+
+t_bool	*get_is_subshell(void);
+t_list	**get_envp(void);
 
 void	exec_word(t_node *node, t_context *p_ctx)
 {

@@ -32,9 +32,6 @@ typedef struct s_context
 }	t_context;
 
 typedef t_bool	(*t_builtin)(char **args);
-
-
-
 t_builtin	check_builtin(char *argv);
 t_list		*split_quotes(char *str);
 t_list		*include_slice(char *str, int *i, char end);

@@ -20,8 +20,6 @@ typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
 typedef	struct s_heredoc_data	t_heredoc_data;
 
-
-
 //heredoc
 t_heredoc_data	*get_heredoc_data(void);
 t_bool			is_same_str(char *word1, char *word2);

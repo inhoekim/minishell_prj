@@ -1,5 +1,7 @@
 #include "../include/execute.h"
 
+t_bool	*get_is_subshell(void);
+
 void	exec_subshell(t_node *node, t_context *p_ctx)
 {
 	int		pid;
