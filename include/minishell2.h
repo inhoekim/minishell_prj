@@ -1,23 +1,21 @@
 #ifndef MINISHELL2_H
 # define MINISHELL2_H
 
-// #include "util.h"
+
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
+# include <errno.h>
+# include <stdio.h>
+# include "../libft/libft.h"
+# include "grammar.h"
+# include "ft_signal.h"
+# include "parser.h"
+# include "execute.h"
 
-typedef struct s_context
-{
-	int		exit_status;
-	int		fd[2];
-	int		fd_close;
-	int		heredoc_file_idx;
-	char	**heredoc_file_name;
-	t_list	*pid_list;
-	int		pid_size;
-	t_bool	is_piped_cmd;
-}	t_context;
-
+# define PROC_MAX 1024
+# define STDOUT 1
+# define STDIN 0
 
 void	init_envp(char **envp);
 t_list	**get_envp(void);

@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/minishell2.h"
 
 // void __leak()
 // {
@@ -61,7 +61,7 @@ void	minishell_loop(void)
 			root = parser(line);
 			execute(root);
 			free_tree(root);
-			free(line);			
+			free(line);
 		}
 	}
 	print_eof_exit();

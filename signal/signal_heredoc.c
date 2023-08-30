@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/ft_signal.h"
 
 static void	quit_heredoc(int signum);
 

@@ -10,6 +10,18 @@
 # define STDIN 0
 # define STDOUT 1
 
+typedef struct s_context
+{
+	int		exit_status;
+	int		fd[2];
+	int		fd_close;
+	int		heredoc_file_idx;
+	char	**heredoc_file_name;
+	t_list	*pid_list;
+	int		pid_size;
+	t_bool	is_piped_cmd;
+}	t_context;
+
 typedef t_bool	(*t_builtin)(char **args);
 
 t_builtin	check_builtin(char *argv);

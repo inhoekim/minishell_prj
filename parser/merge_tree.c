@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   merge_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/29 19:59:42 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/30 14:20:51 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parser.h"
 
 static t_node	*insert_left(t_node *parent, t_node *child);
 static char		**append_cmd(char **front, char **back);

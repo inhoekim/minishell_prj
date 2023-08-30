@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "../include/expansion.h"
 
 static int	**allocate_dp(int row, int col);
 static void	free_dp(int **dp, int row_size);
@@ -12,15 +12,6 @@ int	wildcard(char *pat, char *word, int p_i, int w_i)
 	int	pos;
 	int	match_flag;
 
-	// len_p = ft_strlen(pattern);
-	// len_w = ft_strlen(word);
-	// dp[0][0] = 1;
-	// pos = 0;
-	// while (pattern[pos] == '*')
-	// {
-	// 	dp[pos + 1][0] = dp[pos][0];
-	// 	pos++;
-	// }
 	_wildcard_init(pat, word, &len_p, &len_w);
 	dp = allocate_dp(len_p, len_w);
 	pos = -1;
