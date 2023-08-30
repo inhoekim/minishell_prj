@@ -1,5 +1,4 @@
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 static void	quit_heredoc(int signum);
 
 void	sigact_heredoc_mode(void)

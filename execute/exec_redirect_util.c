@@ -1,5 +1,4 @@
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 t_bool	*get_redirect_ambiguity(void)
 {
 	static t_bool	redirect_ambiguity;

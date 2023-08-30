@@ -1,5 +1,4 @@
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 static void	signal_changer(int signum, void *handler);
 static void	fork_mode_handler(int signum);
 

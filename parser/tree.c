@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/29 20:00:00 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 static char	**make_word_data(char *src, int len);
 static void	free_node(t_node *node);
 

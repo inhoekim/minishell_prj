@@ -6,12 +6,11 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 13:14:09 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 t_bool	ft_export(char **argv)
 {
 	int		idx;

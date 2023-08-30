@@ -1,5 +1,4 @@
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 static void	new_prompt(int signum);
 
 void	sigact_default_mode(void)

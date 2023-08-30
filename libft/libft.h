@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 22:10:00 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/09 16:25:56 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/30 13:22:12 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef enum e_bool
+{
+	FALSE,
+	TRUE,
+}t_bool;
 
 void	ft_bzero(void *s, size_t n);
 int		ft_isalnum(int c);

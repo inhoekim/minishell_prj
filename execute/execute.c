@@ -1,5 +1,4 @@
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 void	execute(t_node *root)
 {
 	t_context	ctx;

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:45 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/29 19:59:52 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {
 	tokenizer->start = line;

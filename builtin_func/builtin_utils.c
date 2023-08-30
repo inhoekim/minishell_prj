@@ -1,6 +1,5 @@
 // #include "../include/minishellbuiltin.h"
-#include "../include/minishell.h"
-
+#include "../include/builtin.h"
 char	*ft_strnjoin(char const *s1, char const *s2)
 {
 	int		total;
