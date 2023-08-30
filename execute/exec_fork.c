@@ -4,8 +4,6 @@ static void	order_check(char **argv, t_context *p_ctx, char *temp_path);
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
-	char	*order;
-	char	**path;
 	char	*temp_path;
 
 	temp_path = ft_getenv("PATH");
@@ -17,7 +15,6 @@ void	search_and_fork_exec(char **argv, t_context *p_ctx)
 		return ;
 	}
 	order_check(argv, p_ctx, temp_path);
-	free_argv(path);
 	free(temp_path);
 }
 
@@ -44,6 +41,7 @@ static void	order_check(char **argv, t_context *p_ctx, char *temp_path)
 		p_ctx->exit_status = 127;
 		fork_error(p_ctx);
 	}
+	free_argv(path);
 }
 
 char	*make_order(char **path, char **argv)
