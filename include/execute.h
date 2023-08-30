@@ -58,7 +58,7 @@ void		set_redirect_ambiguity(t_bool value);
 void		exec_input(t_node *node, t_context *p_ctx);
 void		exec_output(t_node *node, t_context *p_ctx);
 void		exec_append(t_node *node, t_context *p_ctx);
-void		ambiguity_check(char **filename, t_node *rhs, t_context *p_ctx);
+void		ambiguity_check(t_context *p_ctx);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		free_argv(char **argv);
 void		set_exit_status(int exit_status);
