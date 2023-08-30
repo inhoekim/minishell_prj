@@ -2,6 +2,9 @@
 # define MINISHELL2_H
 
 // #include "util.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <dirent.h>
 
 typedef struct s_context
 {

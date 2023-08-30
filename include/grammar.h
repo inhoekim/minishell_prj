@@ -3,6 +3,13 @@
 
 // # include "util.h"
 
+typedef struct s_heredoc_data{
+	int	heredoc_fault_flag;
+	int	heredoc_eof_flag;
+	int	temp_stdin_fd;
+	int	cursor_size;
+}	t_heredoc_data;
+
 //heredoc
 void			heredoc(char *delimiter, t_tokenizer *tokenizer);
 t_heredoc_data	*get_heredoc_data(void);

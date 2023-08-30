@@ -22,13 +22,15 @@ t_bool		is_not_directory(char *filename, t_context *p_ctx);
 t_bool		check_glob(t_list *list);
 t_bool		list_search(t_list *list, char ch);
 t_bool		can_access(char *filename, t_context *p_ctx);
+char		*make_order(char **path, char **argv);
+char		**list_to_arr(t_list *node);
+char		**make_argv(char **word_arr);
 void		redirect_fd(int dst[2]);
 void		exec_or(t_node *node, t_context *p_ctx);
 void		exec_and(t_node *node, t_context *p_ctx);
 void		exec_pipe(t_node *node, t_context *p_ctx);
 void		exec_heredoc(t_node *node, t_context *p_ctx);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
-char		*make_order(char **path, char **argv);
 void		set_redirect_ambiguity(t_bool value);
 void		exec_input(t_node *node, t_context *p_ctx);
 void		exec_output(t_node *node, t_context *p_ctx);
@@ -37,14 +39,11 @@ void		ambiguity_check(char **filename, t_node *rhs, t_context *p_ctx);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		free_argv(char **argv);
 void		set_exit_status(int exit_status);
-int			*get_exit_status(void);
 void		fork_error(t_context *p_ctx);
 void		msh_error(char *name, char *msg, int error);
 void		unquote(t_list *list);
 void		exec_word(t_node *node, t_context *p_ctx);
 void		fork_exec(char **argv, t_context *p_ctx);
-char		**list_to_arr(t_list *node);
-char		**make_argv(char **word_arr);
 void		execute(t_node *root);
 void		exec_node(t_node *node, t_context *p_ctx);
 void		find_last_pid(t_context *p_ctx);
@@ -52,5 +51,5 @@ void		free_delete_heredoc(t_context *p_ctx);
 void		set_last_exit_status(int exit_status);
 void		forked_builtin(t_context *p_ctx, \
 t_builtin builtin_func, char **argv);
-
+int			*get_exit_status(void);
 #endif
