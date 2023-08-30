@@ -1,0 +1,39 @@
+msh_grammar ::= pipeline conditional
+​
+conditional ::= AND pipeline conditional
+conditional ::= OR pipeline conditional
+conditional ::= empty
+​
+pipeline ::= command piped_command
+​
+command ::= simple_cmd
+command ::= ssh io_redirect_star
+​
+piped_command ::= PIPE pipeline
+piped_command ::= empty
+​
+ssh ::= LBRACE msh_grammar RBRACE
+​
+simple_cmd ::= WORD io_redirect_or_word_star
+simple_cmd ::= io_redirect_dagger io_redirect_dg_after_simple_cmd
+​
+io_redirect_dg_after_simple_cmd ::= WORD io_redirect_or_word_star
+io_redirect_dg_after_simple_cmd ::= empty
+
+io_redirect_or_word_star ::= io_redirect io_redirect_or_word_star
+io_redirect_or_word_star ::= WORD io_redirect_or_word_star
+io_redirect_or_word_star ::= empty
+​
+io_redirect_dagger ::= io_redirect io_redirect_star
+​
+io_redirect_star ::= io_redirect io_redirect_star
+io_redirect_star ::= empty
+​
+io_redirect ::= io_file
+io_redirect ::= io_here
+​
+io_file ::= LESS WORD
+io_file ::= GREAT WORD
+io_file ::= DGREAT WORD
+​
+io_here ::= DLESS WORD
