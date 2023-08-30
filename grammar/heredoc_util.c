@@ -1,6 +1,9 @@
 #include "../include/grammar.h"
 
 static char	*quote_removal(char *word);
+t_list		*split_quotes(char *str);
+void		unquote(t_list *list);
+char		*concatenate(t_list *list);
 
 void	delete_heredoc(t_tokenizer *tokenizer)
 {

@@ -5,6 +5,12 @@ static void		read_heredoc(int fd, char *delimiter, \
 t_tokenizer *tokenizer, t_bool can_expansion);
 static t_bool	check_eof_heredoc(char *input, \
 char *delimiter, t_tokenizer *tokenizer);
+void		msh_error(char *name, char *msg, int error);
+t_list		*split_quotes(char *str);
+void		unquote(t_list *list);
+char		*concatenate(t_list *list);
+char		*parameter_expansion(char *str);
+
 
 void	heredoc(char *delimiter, t_tokenizer *tokenizer)
 {
