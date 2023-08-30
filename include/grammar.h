@@ -8,7 +8,6 @@ void			heredoc(char *delimiter, t_tokenizer *tokenizer);
 t_heredoc_data	*get_heredoc_data(void);
 void			set_heredoc_eof_flag(int flag);
 void			set_tmp_stdin_fd(int fd);
-void			set_cursor_size(int size);
 void			set_heredoc_fault_flag(int flag);
 void			delete_heredoc(t_tokenizer *tokenizer);
 void			set_delimiter(t_node *node, char buf[]);
