@@ -122,6 +122,7 @@ t_bool			is_same_str(char *word1, char *word2);
 t_node			*msh_grammar(t_tokenizer *tokenizer);
 t_node			*conditional(t_tokenizer *tokenizer);
 t_node			*pipeline(t_tokenizer *tokenizer);
+t_node			*piped_command(t_tokenizer *tokenizer);
 t_node			*command(t_tokenizer *tokenizer);
 t_node			*ssh(t_tokenizer *tokenizer);
 t_node			*simple_cmd(t_tokenizer *tokenizer);

@@ -24,12 +24,6 @@
 # include <sys/stat.h>
 # include <dirent.h>
 
-typedef enum e_bool
-{
-	FALSE,
-	TRUE,
-} t_bool;
-
 typedef t_bool	(*t_builtin)(char **args);
 
 typedef enum e_nonterminal{
@@ -44,7 +38,7 @@ typedef enum e_nonterminal{
 	IO_REDIRECT_DAGGER = IO_REDIRECT,
 	IO_REDIRECT_DG_AFTER_SIMPLE_CMD = 6,
 	CONDITIONAL = 7,
-} t_nonterminal;
+}	t_nonterminal;
 
 // word, <, >, >>, <<, &&, ||, |, (, eof, ssh, ), err
 // SUBSHELL_LEFT, SUBSHELL_RIGHT, E0F, SYNTAX_ERR 심볼은 오직 토크나이저에서만 사용하는 심벌
@@ -63,7 +57,7 @@ typedef enum e_symbol
 	SUBSHELL,
 	SUBSHELL_RIGHT,
 	SYNTAX_ERR
-} t_symbol;
+}	t_symbol;
 
 /* binary tree */
 typedef struct s_node
@@ -72,14 +66,14 @@ typedef struct s_node
 	struct s_node	*left;
 	struct s_node	*right;
 	char			**word;
-}t_node;
+}	t_node;
 
 typedef struct s_token
 {
 	t_symbol	type;
 	char		*str;
 	int			len;
-}t_token;
+}	t_token;
 
 /* object that separate tokens */
 typedef struct s_tokenizer
@@ -90,8 +84,7 @@ typedef struct s_tokenizer
 	int		heredoc_file_idx;
 	char	**heredoc_file_name;
 	int		token_size;
-}t_tokenizer;
-
+}	t_tokenizer;
 
 typedef struct s_context
 {
@@ -110,6 +103,6 @@ typedef struct s_heredoc_data{
 	int	heredoc_eof_flag;
 	int	temp_stdin_fd;
 	int	cursor_size;
-} t_heredoc_data;
+}	t_heredoc_data;
 
 #endif

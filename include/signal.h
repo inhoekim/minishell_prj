@@ -1,7 +1,6 @@
 #ifndef SIGNAL_H
 # define SIGNAL_H
 
-// # include "util.h"
 // # include "grammar.h"
 
 # define NONE -1

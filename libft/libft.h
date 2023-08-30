@@ -6,7 +6,7 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 22:10:00 by dasong            #+#    #+#             */
-/*   Updated: 2023/08/30 13:22:12 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 13:33:46 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef enum e_bool
 {
 	FALSE,
 	TRUE,
-}t_bool;
+}	t_bool;
 
 void	ft_bzero(void *s, size_t n);
 int		ft_isalnum(int c);
