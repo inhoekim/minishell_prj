@@ -1,6 +1,8 @@
 #include "../include/expansion.h"
 
 static t_list	*globbing(char *pattern);
+t_bool			*get_redirect_ambiguity(void);
+void			set_redirect_ambiguity(t_bool value);
 
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {

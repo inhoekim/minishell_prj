@@ -13,6 +13,14 @@
 #include "../include/grammar.h"
 
 t_token	*get_curr_token(t_tokenizer *tokenizer);
+t_node	*make_leaf(t_tokenizer *tokenizer);
+t_node	*merge_tree(t_node *parent, t_node *child);
+t_bool	match_token(t_symbol type, t_tokenizer *tokenizer, t_bool token_move);
+t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right);
+t_bool	check_first_set(t_nonterminal idx, t_symbol curr_token);
+void	syntax_error(t_tokenizer *tokenizer);
+void	sigact_default_mode(void);
+void	sigact_heredoc_mode(void);
 
 //io_redirect_dg_after_simple_cmd ::= WORD io_redirect_star
 //io_redirect_dg_after_simple_cmd ::= empty
