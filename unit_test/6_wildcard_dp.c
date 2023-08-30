@@ -1,65 +1,82 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../libft/libft.h"
 
-int wildcard(char *pattern, char *word);
+int	wildcard(char *pat, char *word, int p_i, int w_i);
+static int	**allocate_dp(int row, int col);
+static void	free_dp(int **dp, int row_size);
+void	_wildcard_init(char *pat, char *word, int *len_p, int *len_w);
+
 
 
 int main(void)
 {
-	int ret = wildcard("*.txt*", "abc.txt");
+	int ret = wildcard("*.txt*", "a", 0, 0);
 	printf("ret: %d\n", ret);
 	return (0);
 }
 
-int	ft_strlen(const char *s)
+static int	**allocate_dp(int row, int col)
+{
+	int	**dp;
+	int	idx;
+
+	dp = ft_calloc(row + 1, sizeof(int *));
+	if (!dp)
+		exit(0);
+	idx = 0;
+	while (idx <= row)
+	{
+		dp[idx] = ft_calloc(col + 1, sizeof(int));
+		if (!(dp[idx]))
+			exit(0);
+		idx++;
+	}
+	dp[0][0] = 1;
+	return (dp);
+}
+
+static void	free_dp(int **dp, int row_size)
 {
 	int	i;
 
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	while (i <= row_size)
+		free(dp[i++]);
+	free(dp);
 }
 
-int **allocate_dp(int row, int col)
+int	wildcard(char *pat, char *word, int p_i, int w_i)
 {
-	int **dp;
-	dp = ft_calloc(row + 1, sizeof(int *));
-	if (!dp)
-		exit(ENOMEM);
-	for (int i = 0; i <= row; i++)
-	{
-		dp[i] = ft_calloc(col + 1, sizeof(int));
-	}
-	return (dp);
-}
+	int	len_p;
+	int	len_w;
+	int	**dp;
+	int	pos;
+	int	match_flag;
 
-int wildcard(char *pattern, char *word) {
-	int len_p, len_w;
-	int **dp;
-
-	len_p = ft_strlen(pattern);
-	len_w = ft_strlen(word);
+	_wildcard_init(pat, word, &len_p, &len_w);
 	dp = allocate_dp(len_p, len_w);
-	dp[0][0] = 1;
-	if (pattern[0] == '*')
-		dp[1][0] = 1;
-	else
-		dp[1][0] = 0;
-	for (int pattern_idx = 1; pattern_idx <= len_p; pattern_idx++)
+	pos = -1;
+	while (pat[++pos] == '*')
+		dp[pos + 1][0] = dp[pos][0];
+	while (++p_i <= len_p)
 	{
-		for (int word_idx = 1; word_idx <= len_w; word_idx++)
+		w_i = 0;
+		while (++w_i <= len_w)
 		{
-			if (pattern[pattern_idx - 1] == '?' || \
-					pattern[pattern_idx - 1] == word[word_idx - 1])
-			{
-				dp[pattern_idx][word_idx] = dp[pattern_idx - 1][word_idx - 1];
-			}
-			else if (pattern[pattern_idx - 1] == '*') {
-				dp[pattern_idx][word_idx] = \
-				dp[pattern_idx - 1][word_idx] || dp[pattern_idx][word_idx - 1];
-			}
+			if (pat[p_i - 1] == '*')
+				dp[p_i][w_i] = (dp[p_i - 1][w_i] || dp[p_i][w_i - 1]);
+			else if (pat[p_i - 1] == '?' || (pat[p_i - 1] == word[w_i - 1]))
+				dp[p_i][w_i] = dp[p_i - 1][w_i - 1];
 		}
 	}
-	return (dp[len_p][len_w]);
+	match_flag = dp[len_p][len_w];
+	free_dp(dp, len_p);
+	return (match_flag);
+}
+
+void	_wildcard_init(char *pat, char *word, int *len_p, int *len_w)
+{
+	*len_p = ft_strlen(pat);
+	*len_w = ft_strlen(word);
 }
