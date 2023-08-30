@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "../grammar/grammar.h"
+#include "../include/parser.h"
+#include "../include/grammar.h"
 
 t_node	*parser(char *line)
 {

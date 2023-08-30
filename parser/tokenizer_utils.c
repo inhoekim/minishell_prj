@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../include/parser.h"
 
 void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {

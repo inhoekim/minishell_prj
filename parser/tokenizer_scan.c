@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../include/parser.h"
 
 t_token	*scan_char_token(t_tokenizer *tokenizer)
 {
