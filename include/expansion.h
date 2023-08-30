@@ -14,5 +14,5 @@ char	*parameter_expansion(char *str);
 char	**path_split(char *s, char c);
 void	arg_expansion(t_list *list);
 int		wildcard(char *pattern, char *word, int p_idx, int w_idx);
-t_list	*globbing(char *pattern);
+
 #endif
