@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "parser.h"
+#include "../grammar/grammar.h"
 
 t_node	*parser(char *line)
 {

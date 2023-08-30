@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "parser.h"
 
 void	set_tokenizer(t_tokenizer *tokenizer, char *line)
 {

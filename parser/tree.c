@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "parser.h"
 
 static char	**make_word_data(char *src, int len);
 static void	free_node(t_node *node);

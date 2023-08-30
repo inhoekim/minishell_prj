@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "parser.h"
 
 static t_node	*insert_left(t_node *parent, t_node *child);
 static char		**append_cmd(char **front, char **back);
