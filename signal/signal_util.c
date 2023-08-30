@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "signal.h"
 
 t_bool	*get_is_subshell(void)
 {
