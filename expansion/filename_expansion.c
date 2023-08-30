@@ -62,6 +62,7 @@ static t_list	*globbing(char *pattern)
 	{
 		printf("minishell: %s: ambiguous redirect\n", pattern);
 		set_redirect_ambiguity(FALSE);
+		ft_lstclear(&matches, free);
 		return (NULL);
 	}
 	else

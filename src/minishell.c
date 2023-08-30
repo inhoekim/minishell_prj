@@ -1,11 +1,18 @@
 #include "../include/minishell.h"
 
+void test(void)
+{
+	system("leaks minishell");
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
+	atexit(test);
 }
 
 void	init_envp(char **envp)
