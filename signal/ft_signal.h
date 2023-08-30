@@ -7,6 +7,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <termios.h>
+# include "../libft/libft.h"
 
 //signal_default
 void	sigact_default_mode(void);
