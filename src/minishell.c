@@ -1,4 +1,4 @@
-#include "../include/minishell2.h"
+#include "../include/minishell.h"
 
 // void __leak()
 // {

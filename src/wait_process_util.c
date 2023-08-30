@@ -1,4 +1,4 @@
-#include "../include/minishell2.h"
+#include "../include/minishell.h"
 
 int	*get_last_pid(void)
 {

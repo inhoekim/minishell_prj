@@ -6,8 +6,8 @@
 # include "execute.h"
 # include "expansion.h"
 # include "grammar.h"
-# include "minishell2.h"
+//# include "minishell2.h"
 # include "parser.h"
-# include "signal.h"
+# include "ft_signal.h"
 
 #endif
