@@ -1,4 +1,5 @@
-#include "../include/builtin.h"
+#include "signal.h"
+
 t_bool	*get_is_subshell(void)
 {
 	static t_bool	is_subshell;

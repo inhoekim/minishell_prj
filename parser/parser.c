@@ -6,11 +6,13 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 14:11:32 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/builtin.h"
+#include "parser.h"
+#include "../grammar/grammar.h"
+
 t_node	*parser(char *line)
 {
 	t_node		*root;

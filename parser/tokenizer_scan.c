@@ -6,11 +6,12 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:09:36 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 14:11:33 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/builtin.h"
+#include "parser.h"
+
 t_token	*scan_char_token(t_tokenizer *tokenizer)
 {
 	if (*tokenizer->start == '<')

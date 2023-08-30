@@ -6,11 +6,12 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/30 13:30:14 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 14:11:34 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/builtin.h"
+#include "parser.h"
+
 static char	**make_word_data(char *src, int len);
 static void	free_node(t_node *node);
 

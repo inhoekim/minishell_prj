@@ -1,4 +1,5 @@
-#include "../include/builtin.h"
+#include "signal.h"
+
 static void	new_prompt(int signum);
 
 void	sigact_default_mode(void)

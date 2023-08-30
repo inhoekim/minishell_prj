@@ -1,4 +1,5 @@
-#include "../include/builtin.h"
+#include "signal.h"
+
 static void	quit_heredoc(int signum);
 
 void	sigact_heredoc_mode(void)
