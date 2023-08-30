@@ -11,7 +11,6 @@ void	sigact_default_mode(void)
 	tcgetattr(STDIN, &attributes);
 	attributes.c_lflag &= (~ECHOCTL);
 	tcsetattr(STDIN, TCSANOW, &attributes);
-
 	intsig.sa_handler = new_prompt;
 	sigemptyset(&intsig.sa_mask);
 	intsig.sa_flags = 0;

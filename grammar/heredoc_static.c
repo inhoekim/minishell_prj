@@ -3,6 +3,7 @@
 t_heredoc_data	*get_heredoc_data(void)
 {
 	static t_heredoc_data	data;
+
 	return (&data);
 }
 

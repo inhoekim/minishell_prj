@@ -14,6 +14,7 @@ void	set_last_exit_status(int exit_status);
 t_list	*_delete_process(t_list **head, t_list *d_node);
 void	wait_list(t_context *p_ctx);
 void	*wait_process(t_list *node, t_context *p_ctx, int flag);
+void	_wait_process(t_list *ret, t_context *p_ctx, t_list *node, pid_t pid);
 void	cir_lstadd(pid_t pid, t_context *p_ctx);
 void	cir_lstadd_back(t_list **head, t_list *n_node);
 #endif
