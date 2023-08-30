@@ -1,21 +1,11 @@
-#include <stdio.h>
-#include "../libft/libft.h"
 #include "../include/minishell.h"
-#include "../include/parser.h"
-#include "../include/execute.h"
 
-
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	// init_paser();
-	// envp -> env_list
 	init_envp(envp);
 	minishell_loop();
-	// free_parser();
-	// free_tree();
-	// set_exit_status();
 }
 
 void	init_envp(char **envp)
@@ -40,46 +30,34 @@ t_list	**get_envp(void)
 	return (&env_list);
 }
 
-void	init_parser()
+void	print_eof_exit(void)
 {
-
+	ft_putstr_fd("\033[1A", STDOUT);
+	ft_putstr_fd("\033[8C", STDOUT);
+	printf("exit\n");
 }
 
-void	minishell_loop() 
+void	minishell_loop(void)
 {
 	t_node		*root;
 	char		*line;
-	t_bool		check_exit;
-	// t_tokenizer *token;
 
-	check_exit = FALSE;
-	line = ft_strdup("");
+	sigact_default_mode();
+	line = "";
 	while (line)
 	{
+		set_heredoc_fault_flag(FALSE);
 		line = readline("prompt> ");
-		// ctrl+d(eof trigger)시 if 블록 pass
 		if (line)
 		{
-			// 히스토리 기록 -> readline의 함수
 			if (*line != '\0')
 				add_history(line);
-			// parser를 통해 트리생성
+			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
-			// 생성된 트리를 재귀를 통해서 execve함수 호출 && type bool로 exit의 입력여부 판단
-			check_exit = execute(root);
-			// exit입력 시 종료, 아니면 while문을 통해 입력 대기상태 돌입
+			execute(root);
+			free_tree(root);
 			free(line);
-			if (check_exit)
-			{
-				line = NULL;
-			}
 		}
 	}
-	// if (!check_exit)
-	// {
-	// 	// @ 개행이전으로 프롬프트 이동시키는 코드 추가필
-	// 	// printf("exit\n");
-	// 	printf("hge");
-	// }
-	
+	print_eof_exit();
 }

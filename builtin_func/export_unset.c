@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/18 13:12:22 by sdg              ###   ########.fr       */
+/*   Updated: 2023/08/30 16:44:40 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
-#include "../include/exec_node_util.h"
+#include "../include/builtin.h"
 
 t_bool	ft_export(char **argv)
 {
@@ -32,11 +29,34 @@ t_bool	ft_export(char **argv)
 	}
 	else
 	{
-		env = get_envp();
-		check_env(argv, env);
 		while (argv[++idx])
-			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+		{
+			if (check_argv(argv[idx]))
+			{
+				check_env(argv, env);
+				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+			}
+		}
 	}
+	return (0);
+}
+
+int	check_argv(char *argv)
+{
+	int		idx;
+	int		flag;
+
+	idx = 0;
+	flag = 0;
+	while (argv[idx])
+	{
+		if (argv[idx] == '=')
+			if (argv[idx + 1] != 0)
+				flag = 1;
+		idx++;
+	}
+	if (flag == 1)
+		return (1);
 	return (0);
 }
 
@@ -46,7 +66,6 @@ void	check_env(char **argv, t_list **env)
 	int		idx;
 	char	*temp;
 
-	env = get_envp();
 	idx = 0;
 	check = *env;
 	while (argv[++idx])
@@ -62,8 +81,8 @@ void	check_env(char **argv, t_list **env)
 			}
 			check = check->next;
 		}
+		free(temp);
 	}
-	free(temp);
 }
 
 char	*make_temp(char *s1)

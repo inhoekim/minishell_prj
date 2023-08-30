@@ -1,6 +1,4 @@
-#include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
+#include "../include/builtin.h"
 
 t_bool	ft_env(char **argv)
 {

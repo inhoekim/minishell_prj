@@ -1,23 +1,30 @@
-#include "../include/minishell.h"
 #include "../include/execute.h"
-#include "../include/exec_node_util.h"
 
-t_bool	execute(t_node *root)
+char	**alloc_heredoc_name(void);
+void	sigact_default_mode(void);
+void	set_is_subshell(t_bool flag);
+void	wait_list(t_context *p_ctx);
+void	set_last_pid(int pid);
+
+void	execute(t_node *root)
 {
 	t_context	ctx;
 
-	char *file_name[16] = \
-	{"heredoc_0", "heredoc_1", "heredoc_2", "heredoc_3", "heredoc_4", "heredoc_5", "heredoc_6", "heredoc_7", "heredoc_8", "heredoc_9", "heredoc_10", "heredoc_11", "heredoc_12", "heredoc_13", "heredoc_14", "heredoc_15"};
-	ctx.heredoc_file_name = (char *)file_name;
-	ctx.heredoc_file_idx = 0;
 	ctx.fd[STDIN_FILENO] = STDIN_FILENO;
 	ctx.fd[STDOUT_FILENO] = STDOUT_FILENO;
 	ctx.fd_close = -1;
-	// exit함수 호출시, TRUE
-	ctx.check_exit = FALSE;
+	ctx.is_piped_cmd = FALSE;
+	ctx.heredoc_file_idx = 0;
+	ctx.heredoc_file_name = alloc_heredoc_name();
+	ctx.pid_list = NULL;
+	ctx.pid_size = 0;
+	sigact_default_mode();
+	set_is_subshell(FALSE);
+	set_redirect_ambiguity(FALSE);
 	exec_node(root, &ctx);
-	// reaper();
-	return (ctx.check_exit);
+	find_last_pid(&ctx);
+	wait_list(&ctx);
+	free_delete_heredoc(&ctx);
 }
 
 void	exec_node(t_node *node, t_context *p_ctx)
@@ -43,4 +50,37 @@ void	exec_node(t_node *node, t_context *p_ctx)
 	else if (node->type == SUBSHELL)
 		exec_subshell(node, p_ctx);
 	return ;
+}
+
+void	find_last_pid(t_context	*p_ctx)
+{
+	t_list	**head;
+	t_list	*prev;
+	t_list	*current;
+
+	head = &(p_ctx->pid_list);
+	if (!(*head))
+		return ;
+	prev = *head;
+	current = (*head)->next;
+	while (current != *head)
+	{
+		prev = current;
+		current = current->next;
+	}
+	set_last_pid(*((int *)prev->content));
+	return ;
+}
+
+void	free_delete_heredoc(t_context *p_ctx)
+{
+	int	i;
+
+	i = 0;
+	while (i < p_ctx->heredoc_file_idx)
+		unlink(p_ctx->heredoc_file_name[i++]);
+	i = 0;
+	while (i < 16)
+		free(p_ctx->heredoc_file_name[i++]);
+	free(p_ctx->heredoc_file_name);
 }

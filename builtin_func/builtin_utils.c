@@ -1,6 +1,4 @@
-#include "../include/minishell.h"
-#include "../libft/libft.h"
-#include "../include/execute.h"
+#include "../include/builtin.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
 {
@@ -13,7 +11,7 @@ char	*ft_strnjoin(char const *s1, char const *s2)
 	total = ft_strlen(s1) + ft_strlen(s2) + 2;
 	res = (char *)malloc(sizeof(char) * total);
 	if (!res)
-		return (0);
+		exit(ENOMEM);
 	res[total - 1] = '\0';
 	i = 0;
 	while (*s1)
@@ -46,7 +44,7 @@ void	delete_node(t_list **head, t_list *node_to_delete)
 				*head = current->next;
 			else
 				prev->next = current->next;
-			free(current);
+			ft_lstdelone(current, free);
 			break ;
 		}
 		prev = current;
@@ -64,8 +62,8 @@ char	*ft_getenv(char *pos)
 	cur_env = getenv_list(pos, pos_len, get_envp());
 	if (cur_env)
 	{
-		temp = ft_strdup((char *)cur_env->content);
-		return (temp + pos_len + 1);
+		temp = ft_strdup((char *)cur_env->content + pos_len + 1);
+		return (temp);
 	}
 	return (NULL);
 }

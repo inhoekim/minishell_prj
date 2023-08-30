@@ -1,35 +1,37 @@
 ## minishell
 NAME = minishell
 
-CYAN  := \33[1;36m
+# ANSI escape code
+CYAN  := \033[1;36;40m
 RESET := \033[0m
 LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
-## seykim readline 설정 8/16
-INC_DIRS = /opt/homebrew/opt/readline/include
-INC_DIRS += include
-LIB_DIRS = /opt/homebrew/opt/readline/lib libft
-SRC_DIRS = src builtin_func execute parser
+INC_DIRS = $(shell brew --prefix readline)/include
+INC_DIRS += include # libft
+LIB_DIRS = $(shell brew --prefix readline)/lib libft
+SRC_DIRS = src builtin_func execute parser signal expansion grammar
 
 vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 ## file
-HEADERS = arg_expansion.h execute.h libft.h rule.h exec_node_util.h execute_util.h parser.h 
-HEADERS += make_argv_util.h tokenizer.h exec_word_util.h filename_expansion.h minishell.h here_doc.h
+HEADERS = builtin.h execute.h expansion.h grammar.h minishell.h parser.h ft_signal.h util.h
 
-SRCS = minishell.c msh_utils.c arg_expansion.c exec_word_util.c execute_util.c make_argv_util.c
-SRCS += exec_node_util.c execute.c filename_expansion.c parser_util.c rule3.c tokenizer_utils.c
+SRCS = minishell.c arg_expansion.c exec_util.c exec_word_util.c
+SRCS += exec_etc.c execute.c filename_expansion.c rule3.c tokenizer_utils.c
 SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.c
-SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c here_doc.c
+SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c heredoc.c wait_process.c
+SRCS += signal_default.c signal_fork.c signal_heredoc.c parameter_expansion.c exec_redirect.c exec_subshell.c exec_redirect_util.c
+SRCS += exec_fork.c exec_builtin.c exec_word.c wildcard.c wait_process_util.c heredoc_util.c heredoc_static.c
+SRCS += signal_util.c
 
 OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
-CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS)) -g3 #-fsanitize=address
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -g3
+CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft  # -g3  # -fsanitize=leak # export MallocStackLogging=1
 
 .PHONY: clean, fclean, re, all
 
@@ -54,4 +56,7 @@ fclean: clean
 	@make fclean -C libft
 	@rm -f $(NAME)
 
-re: fclean all
+re:
+	@$(LOG) "re"
+	@make fclean
+	@make all
