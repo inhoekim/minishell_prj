@@ -23,7 +23,7 @@ void		exec_pipe(t_node *node, t_context *p_ctx);
 void		exec_heredoc(t_node *node, t_context *p_ctx);
 void		search_and_fork_exec(char **argv, t_context *p_ctx);
 char		*make_order(char **path, char **argv);
-void		set_redirect_ambiguity(t_bool value);\
+void		set_redirect_ambiguity(t_bool value);
 void		exec_input(t_node *node, t_context *p_ctx);
 void		exec_output(t_node *node, t_context *p_ctx);
 void		exec_append(t_node *node, t_context *p_ctx);
