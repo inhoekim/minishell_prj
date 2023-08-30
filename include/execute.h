@@ -3,6 +3,12 @@
 
 # include "builtin.h"
 # include "parser.h"
+# include "signal.h"
+# include <fcntl.h>
+# include <sys/stat.h>
+
+# define STDIN 0
+# define STDOUT 1
 
 typedef t_bool	(*t_builtin)(char **args);
 
