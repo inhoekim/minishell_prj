@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:36 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:36 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
@@ -6,6 +18,8 @@
 # include "signal.h"
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <stdio.h>
+# include <errno.h>
 # include "util.h"
 # define STDIN 0
 # define STDOUT 1

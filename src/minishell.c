@@ -1,9 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:13:15 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:13:16 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
+	printf("\n\
+                    ____________   ____  ___   _____ __  __ \n\
+                   / ____/_  __/  / __ )/   | / ___// / / / \n\
+                  / /_    / /    / __  / /| | \\__ \\/ /_/ /  \n\
+                 / __/   / /    / /_/ / ___ |___/ / __  /   \n\
+                /_/     /_/    /_____/_/  |_/____/_/ /_/    \n\
+                       Writer : Dasong & Seykim					\n\
+\n");
 	init_envp(envp);
 	minishell_loop();
 }
@@ -47,7 +67,7 @@ void	minishell_loop(void)
 	while (line)
 	{
 		set_heredoc_fault_flag(FALSE);
-		line = readline("prompt> ");
+		line = readline("ft_bash > ");
 		if (line)
 		{
 			if (*line != '\0')
