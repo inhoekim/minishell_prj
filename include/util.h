@@ -24,12 +24,6 @@
 # include <sys/stat.h>
 # include <dirent.h>
 
-typedef enum e_bool
-{
-	FALSE,
-	TRUE,
-} t_bool;
-
 typedef t_bool	(*t_builtin)(char **args);
 
 typedef enum e_nonterminal{
