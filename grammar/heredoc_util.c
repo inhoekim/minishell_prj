@@ -1,6 +1,6 @@
 #include "../include/grammar.h"
 
-static char	*quote_removal(char *word);
+// static char	*quote_removal(char *word);
 
 void	delete_heredoc(t_tokenizer *tokenizer)
 {
@@ -23,17 +23,17 @@ void	set_delimiter(t_node *node, char buf[])
 	node->right = NULL;
 }
 
-static char	*quote_removal(char *word)
-{
-	t_list	*list;
-	char	*chunk;
+// static char	*quote_removal(char *word)
+// {
+// 	t_list	*list;
+// 	char	*chunk;
 
-	list = split_quotes(word);
-	unquote(list);
-	chunk = concatenate(list);
-	ft_lstclear(&list, free);
-	return (chunk);
-}
+// 	list = split_quotes(word);
+// 	unquote(list);
+// 	chunk = concatenate(list);
+// 	ft_lstclear(&list, free);
+// 	return (chunk);
+// }
 
 t_bool	is_same_str(char *word1, char *word2)
 {

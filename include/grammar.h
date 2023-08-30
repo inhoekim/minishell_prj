@@ -6,6 +6,9 @@
 # define STDOUT 1
 
 # include "../libft/libft.h"
+# include "parser.h"
+# include "ft_signal.h"
+# include "expansion.h"
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,

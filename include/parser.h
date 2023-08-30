@@ -11,6 +11,16 @@
 # include <errno.h>
 # include "../libft/libft.h"
 # include "grammar.h"
+# include "execute.h"
+
+typedef enum e_nonterminal		t_nonterminal;
+typedef enum e_symbol			t_symbol;
+
+typedef struct s_node			t_node;
+typedef struct s_token			t_token;
+typedef struct s_tokenizer		t_tokenizer;
+
+
 
 //merge_tree
 t_node	*merge_tree(t_node *parent, t_node *child);
@@ -42,5 +52,5 @@ t_node	*make_leaf(t_tokenizer *tokenizer);
 t_node	*make_tree(t_symbol node_type, t_node *left, t_node *right);
 void	free_tree(t_node *root);
 
-
+char	**alloc_heredoc_name(void);
 #endif

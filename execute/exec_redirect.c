@@ -6,6 +6,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	t_node	*rhs;
 	char	**filename;
 
+	filename = 0;
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
@@ -28,6 +29,7 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	t_node	*rhs;
 	char	**filename;
 
+	filename = 0;
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
@@ -51,6 +53,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	t_node	*rhs;
 	char	**filename;
 
+	filename = 0;
 	lhs = node->left;
 	rhs = node->right;
 	if (p_ctx->fd[STDOUT] != STDOUT)
