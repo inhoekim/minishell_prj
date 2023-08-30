@@ -1,0 +1,1 @@
+ps | (cat > log.txt < tmp2.txt < tmp2.txt) | cat < tmp1.txt > tmp2.txt
