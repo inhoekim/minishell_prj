@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/parser.h"
-#include "../include/grammar.h"
+t_heredoc_data	*get_heredoc_data(void);
 
 t_node	*parser(char *line)
 {

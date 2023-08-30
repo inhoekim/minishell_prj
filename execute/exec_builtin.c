@@ -1,8 +1,14 @@
 #include "../include/execute.h"
-#include "../include/builtin.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 static void		close_fds(int ctx_fd[2], int temp_fd[2]);
+t_bool			ft_cd(char **argv);
+t_bool			ft_echo(char **argv);
+t_bool			ft_export(char **argv);
+t_bool			ft_exit(char **argv);
+t_bool			ft_env(char **argv);
+t_bool			ft_pwd(char **argv);
+t_bool			ft_unset(char **argv);
 
 t_builtin	check_builtin(char *argv)
 {

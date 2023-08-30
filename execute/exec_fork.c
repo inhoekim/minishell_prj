@@ -2,6 +2,12 @@
 
 static void	order_check(char **argv, t_context *p_ctx, char *temp_path);
 t_bool		*get_is_subshell(void);
+char		*ft_getenv(char *pos);
+char		**path_split(char *s, char c);
+t_bool		*get_is_subshell(void);
+void		sigact_fork_mode(void);
+void		sigact_modeoff(void);
+void		cir_lstadd(pid_t pid, t_context *p_ctx);
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
