@@ -42,7 +42,9 @@ t_node	*parser(char *line)
 void	syntax_error(t_tokenizer *tokenizer)
 {
 	t_token	*token;
+	int		i;
 
+	i = -1;
 	set_last_exit_status(1);
 	token = tokenizer->curr_token;
 	if (token->type != SYNTAX_ERR)
@@ -55,7 +57,8 @@ void	syntax_error(t_tokenizer *tokenizer)
 		{
 			ft_putstr_fd("token ", STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
-			ft_putstr_fd(token->str, STDERR_FILENO);
+			while (++i < token->len)
+				ft_putchar_fd(token->str[i], STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);
