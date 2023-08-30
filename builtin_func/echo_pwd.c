@@ -1,4 +1,5 @@
 #include "../include/builtin.h"
+
 t_bool	ft_echo(char **argv)
 {
 	int		idx;

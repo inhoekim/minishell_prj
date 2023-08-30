@@ -4,6 +4,12 @@
 // {
 // 	system("leaks minishell");
 // }
+void	sigact_default_mode(void);
+void	sigact_heredoc_mode(void);
+t_node	*parser(char *line);
+void	execute(t_node *root);
+void	set_heredoc_fault_flag(int flag);
+void	free_tree(t_node *root);
 
 int	main(int argc, char **argv, char **envp)
 {

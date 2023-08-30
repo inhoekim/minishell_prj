@@ -1,4 +1,7 @@
 #include "../include/execute.h"
+#include <stdio.h>
+
+void	cir_lstadd(pid_t pid, t_context *p_ctx);
 
 void	free_argv(char **argv)
 {

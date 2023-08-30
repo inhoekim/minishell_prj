@@ -1,4 +1,5 @@
 #include "../include/execute.h"
+#include <errno.h>
 
 t_bool	*get_redirect_ambiguity(void)
 {
