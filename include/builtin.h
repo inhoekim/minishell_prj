@@ -1,8 +1,11 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 # include "../libft/libft.h"
+# include "minishell.h"
 # include <errno.h>
+# include <stdio.h>
 # define PATH_MAX 1024
+# include "util.h"
 
 // builtin func
 t_bool	ft_cd(char **argv);

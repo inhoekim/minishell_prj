@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:26:07 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/30 14:11:33 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 16:36:08 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../include/parser.h"
 
 t_token	*make_token(t_tokenizer *tokenizer, t_symbol type)
 {

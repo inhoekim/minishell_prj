@@ -2,7 +2,6 @@
 #include "../include/builtin.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
-static void		close_fds(int ctx_fd[2], int temp_fd[2]);
 
 t_builtin	check_builtin(char *argv)
 {
@@ -55,7 +54,6 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 			redirect_fd(p_ctx->fd);
 			builtin_exit_status = builtin_func(argv);
 			redirect_fd(tmp_fd);
-			close_fds(p_ctx->fd, tmp_fd);
 			p_ctx->exit_status = builtin_exit_status;
 			set_last_exit_status(p_ctx->exit_status);
 		}
@@ -67,14 +65,4 @@ t_bool	exec_builtin(char **argv, t_context *p_ctx)
 static t_bool	check_str(char *argv, int idx, int size, char *sep)
 {
 	return (ft_memcmp(argv + idx, sep, size + 1) == 0);
-}
-
-static void	close_fds(int ctx_fd[2], int temp_fd[2])
-{
-	if (ctx_fd[STDIN] != STDIN_FILENO)
-		close(ctx_fd[STDIN]);
-	if (ctx_fd[STDOUT] != STDOUT_FILENO)
-		close(ctx_fd[STDOUT]);
-	close(temp_fd[STDIN]);
-	close(temp_fd[STDOUT]);
 }

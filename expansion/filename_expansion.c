@@ -1,9 +1,5 @@
 #include "../include/expansion.h"
 
-static t_list	*globbing(char *pattern);
-t_bool			*get_redirect_ambiguity(void);
-void			set_redirect_ambiguity(t_bool value);
-
 t_list	*filename_expansion(t_list *list, t_bool glob_flag)
 {
 	t_list	*expanded_list;
@@ -51,30 +47,16 @@ char	*concatenate(t_list *list)
 	return (pattern);
 }
 
-static t_list	*globbing(char *pattern)
+t_list	*globbing(char *pattern)
 {
 	t_list			*matches;
+	DIR				*dp;
+	char			dirbuf[PATH_MAX];
+	struct dirent	*dir;
 	int				file_cnt;
 
 	file_cnt = 0;
 	matches = NULL;
-	dir_search(pattern, matches, &file_cnt);
-	if (*get_redirect_ambiguity() == TRUE && file_cnt > 1)
-	{
-		printf("minishell: %s: ambiguous redirect\n", pattern);
-		set_redirect_ambiguity(FALSE);
-		return (NULL);
-	}
-	else
-		return (matches);
-}
-
-void	dir_search(char *pattern, t_list *matches, int *p_file_cnt)
-{
-	char			dirbuf[PATH_MAX];
-	DIR				*dp;
-	struct dirent	*dir;
-
 	getcwd(dirbuf, PATH_MAX);
 	dp = opendir(dirbuf);
 	dir = readdir(dp);
@@ -87,9 +69,16 @@ void	dir_search(char *pattern, t_list *matches, int *p_file_cnt)
 			&& wildcard(pattern, dir->d_name, 0, 0))
 		{
 			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(dir->d_name)));
-			(*p_file_cnt)++;
+			file_cnt++;
 		}
 	}
 	closedir(dp);
-	return ;
+	if (*get_redirect_ambiguity() == TRUE && file_cnt > 1)
+	{
+		printf("minishell: %s: ambiguous redirect\n", pattern);
+		set_redirect_ambiguity(FALSE);
+		return (NULL);
+	}
+	else
+		return (matches);
 }

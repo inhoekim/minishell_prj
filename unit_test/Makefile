@@ -4,7 +4,7 @@ NAME = test
 
 ## directory
 # HEADERS = 
-SRCS = 6_wildcard_dp.c
+SRCS = test13.c
 OBJS = $(SRCS:.c=.o)
 
 ## desktop env 

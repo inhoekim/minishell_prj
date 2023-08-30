@@ -1,30 +1,6 @@
 #ifndef UTIL_H
 # define UTIL_H
 
-# define NONE -1
-# define STDERR_FD 2
-# define PATH_MAX 1024
-# define PROC_MAX 1024
-# define DELIMLEN 1024
-# define HEREDOC_MAX 16
-# define TOKEN_SIZE 1024
-# define DELIMETER "<>&|() \t\n"
-# define STDIN 0
-# define STDOUT 1
-
-# include <stdio.h>
-# include <fcntl.h>
-# include "../libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <signal.h>
-# include <termios.h>
-# include <errno.h> 
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <dirent.h>
-
-typedef t_bool	(*t_builtin)(char **args);
 
 typedef enum e_nonterminal{
 	PIPELINE = 0,
@@ -85,18 +61,6 @@ typedef struct s_tokenizer
 	char	**heredoc_file_name;
 	int		token_size;
 }	t_tokenizer;
-
-typedef struct s_context
-{
-	int		exit_status;
-	int		fd[2];
-	int		fd_close;
-	int		heredoc_file_idx;
-	char	**heredoc_file_name;
-	t_list	*pid_list;
-	int		pid_size;
-	t_bool	is_piped_cmd;
-}	t_context;
 
 typedef struct s_heredoc_data{
 	int	heredoc_fault_flag;

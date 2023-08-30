@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   merge_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:28 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/30 14:11:31 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 16:35:57 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../include/parser.h"
 
 static t_node	*insert_left(t_node *parent, t_node *child);
 static char		**append_cmd(char **front, char **back);

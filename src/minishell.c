@@ -1,15 +1,4 @@
-#include "../include/minishell2.h"
-
-// void __leak()
-// {
-// 	system("leaks minishell");
-// }
-void	sigact_default_mode(void);
-void	sigact_heredoc_mode(void);
-t_node	*parser(char *line);
-void	execute(t_node *root);
-void	set_heredoc_fault_flag(int flag);
-void	free_tree(t_node *root);
+#include "../include/minishell.h"
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -17,7 +6,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	init_envp(envp);
 	minishell_loop();
-	// atexit(__leak);
 }
 
 void	init_envp(char **envp)
@@ -55,19 +43,20 @@ void	minishell_loop(void)
 	char		*line;
 
 	sigact_default_mode();
-	line = ft_strdup("");
+	line = "";
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);
+		set_heredoc_fault_flag(FALSE);	
 		line = readline("prompt> ");
 		if (line)
 		{
 			if (*line != '\0')
 				add_history(line);
+			set_heredoc_eof_flag(FALSE);
 			root = parser(line);
 			execute(root);
 			free_tree(root);
-			free(line);			
+			free(line);
 		}
 	}
 	print_eof_exit();

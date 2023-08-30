@@ -1,7 +1,5 @@
 #include "../include/grammar.h"
 
-static char	*quote_removal(char *word);
-
 void	delete_heredoc(t_tokenizer *tokenizer)
 {
 	int	i;
@@ -23,7 +21,7 @@ void	set_delimiter(t_node *node, char buf[])
 	node->right = NULL;
 }
 
-static char	*quote_removal(char *word)
+char	*quote_removal(char *word)
 {
 	t_list	*list;
 	char	*chunk;

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 07:46:37 by inhkim            #+#    #+#             */
-/*   Updated: 2023/08/30 14:11:34 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 16:36:10 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "../include/parser.h"
 
 static char	**make_word_data(char *src, int len);
 static void	free_node(t_node *node);

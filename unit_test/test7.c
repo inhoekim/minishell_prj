@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/minishelllibft.h"
+#include "../include/libft.h"
 
 int main() {
 

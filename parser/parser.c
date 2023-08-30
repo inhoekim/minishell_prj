@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 11:25:54 by naylee            #+#    #+#             */
-/*   Updated: 2023/08/30 14:11:32 by dasong           ###   ########.fr       */
+/*   Updated: 2023/08/30 16:36:00 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "../grammar/grammar.h"
+#include "../include/parser.h"
 
 t_node	*parser(char *line)
 {
@@ -43,9 +42,7 @@ t_node	*parser(char *line)
 void	syntax_error(t_tokenizer *tokenizer)
 {
 	t_token	*token;
-	int		i;
 
-	i = -1;
 	set_last_exit_status(1);
 	token = tokenizer->curr_token;
 	if (token->type != SYNTAX_ERR)
@@ -58,8 +55,7 @@ void	syntax_error(t_tokenizer *tokenizer)
 		{
 			ft_putstr_fd("token ", STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
-			while (++i < token->len)
-				ft_putchar_fd(token->str[i], STDERR_FILENO);
+			ft_putstr_fd(token->str, STDERR_FILENO);
 			ft_putchar_fd('\'', STDERR_FILENO);
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);

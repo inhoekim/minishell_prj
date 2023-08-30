@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "../libft/libft.h"
-// #include "../include/minishellminishell.h"
+// #include "../include/minishell.h"
 void	init_envp(char **envp);
 void	ft_env(void);
 t_list	**get_envp(void);

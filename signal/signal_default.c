@@ -25,7 +25,8 @@ static void	new_prompt(int signum)
 {
 	if (signum != SIGINT)
 		return ;
-	printf("\n");
+	if (!get_heredoc_data()->heredoc_eof_flag)
+		printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();

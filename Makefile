@@ -8,7 +8,7 @@ LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
 INC_DIRS = $(shell brew --prefix readline)/include
-INC_DIRS += include libft
+INC_DIRS += include # libft
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
 SRC_DIRS = src builtin_func execute parser signal expansion grammar
 
@@ -16,7 +16,7 @@ vpath %.h $(INC_DIRS)
 vpath %.c $(SRC_DIRS)
 
 ## file
-HEADERS = builtin.h execute.h expansion.h grammar.h minishell2.h parser.h ft_signal.h util.h
+HEADERS = builtin.h execute.h expansion.h grammar.h minishell.h parser.h ft_signal.h util.h
 
 SRCS = minishell.c arg_expansion.c exec_util.c exec_word_util.c
 SRCS += exec_etc.c execute.c filename_expansion.c rule3.c tokenizer_utils.c
@@ -31,7 +31,7 @@ OBJS = $(SRCS:.c=.o)
 ## compile
 CC=	gcc
 CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft # -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft -fsanitize=address # -g3  # -fsanitize=leak # export MallocStackLogging=1
 
 .PHONY: clean, fclean, re, all
 
