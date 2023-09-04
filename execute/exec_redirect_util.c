@@ -57,3 +57,14 @@ t_bool	is_not_directory(char *filename, t_context *p_ctx)
 	}
 	return (TRUE);
 }
+
+t_bool	check_permission(char *filename, t_context *p_ctx)
+{
+	if (access(filename, X_OK) != 0)
+	{
+		msh_error(filename, NULL, EACCES);
+		p_ctx->exit_status = 1;
+		return (FALSE);
+	}
+	return(TRUE);
+}

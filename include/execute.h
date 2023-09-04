@@ -84,4 +84,5 @@ void		set_last_exit_status(int exit_status);
 void		forked_builtin(t_context *p_ctx, \
 t_builtin builtin_func, char **argv);
 int			*get_exit_status(void);
+t_bool		check_permission(char *filename, t_context *p_ctx);
 #endif
