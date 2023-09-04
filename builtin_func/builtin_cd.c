@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:03 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 19:59:38 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 20:09:18 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_bool	ft_cd(char **argv)
 		ft_putstr_fd("cd : ", STDERR_FILENO);
 		ft_putstr_fd(can_env, STDERR_FILENO);
 		ft_putendl_fd(" : No such directory", STDERR_FILENO);
+		free(can_env);
 		return (1);
 	}
 	cd_util(newpwd);
