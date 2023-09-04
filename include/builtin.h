@@ -25,10 +25,9 @@ t_bool	ft_cd(char **argv);
 t_bool	ft_echo(char **argv);
 t_bool	ft_pwd(char **argv);
 t_bool	ft_env(char **argv);
-t_bool	ft_exit(char **argv);
 t_bool	ft_export(char **argv);
 t_bool	ft_unset(char **argv);
-
+t_bool	ft_exit(char **argv);
 // set env func
 t_list	*getenv_list(char *pos, size_t pos_len, t_list **env);
 char	*ft_getenv(char *pos);
