@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirect_util.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:32 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:35 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 15:10:26 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ t_bool	check_permission(char *filename, t_context *p_ctx)
 	{
 		msh_error(filename, NULL, EACCES);
 		p_ctx->exit_status = 1;
+		// printf("here\n");
 		return (FALSE);
 	}
-	return(TRUE);
+	return (TRUE);
 }
