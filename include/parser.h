@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:45 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 23:41:41 by sdg              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_H
 # define PARSER_H
 
@@ -19,8 +31,6 @@ typedef enum e_symbol			t_symbol;
 typedef struct s_node			t_node;
 typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
-
-
 
 //merge_tree
 t_node	*merge_tree(t_node *parent, t_node *child);

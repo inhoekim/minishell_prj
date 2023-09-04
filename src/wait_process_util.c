@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wait_process_util.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:13:18 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:13:19 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	*get_last_pid(void)
@@ -33,7 +45,7 @@ t_list	*_delete_process(t_list **head, t_list *d_node)
 	current = (*head)->next;
 	while (current != d_node)
 	{
-		prev = current;		
+		prev = current;
 		current = current->next;
 	}
 	if (current == *head && prev == *head)

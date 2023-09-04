@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wait_process.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:13:21 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 23:24:06 by sdg              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 void	wait_list(t_context *p_ctx)
@@ -32,20 +44,22 @@ void	*wait_process(t_list *node, t_context *p_ctx, int flag)
 	else if (WIFEXITED(status))
 	{
 		p_ctx->exit_status = WEXITSTATUS(status);
-		ret = _delete_process(&p_ctx->pid_list, node);
-		p_ctx->pid_size--;
-		if (pid == *get_last_pid())
-			set_last_exit_status(p_ctx->exit_status);
+		_wait_process(&ret, p_ctx, node, pid);
 	}
 	else if (WIFSIGNALED(status))
 	{
 		p_ctx->exit_status = WTERMSIG(status) + 128;
-		ret = _delete_process(&p_ctx->pid_list, node);
-		p_ctx->pid_size--;
-		if (pid == *get_last_pid())
-			set_last_exit_status(p_ctx->exit_status);
+		_wait_process(&ret, p_ctx, node, pid);
 	}
 	return (ret);
+}
+
+void	_wait_process(t_list **ret, t_context *p_ctx, t_list *node, pid_t pid)
+{
+	*ret = _delete_process(&p_ctx->pid_list, node);
+	p_ctx->pid_size--;
+	if (pid == *get_last_pid())
+		set_last_exit_status(p_ctx->exit_status);
 }
 
 void	cir_lstadd(pid_t pid, t_context *p_ctx)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_word.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:03 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:04 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/execute.h"
 #include <errno.h>
 
@@ -56,7 +68,7 @@ char	**list_to_arr(t_list *node)
 
 	i = 0;
 	len = ft_lstsize(node);
-	arr = ft_calloc(len + 1 ,sizeof(t_list));
+	arr = ft_calloc(len + 1, sizeof(t_list));
 	if (!arr)
 		exit(ENOMEM);
 	while (node)
