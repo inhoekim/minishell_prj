@@ -6,7 +6,7 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:32 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 15:10:26 by dasong           ###   ########.fr       */
+/*   Updated: 2023/09/04 15:18:22 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,12 @@ t_bool	is_not_directory(char *filename, t_context *p_ctx)
 	return (TRUE);
 }
 
-t_bool	check_permission(char *filename, t_context *p_ctx)
+t_bool	check_permission(char *filename, t_context *p_ctx, int mode_bit)
 {
-	if (access(filename, X_OK) != 0)
+	if (access(filename, mode_bit) != 0)
 	{
 		msh_error(filename, NULL, EACCES);
 		p_ctx->exit_status = 1;
-		// printf("here\n");
 		return (FALSE);
 	}
 	return (TRUE);

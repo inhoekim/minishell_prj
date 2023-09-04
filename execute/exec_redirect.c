@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:38 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:39 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 15:21:09 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_regular_file(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, R_OK))
 		fork_error(p_ctx);
 	else
 	{
@@ -49,7 +49,7 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_not_directory(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
 	{
@@ -74,7 +74,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_not_directory(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
 	{

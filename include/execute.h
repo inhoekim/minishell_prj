@@ -6,7 +6,7 @@
 /*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:12:36 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 14:57:50 by dasong           ###   ########.fr       */
+/*   Updated: 2023/09/04 15:19:09 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,5 @@ void		free_delete_heredoc(t_context *p_ctx);
 void		set_last_exit_status(int exit_status);
 void		forked_builtin(t_context *p_ctx, \
 t_builtin builtin_func, char **argv);
-t_bool		check_permission(char *filename, t_context *p_ctx);
+t_bool		check_permission(char *filename, t_context *p_ctx, int mode_bit);
 #endif
