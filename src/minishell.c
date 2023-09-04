@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:13:15 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 18:55:14 by seykim           ###   ########.fr       */
+/*   Updated: 2023/08/30 23:32:43 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[10C", STDOUT);
-	ft_putendl_fd("exit", STDOUT);
+	printf("exit\n");
 }
 
 void	minishell_loop(void)

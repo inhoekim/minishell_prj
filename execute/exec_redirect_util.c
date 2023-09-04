@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:32 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 18:54:18 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 18:50:42 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ t_bool	check_permission(char *filename, t_context *p_ctx, int mode_bit)
 		p_ctx->exit_status = 1;
 		return (FALSE);
 	}
-	return(TRUE);
+	return (TRUE);
 }
