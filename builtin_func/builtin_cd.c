@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:03 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:04 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 18:51:01 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static char	*vaild_env(char **temp);
 static char	*special_case(char **temp);
+static void	cd_util(char *newpwd);
 
 t_bool	ft_cd(char **argv)
 {
@@ -24,20 +25,41 @@ t_bool	ft_cd(char **argv)
 	can_env = vaild_env(argv);
 	if (!can_env)
 	{
-		write(STDERR_FILENO, "cd: Too many arguments\n", 24);
+		ft_putendl_fd("cd : HOME not set", STDERR_FILENO);
 		return (1);
 	}
 	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(can_env) != 0)
 	{
-		write(STDERR_FILENO, "cd : No such file or directory\n", 32);
+		ft_putstr_fd("cd : ", STDERR_FILENO);
+		ft_putstr_fd(can_env, STDERR_FILENO);
+		ft_putendl_fd(" : No such directory", STDERR_FILENO);
 		return (1);
 	}
-	set_envp("OLDPWD", newpwd);
-	newpwd = getcwd(path, PATH_MAX);
-	set_envp("PWD", newpwd);
+	cd_util(newpwd);
 	free(can_env);
 	return (0);
+}
+
+static void	cd_util(char *newpwd)
+{
+	char	*temp;
+	char	path[PATH_MAX];
+
+	if (newpwd)
+		set_envp("OLDPWD", newpwd);
+	else
+	{
+		newpwd = ft_getenv("PWD");
+		temp = ft_getenv("OLDPWD");
+		set_envp("OLDPWD", newpwd);
+		set_envp("PWD", temp);
+		free(temp);
+		free(newpwd);
+	}
+	newpwd = getcwd(path, PATH_MAX);
+	if (newpwd)
+		set_envp("PWD", newpwd);
 }
 
 static char	*vaild_env(char **temp)
@@ -49,9 +71,7 @@ static char	*vaild_env(char **temp)
 	parameter = 0;
 	while (temp[size])
 		size++;
-	if (size > 2)
-		return (NULL);
-	else if (size == 1)
+	if (size == 1)
 		return (ft_getenv("HOME"));
 	parameter = special_case(temp);
 	if (!parameter)

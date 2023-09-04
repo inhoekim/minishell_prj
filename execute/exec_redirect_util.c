@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:32 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:35 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 18:50:42 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ t_bool	is_not_directory(char *filename, t_context *p_ctx)
 	{
 		msh_error(filename, NULL, EISDIR);
 		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+t_bool	check_permission(char *filename, t_context *p_ctx, int mode_bit)
+{
+	if (access(filename, mode_bit) != 0)
+	{
+		msh_error(filename, NULL, EACCES);
+		p_ctx->exit_status = 1;
 		return (FALSE);
 	}
 	return (TRUE);
