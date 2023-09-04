@@ -25,7 +25,7 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_regular_file(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, R_OK))
 		fork_error(p_ctx);
 	else
 	{
@@ -49,7 +49,7 @@ void	exec_output(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_not_directory(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
 	{
@@ -74,7 +74,7 @@ void	exec_append(t_node *node, t_context *p_ctx)
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_not_directory(filename[0], p_ctx) || \
-	!check_permission(filename[0], p_ctx))
+	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
 	{
