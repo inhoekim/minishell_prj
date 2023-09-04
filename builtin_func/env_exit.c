@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:10 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:11 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 17:50:20 by dasong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,28 @@
 t_bool	ft_env(char **argv)
 {
 	t_list	**env;
-	t_list	*temp;
+	t_list	*tp;
+	int		ret;
+	char	*tp_str;
 
 	(void)argv;
 	env = get_envp();
-	temp = *env;
-	while (temp != NULL)
+	tp = *env;
+	while (tp != NULL)
 	{
-		printf("%s\n", (char *)temp->content);
-		temp = temp->next;
+		ret = check_argv((char *)tp->content);
+		if (ret != 0)
+		{
+			if (ret == 3)
+			{
+				tp_str = ft_substr(tp->content, 0, ft_strlen(tp->content) - 2);
+				printf("%s\n", tp_str);
+				free(tp_str);
+			}
+			else
+				printf("%s\n", (char *)tp->content);
+		}
+		tp = tp->next;
 	}
 	return (0);
 }
