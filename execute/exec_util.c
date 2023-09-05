@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:11:45 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/05 16:26:43 by inhkim           ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2023/09/05 16:40:07 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/execute.h"
 
@@ -24,21 +25,6 @@ void	free_argv(char **argv)
 	while (argv[i])
 		free(argv[i++]);
 	free(argv);
-}
-
-void	set_exit_status(int exit_status)
-{
-	int	*p_exit_status;
-
-	p_exit_status = get_exit_status();
-	*p_exit_status = exit_status;
-}
-
-int	*get_exit_status(void)
-{
-	static int	exit_status;
-
-	return (&exit_status);
 }
 
 void	fork_error(t_context *p_ctx)

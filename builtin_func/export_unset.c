@@ -6,104 +6,90 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:13 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/05 16:26:30 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/builtin.h"
 
+static t_bool	export_error(char *argv);
+static void		export_excp(char **argv, int idx, t_list **env);
+
 t_bool	ft_export(char **argv)
 {
 	int		idx;
 	t_list	**env;
+	t_list	*temp;
 
 	idx = 0;
 	env = get_envp();
+	temp = *env;
 	if (!argv[1])
 	{
-		while ((*env)->next != NULL)
+		while (temp != NULL)
 		{
-			printf("declare -x %s\n", (char *)(*env)->content);
-			env = &(*env)->next;
+			printf("declare -x %s\n", (char *)temp->content);
+			temp = temp->next;
 		}
 	}
 	else
-	{
-		while (argv[++idx])
-		{
-			if (check_argv(argv[idx]))
-			{
-				check_env(argv, env);
-				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
-			}
-		}
-	}
+		export_excp(argv, idx, env);
 	return (0);
 }
 
-int	check_argv(char *argv)
+static t_bool	export_error(char *argv)
 {
-	int		idx;
-	int		flag;
+	int	idx;
 
-	idx = 0;
-	flag = 0;
-	while (argv[idx])
+	idx = 1;
+	if (argv[0] != '_' && !ft_isalpha(argv[0]))
 	{
-		if (argv[idx] == '=')
-			if (argv[idx + 1] != 0)
-				flag = 1;
+		ft_putstr_fd("export: '", 2);
+		ft_putstr_fd(argv, 2);
+		ft_putendl_fd("': not a valid identifier", 1);
+		return (FALSE);
+	}
+	while (argv[idx] && argv[idx] != '=')
+	{
+		if (!ft_isalnum(argv[idx]) && argv[idx] != '_')
+		{
+			ft_putstr_fd("export: '", 2);
+			ft_putstr_fd(argv, 2);
+			ft_putendl_fd("': not a valid identifier", 1);
+			return (FALSE);
+		}
 		idx++;
 	}
-	if (flag == 1)
-		return (1);
-	return (0);
+	return (TRUE);
 }
 
-void	check_env(char **argv, t_list **env)
+static void	export_excp(char **argv, int idx, t_list **env)
 {
-	t_list	*check;
-	int		idx;
-	char	*temp;
+	int		cnt;
+	int		ret;
+	char	*temp_str;
 
-	idx = 0;
-	check = *env;
+	cnt = 0;
 	while (argv[++idx])
 	{
-		check = *env;
-		temp = make_temp(argv[idx]);
-		while (check)
+		if (export_error(argv[idx]) == FALSE)
+			continue ;
+		ret = check_argv(argv[idx]);
+		if (ret == 2)
 		{
-			if (!ft_memcmp(temp, check->content, ft_strlen(temp)))
-			{
-				delete_node(env, check);
-				break ;
-			}
-			check = check->next;
+			temp_str = ft_strjoin(argv[idx], "\"\"");
+			free(argv[idx]);
+			argv[idx] = temp_str;
 		}
-		free(temp);
-	}
-}
-
-char	*make_temp(char *s1)
-{
-	int		idx;
-	char	*temp;
-
-	idx = 0;
-	temp = 0;
-	if (!s1)
-		return (0);
-	while (s1[idx])
-	{
-		if (s1[idx] == '=')
+		if (!(ret == 0 && cnt > 0))
 		{
-			temp = ft_substr(s1, 0, idx);
-			break ;
+			if (check_env(argv[idx], env) == 0)
+				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+			cnt++;
 		}
-		idx++;
+		if (ret == 0 && getenv_list(argv[idx], ft_strlen(argv[idx]), env) == 0)
+			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
 	}
-	return (temp);
 }
 
 t_bool	ft_unset(char **argv)

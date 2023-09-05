@@ -54,7 +54,7 @@ void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
 	ft_putstr_fd("\033[10C", STDOUT);
-	ft_putendl_fd("exit", STDOUT);
+	printf("exit\n");
 }
 
 void	minishell_loop(void)
