@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: inhkim <inhkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/09/05 16:40:07 by inhkim           ###   ########.fr       */
+/*   Created: 2023/09/05 16:51:48 by inhkim            #+#    #+#             */
+/*   Updated: 2023/09/05 16:51:52 by inhkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/execute.h"
 
