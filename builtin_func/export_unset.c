@@ -12,6 +12,8 @@
 
 #include "../include/builtin.h"
 
+static t_bool	export_error(char *argv);
+
 t_bool	ft_export(char **argv)
 {
 	int		idx;
@@ -30,10 +32,34 @@ t_bool	ft_export(char **argv)
 		}
 	}
 	else
-	{
 		export_excp(argv, idx, env);
-	}
 	return (0);
+}
+
+static t_bool	export_error(char *argv)
+{
+	int	idx;
+
+	idx = 1;
+	if (argv[0] != '_' && !ft_isalpha(argv[0]))
+	{
+		ft_putstr_fd("export: '", 2);
+		ft_putstr_fd(argv, 2);
+		ft_putendl_fd("': not a valid identifier",1);
+		return (FALSE);
+	}
+	while (argv[idx] && argv[idx] != '=')
+	{
+		if (!ft_isalnum(argv[idx]) && argv[idx] != '_')
+		{
+			ft_putstr_fd("export: '", 2);
+			ft_putstr_fd(argv, 2);
+			ft_putendl_fd("': not a valid identifier",1);
+			return (FALSE);
+		}
+		idx++;
+	}
+	return (TRUE);
 }
 
 void	export_excp(char **argv, int idx, t_list **env)
@@ -45,6 +71,8 @@ void	export_excp(char **argv, int idx, t_list **env)
 	cnt = 0;
 	while (argv[++idx])
 	{
+		if (export_error(argv[idx]) == FALSE)
+			continue;
 		ret = check_argv(argv[idx]);
 		if (ret == 2)
 		{
