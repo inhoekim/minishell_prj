@@ -12,6 +12,9 @@
 
 #include "../include/execute.h"
 
+int		*get_last_exit_status(void);
+void	wait_list(t_context *p_ctx);
+
 void	exec_or(t_node *node, t_context *p_ctx)
 {
 	t_node	*lhs;

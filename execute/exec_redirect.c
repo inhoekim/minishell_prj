@@ -53,7 +53,8 @@ void	exec_output(t_node *node, t_context *p_ctx)
 		fork_error(p_ctx);
 	else
 	{
-		p_ctx->fd[STDOUT] = open(filename[0], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+		p_ctx->fd[STDOUT] = open(filename[0], \
+		O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		exec_node(lhs, p_ctx);
 	}
 	free_argv(filename);

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/execute.h"
+#include "../include/builtin.h"
 
 static t_bool	check_str(char *argv, int idx, int size, char *sep);
 
