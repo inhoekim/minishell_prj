@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:10 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 19:03:00 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/05 16:28:15 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ t_bool	ft_exit(char **argv)
 		{
 			ft_putendl_fd("exit", STDOUT);
 			ft_putendl_fd("exit: too many arguments", STDOUT);
-			exit(1);
 			return (1);
 		}
 		ft_putendl_fd("exit", STDOUT);
