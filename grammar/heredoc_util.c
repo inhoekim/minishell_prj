@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_util.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:23 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:24 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/grammar.h"
 
 void	delete_heredoc(t_tokenizer *tokenizer)
@@ -19,18 +31,6 @@ void	set_delimiter(t_node *node, char buf[])
 	free(word);
 	free(node->right);
 	node->right = NULL;
-}
-
-char	*quote_removal(char *word)
-{
-	t_list	*list;
-	char	*chunk;
-
-	list = split_quotes(word);
-	unquote(list);
-	chunk = concatenate(list);
-	ft_lstclear(&list, free);
-	return (chunk);
 }
 
 t_bool	is_same_str(char *word1, char *word2)

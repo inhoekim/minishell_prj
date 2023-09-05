@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_heredoc.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:13:10 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/04 14:57:56 by dasong           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/ft_signal.h"
 
 static void	quit_heredoc(int signum);
@@ -22,6 +34,7 @@ static void	quit_heredoc(int signum)
 	if (signum != SIGINT)
 		return ;
 	printf("\n");
+	set_last_exit_status(1);
 	set_heredoc_fault_flag(TRUE);
 	set_tmp_stdin_fd(dup(STDIN));
 	close(STDIN);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:36 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/04 17:11:29 by dasong           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
@@ -6,10 +18,11 @@
 # include "signal.h"
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <stdio.h>
+# include <errno.h>
 # include "util.h"
 # define STDIN 0
 # define STDOUT 1
-
 
 typedef enum e_nonterminal		t_nonterminal;
 typedef enum e_symbol			t_symbol;
@@ -17,7 +30,7 @@ typedef enum e_symbol			t_symbol;
 typedef struct s_node			t_node;
 typedef struct s_token			t_token;
 typedef struct s_tokenizer		t_tokenizer;
-
+typedef t_bool					(*t_builtin)(char **args);
 
 typedef struct s_context
 {
@@ -30,10 +43,6 @@ typedef struct s_context
 	int		pid_size;
 	t_bool	is_piped_cmd;
 }	t_context;
-
-typedef t_bool	(*t_builtin)(char **args);
-
-
 
 t_builtin	check_builtin(char *argv);
 t_list		*split_quotes(char *str);
@@ -58,7 +67,7 @@ void		set_redirect_ambiguity(t_bool value);
 void		exec_input(t_node *node, t_context *p_ctx);
 void		exec_output(t_node *node, t_context *p_ctx);
 void		exec_append(t_node *node, t_context *p_ctx);
-void		ambiguity_check(char **filename, t_node *rhs, t_context *p_ctx);
+int			ambiguity_check(char ***filename, t_context *p_ctx, t_node	*rhs);
 void		exec_subshell(t_node *node, t_context *p_ctx);
 void		free_argv(char **argv);
 void		set_exit_status(int exit_status);
@@ -75,4 +84,5 @@ void		set_last_exit_status(int exit_status);
 void		forked_builtin(t_context *p_ctx, \
 t_builtin builtin_func, char **argv);
 int			*get_exit_status(void);
+t_bool		check_permission(char *filename, t_context *p_ctx, int mode_bit);
 #endif

@@ -1,9 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:13:15 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 23:32:43 by sdg              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
+	printf("\n\
+                    ____________   ____  ___   _____ __  __ \n\
+                   / ____/_  __/  / __ )/   | / ___// / / / \n\
+                  / /_    / /    / __  / /| | \\__ \\/ /_/ /  \n\
+                 / __/   / /    / /_/ / ___ |___/ / __  /   \n\
+                /_/     /_/    /_____/_/  |_/____/_/ /_/    \n\
+                       Writer : Dasong & Seykim					\n\
+\n");
 	init_envp(envp);
 	minishell_loop();
 }
@@ -33,7 +53,7 @@ t_list	**get_envp(void)
 void	print_eof_exit(void)
 {
 	ft_putstr_fd("\033[1A", STDOUT);
-	ft_putstr_fd("\033[8C", STDOUT);
+	ft_putstr_fd("\033[10C", STDOUT);
 	printf("exit\n");
 }
 
@@ -46,8 +66,8 @@ void	minishell_loop(void)
 	line = "";
 	while (line)
 	{
-		set_heredoc_fault_flag(FALSE);	
-		line = readline("prompt> ");
+		set_heredoc_fault_flag(FALSE);
+		line = readline("ft_bash > ");
 		if (line)
 		{
 			if (*line != '\0')

@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_util.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:11:45 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/04 14:57:57 by dasong           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/execute.h"
+
+void	cir_lstadd(pid_t pid, t_context *p_ctx);
 
 void	free_argv(char **argv)
 {
@@ -10,21 +24,6 @@ void	free_argv(char **argv)
 	while (argv[i])
 		free(argv[i++]);
 	free(argv);
-}
-
-void	set_exit_status(int exit_status)
-{
-	int	*p_exit_status;
-
-	p_exit_status = get_exit_status();
-	*p_exit_status = exit_status;
-}
-
-int	*get_exit_status(void)
-{
-	static int	exit_status;
-
-	return (&exit_status);
 }
 
 void	fork_error(t_context *p_ctx)

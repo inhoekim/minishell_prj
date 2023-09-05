@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_signal.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:39 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:40 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_SIGNAL_H
 # define FT_SIGNAL_H
 
@@ -9,7 +21,6 @@
 # include <termios.h>
 # include "../libft/libft.h"
 # include "minishell.h"
-
 
 //signal_default
 void	sigact_default_mode(void);

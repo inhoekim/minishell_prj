@@ -1,4 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:05 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:06 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/execute.h"
+
+char	**alloc_heredoc_name(void);
+void	sigact_default_mode(void);
+void	set_is_subshell(t_bool flag);
+void	wait_list(t_context *p_ctx);
+void	set_last_pid(int pid);
 
 void	execute(t_node *root)
 {

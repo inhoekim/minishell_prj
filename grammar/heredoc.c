@@ -1,4 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:12:25 by seykim            #+#    #+#             */
+/*   Updated: 2023/08/30 19:12:26 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/grammar.h"
+
+static void		read_heredoc(int fd, char *delimiter, \
+t_tokenizer *tokenizer, t_bool can_expansion);
+static t_bool	check_eof_heredoc(char *input, \
+char *delimiter, t_tokenizer *tokenizer);
 
 void	heredoc(char *delimiter, t_tokenizer *tokenizer)
 {

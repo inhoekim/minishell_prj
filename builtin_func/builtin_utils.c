@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:11:06 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/04 19:41:39 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/builtin.h"
 
 char	*ft_strnjoin(char const *s1, char const *s2)
@@ -93,6 +105,8 @@ void	set_envp(char *pos, char *pwd)
 	size_t	pos_len;
 	char	*newpwd;
 
+	if (!pwd)
+		return ;
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
 	if (!temp)

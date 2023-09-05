@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 16:44:40 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/04 19:03:04 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,94 +16,51 @@ t_bool	ft_export(char **argv)
 {
 	int		idx;
 	t_list	**env;
+	t_list	*temp;
 
 	idx = 0;
 	env = get_envp();
+	temp = *env;
 	if (!argv[1])
 	{
-		while ((*env)->next != NULL)
+		while (temp != NULL)
 		{
-			printf("declare -x %s\n", (char *)(*env)->content);
-			env = &(*env)->next;
+			printf("declare -x %s\n", (char *)temp->content);
+			temp = temp->next;
 		}
 	}
 	else
 	{
-		while (argv[++idx])
-		{
-			if (check_argv(argv[idx]))
-			{
-				check_env(argv, env);
-				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
-			}
-		}
+		export_excp(argv, idx, env);
 	}
 	return (0);
 }
 
-int	check_argv(char *argv)
+void	export_excp(char **argv, int idx, t_list **env)
 {
-	int		idx;
-	int		flag;
+	int		cnt;
+	int		ret;
+	char	*temp_str;
 
-	idx = 0;
-	flag = 0;
-	while (argv[idx])
-	{
-		if (argv[idx] == '=')
-			if (argv[idx + 1] != 0)
-				flag = 1;
-		idx++;
-	}
-	if (flag == 1)
-		return (1);
-	return (0);
-}
-
-void	check_env(char **argv, t_list **env)
-{
-	t_list	*check;
-	int		idx;
-	char	*temp;
-
-	idx = 0;
-	check = *env;
+	cnt = 0;
 	while (argv[++idx])
 	{
-		check = *env;
-		temp = make_temp(argv[idx]);
-		while (check)
+		ret = check_argv(argv[idx]);
+		if (ret == 2)
 		{
-			if (!ft_memcmp(temp, check->content, ft_strlen(temp)))
+			temp_str = ft_strjoin(argv[idx], "\"\"");
+			free(argv[idx]);
+			argv[idx] = temp_str;
+		}
+		if (!(ret == 0 && cnt > 0))
+		{
+			if (check_env(argv[idx], env) == 0)
 			{
-				delete_node(env, check);
-				break ;
+				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
+				cnt++;
 			}
-			check = check->next;
 		}
-		free(temp);
 	}
-}
-
-char	*make_temp(char *s1)
-{
-	int		idx;
-	char	*temp;
-
-	idx = 0;
-	temp = 0;
-	if (!s1)
-		return (0);
-	while (s1[idx])
-	{
-		if (s1[idx] == '=')
-		{
-			temp = ft_substr(s1, 0, idx);
-			break ;
-		}
-		idx++;
-	}
-	return (temp);
 }
 
 t_bool	ft_unset(char **argv)

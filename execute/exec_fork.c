@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_fork.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/30 19:11:29 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/04 18:50:48 by seykim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/execute.h"
+
+static void	order_check(char **argv, t_context *p_ctx, char *temp_path);
 
 void	search_and_fork_exec(char **argv, t_context *p_ctx)
 {
