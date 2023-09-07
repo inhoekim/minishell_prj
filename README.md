@@ -1,6 +1,6 @@
 # minishell_prj
-This is interactive-shell prj - from 42seoul_Cursus - Circle 3<br/>
-## Team Members<br/>
+This is interactive-shell prj - *from 42Cursus - Circle 3*<br/>
+## Team Members - Available Language Stacks<br/>
 ### Leader - inhoe<br/>
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=inhoekim&layout=compact)](https://github.com/inhoekim/github-readme-stats)<br/>
 ### daegeun<br/>
