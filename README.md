@@ -1,5 +1,5 @@
 # 미니쉘 팀 프로젝트
-![Alt text](minishell.png)
+![Alt text](img/minishell.png)
     
     This is our Interactive-shell project!
     (from 42Cursus - Circle 3)
@@ -34,7 +34,7 @@
 
 
 ## 프로젝트 동작과정 (FlowChart)
-![Alt text](FlowChart.png)
+![Alt text](img/FlowChart.png)
 
 ## 파서 구현
 - ### LL파서 구현
@@ -47,9 +47,8 @@
 - ### 트리 생성
     - 우리의 파서는 문법의 유효성을 검사하는 동시에 실행부에 넘겨줄 트리를 같이 생성
 
-    - Rule rhs의 앞의 symbol이 child가 되고 뒤의 symbol이 parent가 되어, parent의 왼쪽 자식에 child가 삽입되게끔 트리를 생성하여 실행순서를 조절
-    (e)
-
+    - Rule rhs의 앞의 symbol이 child가 되고 뒤의 symbol이 parent가 되어, parent의 왼쪽 자식에 child가 삽입되게끔 트리를 생성하여 실행순서를 조절 
+    (단)
 - ### 간단한 명령어일 때, 트리 구성그림 추가
     - image.png(간단한 트리예시/ 예.ls | cat etc.)
 - ### 우리가 만든 문법(Rule) img 첨부
