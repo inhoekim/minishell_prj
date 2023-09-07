@@ -1,10 +1,13 @@
 # 미니쉘 팀 프로젝트
+![Alt text](asdasda-1.png)
     This is our Interactive-shell project!
     (from 42Cursus - Circle 3)
 
-해당 프로젝트의 목표는 유닉스 쉘을 직접 구현해보는 것입니다!
+해당 프로젝트의 목표는 유닉스 쉘을 직접 구현해보는 것입니다!<br/>
 
-미니쉘 프롬프트 사진첨부 (img.png)
+사용 언어 -  &nbsp; <img src="https://img.shields.io/badge/C-3178C6?style=flat"/> &nbsp;<img src="https://img.shields.io/badge/Makefile-3178C6?style=flat"/>
+
+
 
 ## 팀 멤버 소개 및 링크<br/>
 ### 인회<br/>
@@ -21,21 +24,22 @@
 
 
 ## 목차
-- [파서 구현](#파서-구현) - 입력받은 Command로 트리를 생성 (<a href="https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/utilities/V3_chap02.html#tag_18_10">Bash 문법</a>) 
-- [Builtin 함수](#builtin-함수-목록들-옵션-제외)- export, cd, unset, pwd, echo, exit, env
-- [트리 실행부 구현](#트리-실행부-구현---파싱된-트리를-실행)- 파싱된 트리를 실행
-- [쉘 메타 문자 ($, |, ||, &&, <, >, <<, >>)의 기능 구현](#구현한-쉘-메타문자-목록)
+- [파서 구현](#파서-구현) - 입력받은 Command로 트리를 생성 (<a href="https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html#tag_02_10_02">Bash Grammar Link</a>) 
+- [Builtin 함수](#builtin-함수-목록들-옵션-제외) - export, cd, unset, pwd, echo, exit, env
+- [트리 실행부 구현](#트리-실행부-구현---파싱된-트리를-실행) - 파싱된 트리를 실행
+- [쉘 메타 문자 구현](#구현한-쉘-메타문자-목록) - $, |, ||, &&, <, >, <<, >>
 - [구현 시 유의사항 및 문제점 정리](#구현-시-유의사항-및-문제점-정리)
 
 ## 프로젝트 동작과정 (FlowChart)
 ![Alt text](image.png)
 
 ## 파서 구현
-- ### LL파서 설명
-    - 각 root의 왼쪽에는 Command, 오른쪽에는 옵션 또는 목적 내용
+- ### LL파서 구현
+    - 입력된 문자열을(Command)를 왼쪽에서부터 파싱을 시작해(좌측유도) Rule을 적용
+    - 알맞는 Rule을 선택비결정적인 상활을 
 - ### 간단한 명령어일 떄, 트리 구성그림 추가
     - image.png(간단한 트리예시/ 예.ls | cat etc.)
-- ### 우리가 만든 문법 img 첨부
+- ### 우리가 만든 문법(Rule) img 첨부
     - image.png(문법 이미지)
 
 <br/>
@@ -51,15 +55,13 @@
 <br/>
 
 ## 트리 실행부 구현 - 파싱된 트리를 실행
-- 일반적인 경우, 트리의 루트에서 왼쪽부터 내려가며 각 노드들을 실행 (전위 순회)
+- 일반적인 경우, 트리의 루트에서 왼쪽부터 내려가며 각 노드들을 실행 (전위 순회 - 재귀)
 
 - 단, 오른쪽 자식이 파일인 경우(입출력 재지정)에만 오른쪽 자식을 먼저 방문
 
-- 쉘의 메타문자별로 노드의 타입이 구분됨 (ex, pipe_type(|), input_type(<), heredoc_type(<<), ... )
+- 쉘의 메타문자별로 노드의 타입이 구분됨 (ex, pipe_type(|), input_type(<), heredoc_type(<<), etc.. )
 
-- 메타문자 타입을 제외한 것들은 모두 word_type(특정 파일과 혹은 명령어와 관련된 문자)
-
-# https://worthpreading.tistory.com/83 이거 따라서 한번 올려보시나요
+- 메타문자 타입을 제외한 것들은 특정 파일과 혹은 명령어와 관련된 문자
 
 <br/>
 
