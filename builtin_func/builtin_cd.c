@@ -49,33 +49,15 @@ static void	cd_util(char *newpwd)
 
 	if (newpwd)
 		set_envp("OLDPWD", newpwd);
-	// unset으로 PWD, OLDPWD를 지웠을 경우
-	// PWD= / OLDPWD= 를 출력하는 부분
 	else
 	{
 		newpwd = ft_getenv("PWD");
 		temp = ft_getenv("OLDPWD");
-		if (!newpwd)
-			set_envp("OLDPWD", "\"\"");
-		else
-			set_envp("OLDPWD", newpwd);
-		if (!temp)
-			set_envp("PWD", "\"\"");
-		else
-			set_envp("PWD", temp);
+		set_envp("OLDPWD", newpwd);
+		set_envp("PWD", temp);
 		free(temp);
 		free(newpwd);
 	}
-	// 안지우고 경로 업데이트하는 방식
-	// else
-	// {
-	// 	newpwd = ft_getenv("PWD");
-	// 	temp = ft_getenv("OLDPWD");
-	// 	set_envp("OLDPWD", newpwd);
-	// 	set_envp("PWD", temp);
-	// 	free(temp);
-	// 	free(newpwd);
-	// }
 	newpwd = getcwd(path, PATH_MAX);
 	if (newpwd)
 		set_envp("PWD", newpwd);
