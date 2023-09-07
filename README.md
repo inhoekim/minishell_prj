@@ -21,15 +21,14 @@
 
 
 ## 목차
-- [파서 구현](#파서-구현) - 입력받은 Command로 트리를 생성 (<a href="https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/utilities/V3_chap02.html#tag_18_10">Bash 문법</a>)    
-- [Builtin 함수 구현](#builtin-함수-목록들-옵션-제외)- export, cd, unset, pwd, echo, exit, env
+- [파서 구현](#파서-구현) - 입력받은 Command로 트리를 생성 (<a href="https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/utilities/V3_chap02.html#tag_18_10">Bash 문법</a>) 
+- [Builtin 함수](#builtin-함수-목록들-옵션-제외)- export, cd, unset, pwd, echo, exit, env
 - [트리 실행부 구현](#트리-실행부-구현---파싱된-트리를-실행)- 파싱된 트리를 실행
 - [쉘 메타 문자 ($, |, ||, &&, <, >, <<, >>)의 기능 구현](#구현한-쉘-메타문자-목록)
 - [구현 시 유의사항 및 문제점 정리](#구현-시-유의사항-및-문제점-정리)
 
-## 프로젝트 동작 과정
-image.png (간단 버전)
-
+## 프로젝트 동작과정 (FlowChart)
+![Alt text](image.png)
 
 ## 파서 구현
 - ### LL파서 설명
@@ -37,6 +36,7 @@ image.png (간단 버전)
 - ### 간단한 명령어일 떄, 트리 구성그림 추가
     - image.png(간단한 트리예시/ 예.ls | cat etc.)
 - ### 우리가 만든 문법 img 첨부
+    - image.png(문법 이미지)
 
 <br/>
 
@@ -51,11 +51,15 @@ image.png (간단 버전)
 <br/>
 
 ## 트리 실행부 구현 - 파싱된 트리를 실행
-- 트리의 루트에서 왼쪽부터 내려가며 각 노드들을 실행 (일반적으로 전위 순회)
-- 단, 오른쪽 자식이 파일인 경우 (입출력 재지정의 경우)에만 오른쪽 자식을 먼저 방문
-- 쉘의 메타문자별로 노드의 타입이 구분됨 (ex, pipe_type(|), input_type(<), heredoc_type(<<), ... )
-- 메타문자 타입을 제외한 것들은 모두 word_type (파일이름 or 옵션)
+- 일반적인 경우, 트리의 루트에서 왼쪽부터 내려가며 각 노드들을 실행 (전위 순회)
 
+- 단, 오른쪽 자식이 파일인 경우(입출력 재지정)에만 오른쪽 자식을 먼저 방문
+
+- 쉘의 메타문자별로 노드의 타입이 구분됨 (ex, pipe_type(|), input_type(<), heredoc_type(<<), ... )
+
+- 메타문자 타입을 제외한 것들은 모두 word_type(특정 파일과 혹은 명령어와 관련된 문자)
+
+# https://worthpreading.tistory.com/83 이거 따라서 한번 올려보시나요
 
 <br/>
 
