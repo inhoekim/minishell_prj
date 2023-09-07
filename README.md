@@ -8,7 +8,7 @@
 
 사용 언어 -  &nbsp; <img src="https://img.shields.io/badge/C-3178C6?style=flat"/> &nbsp;<img src="https://img.shields.io/badge/Makefile-3178C6?style=flat"/>
 
-
+<br/>
 
 ## 팀 멤버 소개 및 링크<br/>
 ### 인회<br/>
@@ -23,6 +23,7 @@
 ### 세연<br/>
 <a href="https://github.com/seyeon22222">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=seyeon22222&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
 
+<br/>
 
 ## 목차
 - [파서 구현](#파서-구현) - 입력받은 Command로 트리를 생성 (<a href="https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html#tag_02_10_02">Bash Grammar Link</a>) 
@@ -32,6 +33,7 @@
 - [기타 기능](#기타-기능들)
 - [구현 시 유의사항 및 문제점 정리](#구현-시-유의사항-및-문제점-정리)
 
+<br/>
 
 ## 프로젝트 동작과정 (FlowChart)
 ![image](https://github.com/inhoekim/minishell_prj/assets/92151066/d8e82ade-43af-499d-82eb-5069f68d525d)
@@ -47,11 +49,16 @@
 - ### 트리 생성
     - 우리의 파서는 문법의 유효성을 검사하는 동시에 실행부에 넘겨줄 트리를 같이 생성
 
-    - 실행순서를 조절하기 위하여 Rule rhs의 앞의 symbol이 child가 되고 뒤의 symbol이 parent가 되어, parent의 왼쪽 자식에 child가 삽입되게끔 트리를 생성 (예외 
+    - 실행순서를 조절하기 위하여 Rule rhs의 앞의 symbol이 child가 되고 뒤의 symbol이 parent가 되어, parent의 왼쪽 자식에 child가 삽입되게끔 트리를 생성
     
 - ### 트리 예시
-
-        ex) ls | cat
+        ex) cat < a.txt < b.txt | ls
+        
+        실행순서 (leaf 기준)
+        1. b.txt OPEN
+        2. a.txt OPEN
+        3. cat   FORK
+        4. ls    FORK
         
 - ### 우리가 만든 문법(Rule) img 첨부
     - image.png(문법 이미지)
@@ -87,8 +94,8 @@
 - <, >, >> (Redirect) : 프로세스의 입출력을 재지정
     - < : 프로세스의 입력 지정
     - \> : 프로세스의 출력 지정(덮어쓰기)
-    - \>\> : 프로세스의 출력 지정(이어쓰기)<br/><br/>
-
+    - \>\> : 프로세스의 출력 지정(이어쓰기)<br/>
+<br/>
 - << (HereDoc) : 프로세스의 입력을 대기 받는 상태로, 표준입력을 여러줄 이어받고 싶을 때 사용
 
 - && (And) : CMD1 && CMD2 처럼 사용하며, CMD1이 명령어 실행에 성공했을 때, CMD2를 실행(CMD1이 실행에 실패했을 때, CMD2 실행 X)
@@ -96,21 +103,16 @@
 
 - \*, ? (WilCard) : \*는 뒤에 몇글자가 오는지 상관없이 모든 글자가 매칭될 수 있으며, ?는 한글자만 매칭(ex, \+a == ba,?a,aaa  / ?a = ba, ca etc..)
 
-
 ## 기타 기능들
 
-
-histroy 기능 : 사용자가 기존에 입력한 키워드(history)를 기억하여 키보드 입력(up, down)시 이전 키워드를 찾을수 있도록
-환경변수 확장기능 :  (메타 문자 $)
-시그널 이벤트 변경 : sigint, sigquit
-quote(", ') 처리기능: quote로 감싸진 메타문자의 처리는 기존의 쉘과 동일해야함
+- histroy 기능 : 사용자가 기존에 입력한 키워드(history)를 기억하여 키보드 입력(↑ , ↓)시 이전 키워드를 찾을수 있도록
 
 
-3. 실행부의 중점
+- quote(", ') 처리기능: quote로 감싸진 메타문자의 처리는 기존의 쉘과 동일해야함
 
+
+- 시그널 이벤트 변경 : sigint, sigquit
 fork()와 pipe()를 이용한 프로세스 실행법과 올바른 프로세스 관리 wait()에 대해서 소개
-
-4. 프로젝트를 진행하며 생긴 이슈들
 
 ## 구현 시 유의사항 및 문제점 정리
 
