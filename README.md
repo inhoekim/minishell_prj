@@ -1,22 +1,29 @@
-# minishell_prj
+# 미니쉘 팀 프로젝트
 This is Interactive-shell prj - *from 42Cursus - Circle 3*<br/><br/>
-## Team Members - Available Language Stacks<br/>
-### Inhoe<br/>
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=inhoekim&show_icons=true&theme=dark&card_width=5&card_height=5)<br/>
-### daegeun<br/>
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=songdaegeun&show_icons=true&theme=dark&card_width=5&card_height=5)<br/>
-### nayoung<br/>
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=wwwlnyy&show_icons=true&theme=dark&card_width=5&card_height=5)
-### seyeon<br/>
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=seyeon22222&show_icons=true&theme=dark&card_width=5&card_height=5)
+## 팀 멤버<br/>
+### 인회<br/>
+<a href="https://github.com/inhoekim">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=inhoekim&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5) </a><br/>
+### 대근<br/>
+<a href="https://github.com/songdaegeun">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=songdaegeun&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
+### 나영<br/>
+<a href="https://github.com/wwwlnyy">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=wwwlnyy&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
+### 세연<br/>
+<a href="https://github.com/seyeon22222">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=seyeon22222&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
 
-이게 근데 팀원들 github링크로 이어지면 더 좋을것같은데
 
-### 개요
-<br/>
-전체 미니쉘 설명과 기능
+# 프로젝트 개요
+- 구현목표 : 유닉스 쉘을 직접 최소구현 해보는 것<br/>
+- 구현 목차   
+    - 유닉스 쉘의 문법 - LL파서 구현
+    - 빌트인 함수 - export, cd, unset, pwd, echo, exit, env 구현
+    - 실행부
+    - 구현하면서 생긴 이슈
 
-문서화한 그림 첨부
+
+## 구현 결과 
+문서화한 그림 첨부 
+
+
 
 === 
 
