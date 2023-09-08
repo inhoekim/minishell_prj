@@ -107,9 +107,10 @@
 - [Readline(GNU)](https://tiswww.case.edu/php/chet/readline/rltop.html) 라이브러리 : histroy 기능 및 표준입력을 받기위해 사용
     - histroy 기능 : 사용자가 기존에 입력한 키워드(history)를 기억하여 키보드 입력(↑ , ↓)시 이전 키워드를 찾을수 있도록 하는 기능
 <br/>
+
 - quote(", ') 처리기능 : quote로 감싸진 메타문자의 처리는 기존의 쉘(Bash)과 동일해야함
 
-- 시그널 이벤트 변경 : 시그널 2종류(sigint, sigquit)를 다뤘으며, 기존의 쉘(Bash)와 동일하게, 시그널이 발생했을 때 동작이 동일하도록 설정
+- 시그널 이벤트 변경 : 시그널 2종류(sigint, sigquit)를 다뤘으며, 기존의 쉘(Bash)와 동일하게, 시그널이 발생했을 때 동작이 동일하도록 설정<br/>
     - Sigint : 인터럽트(ctrl + D)가 발생했을 때, 발생하는 시그널
     - Sigquit : 강제종료(ctrl + C)가 발생했을 때, 발생하는 시그널
 <br/>
