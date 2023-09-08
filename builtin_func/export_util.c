@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 17:09:04 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 17:49:59 by dasong           ###   ########.fr       */
+/*   Updated: 2023/09/08 17:10:45 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,8 @@ int	check_argv(char *argv)
 int	check_env(char *argv, t_list **env)
 {
 	t_list	*check;
-	int		idx;
 	char	*temp;
 
-	idx = 0;
 	check = *env;
 	if (argv)
 	{

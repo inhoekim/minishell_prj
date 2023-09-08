@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:45 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 14:57:57 by dasong           ###   ########.fr       */
+/*   Updated: 2023/09/08 17:08:42 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
-
-void	cir_lstadd(pid_t pid, t_context *p_ctx);
 
 void	free_argv(char **argv)
 {
@@ -33,6 +31,10 @@ void	fork_error(t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 		exit(p_ctx->exit_status);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	cir_lstadd(pid, p_ctx);
 }
 

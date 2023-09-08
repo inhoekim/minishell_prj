@@ -6,7 +6,7 @@
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:11:03 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:11:04 by seykim           ###   ########.fr       */
+/*   Updated: 2023/09/05 16:34:51 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static char	*vaild_env(char **temp);
 static char	*special_case(char **temp);
+static void	cd_util(char *newpwd);
 
 t_bool	ft_cd(char **argv)
 {
@@ -33,15 +34,33 @@ t_bool	ft_cd(char **argv)
 		ft_putstr_fd("cd : ", STDERR_FILENO);
 		ft_putstr_fd(can_env, STDERR_FILENO);
 		ft_putendl_fd(" : No such directory", STDERR_FILENO);
+		free(can_env);
 		return (1);
 	}
+	cd_util(newpwd);
+	free(can_env);
+	return (0);
+}
+
+static void	cd_util(char *newpwd)
+{
+	char	*temp;
+	char	path[PATH_MAX];
+
 	if (newpwd)
 		set_envp("OLDPWD", newpwd);
+	else
+	{
+		newpwd = ft_getenv("PWD");
+		temp = ft_getenv("OLDPWD");
+		set_envp("OLDPWD", newpwd);
+		set_envp("PWD", temp);
+		free(temp);
+		free(newpwd);
+	}
 	newpwd = getcwd(path, PATH_MAX);
 	if (newpwd)
 		set_envp("PWD", newpwd);
-	free(can_env);
-	return (0);
 }
 
 static char	*vaild_env(char **temp)

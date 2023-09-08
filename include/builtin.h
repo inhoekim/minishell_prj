@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sdg <sdg@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 19:12:33 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 17:49:43 by dasong           ###   ########.fr       */
+/*   Updated: 2023/09/08 17:10:36 by sdg              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,5 @@ void	delete_node(t_list **head, t_list *node_to_delete);
 void	exit_utils(char **temp);
 int		check_env(char *argv, t_list **env);
 int		check_argv(char *argv);
-void	export_excp(char **argv, int idx, t_list **env);
 
 #endif
