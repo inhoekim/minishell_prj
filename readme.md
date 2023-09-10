@@ -11,13 +11,13 @@
 
 </div><br/>
 
-사용 언어 :  &nbsp;&nbsp; <img src="https://img.shields.io/badge/C-3178C6?style=flat"/> &nbsp;<img src="https://img.shields.io/badge/Makefile-3178C6?style=flat"/>
+사용언어 :  &nbsp;&nbsp; <img src="https://img.shields.io/badge/C-3178C6?style=flat"/> &nbsp;<img src="https://img.shields.io/badge/Makefile-3178C6?style=flat"/>
 
-사용 환경 : &nbsp;&nbsp;<img src="https://img.shields.io/badge/UNIX-3178C6?style=flat"/>
+사용환경 : &nbsp;&nbsp;<img src="https://img.shields.io/badge/UNIX-3178C6?style=flat"/>
 
 개발 기간 : *2023-07-25 ~ 2023-09-07* 
 
-팀 멤버 : *seykim, dasong, naylee, inhkim (42Cursus-Cardet)*
+팀 멤버 : *[seykim](https://github.com/seyeon22222),  [dasong](https://github.com/songdaegeun),  [naylee](https://github.com/wwwlnyy),  [inhkim](https://github.com/inhoekim) (42Cursus-Cardets)*
 
 # 목차
 1. [FlowChart](#프로그램-동작과정-flowchart)
@@ -29,8 +29,6 @@
 4. [기타기능 세부사항 && 외부 라이브러리](#기타기능-세부사항-및-사용한-외부-라이브러리)
 
 5. [설치 및 사용법](#설치-및-사용)
-
-6. [Members 깃허브 링크](#members-github-link)
 
 <br/>
 
@@ -77,18 +75,36 @@
   - 파서는 문법 유효성을 검사하는 동시에 실행부에 넘겨줄 트리를 같이 생성
 
   - Rule rhs의 앞의 symbol이 child가 되고 뒤의 symbol이 parent가 되어, parent의 왼쪽 자식에 child가 삽입되게끔 트리를 생성 (전위순회 방식)
-    
+
+<br/>    
+
 #### 트리 예시
-        ex) cat < a.txt < b.txt | ls
+       
+<br/>
+<div align=center>
+
+![image](https://github.com/inhoekim/minishell_prj/assets/90288195/0a094c66-5902-4ac1-9ee2-ac65849f8352)
+</div>
+
+
+     ex) cat < a.txt < b.txt | ls -al 
+
+    실행순서 (leaf 기준)
+
+    1. b.txt OPEN
+    2. a.txt OPEN
+    3. cat   FORK
+    4. ls    FORK (arvs : -al)
+
+
         
-        실행순서 (leaf 기준)
-        1. b.txt OPEN
-        2. a.txt OPEN
-        3. cat   FORK
-        4. ls    FORK
-        
-#### grammar img
-    - image.png(문법 이미지)
+#### 문법
+<div align=center>
+
+![image](https://github.com/inhoekim/minishell_prj/assets/90288195/b08ab349-f187-45a6-9a84-4821e7e3b78f)
+
+</div>
+
 
 ***
 
@@ -150,32 +166,24 @@
 
 <br/>
 
-# 설치 및 사용 (UNIX 환경)
+# 설치 및 사용
 
 ### 1. Git Clone
 
-    git clone https://github.com/inhoekim/minishell_prj.git 폴더 이름
+    git clone https://github.com/inhoekim/minishell_prj.git 폴더이름
 
 
-### 2. 쉘(zsh)에서 해당폴더로 이동 한 후 명령어 입력
-    make 또는 make all
-### 3. 미니쉘 실행
-    쉘에서 ./minishell 입력
+### 2. 컴파일 및 빌드 (Makefile)
+
+    git clone 받은 파일경로로 이동
+    make 또는 make all 입력 (Make Build Tool 프로그램 이용)
+
+### 3. 프로그램 실행
+    설치폴더 경로에서 ./minishell 입력
     또는
     생성된 실행파일 더블클릭
+
 ### 4. 파일 삭제
     make clean(실행파일만 남겨두고 오브젝트 파일 삭제)
     또는
     make fclean(실행파일 및 오브젝트 파일 삭제)
-
-<br/>
-
-# Members Github Link
-
-<a href="https://github.com/inhoekim">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=inhoekim&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5) </a><br/>
-
-<a href="https://github.com/wwwlnyy">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=wwwlnyy&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
-
-<a href="https://github.com/songdaegeun">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=songdaegeun&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
-
-<a href="https://github.com/seyeon22222">![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=seyeon22222&locale=kr&show_icons=true&theme=dark&card_width=5&card_height=5)</a><br/>
