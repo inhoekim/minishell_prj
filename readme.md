@@ -91,11 +91,10 @@
 
     실행순서 (leaf 기준)
 
-    1. b.txt OPEN
-    2. a.txt OPEN
-    3. cat   FORK
-    4. ls    FORK (args:-al)
-
+    1. ls    FORK (args:-al)
+    2. b.txt OPEN
+    3. a.txt OPEN
+    4. cat   FORK
         
 #### 문법
 
