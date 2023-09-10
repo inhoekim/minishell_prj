@@ -38,10 +38,8 @@ int	check_argv(char *argv)
 int	check_env(char *argv, t_list **env)
 {
 	t_list	*check;
-	int		idx;
 	char	*temp;
 
-	idx = 0;
 	check = *env;
 	if (argv)
 	{
