@@ -25,7 +25,7 @@
 
 2. [프로젝트 모듈요약](#project-file-tree-module-요약)
 
-3. [사용 가능한 쉘기능](#사용-가능-쉘-메타문자-목록)
+3. [사용 가능한 쉘 기능](#사용-가능한-쉘-메타문자-목록)
 
 4. [기타기능 세부사항 && 외부 라이브러리](#기타기능-세부사항-및-사용한-외부-라이브러리)
 
@@ -161,7 +161,7 @@
     exit : 현재 프로세스를 종료
     env : 환경변수의 리스트를 출력
 
-# 사용 가능 쉘 메타문자 목록
+# 사용 가능한 쉘 메타문자 목록
 
 **$ (Shell Environment Variables)** : 시스템 환경변수 및 쉘 환경변수를 등록하고 참조가 가능 (시스템 환경변수는 참조만 가능, 추가적인 등록 X)
 
@@ -178,7 +178,7 @@
 
 **|| (Or)** : CMD1 || CMD2 처럼 사용하며, CMD1이 명령어 실행에 실패했을 때, CMD2를 실행(반대의 경우 CMD1이 실행에 성공했을 때, CMD2는 실행 X)
 
-**\*, ? (WildCard)** : 와일드카드 문자 확장이 가능. \*은 0글자 이상의 모든 문자와 매칭되며, ?는 한글자만 매칭 (ex. \*a -> ba,?a,aaa  / ?a -> ba, ca etc..)
+**\*, ? (WildCard)** : 와일드카드 패턴 확장이 가능. \*은 0글자 이상의 모든 문자와 매칭되며, ?는 한글자만 매칭 (ex. \*a -> ba,?a,aaa  / ?a -> ba, ca etc..)
 
 <br/>
 
@@ -203,20 +203,28 @@
 
 ### 1. Git Clone
 
-    git clone https://github.com/inhoekim/minishell_prj.git 폴더이름
+    git clone https://github.com/inhoekim/minishell_prj.git 설치폴더이름
 
+### 2. 의존 라이브러리 설치 (GNU Readline)
+    (macOS)
+    brew install readline 
 
-### 2. 컴파일 및 빌드 (Makefile)
+    (Ubuntu)
+    apt install libreadline-dev
+    
+    (CentOS)
+    yum install readline-devel
 
-    git clone 받은 파일경로로 이동
+### 3. 컴파일 및 빌드 (Makefile)
+
+    git clone을 받은 파일경로로 이동한 후,
     make 또는 make all 입력 (Make Build Tool 프로그램 이용)
 
-### 3. 프로그램 실행
-    설치폴더 경로에서 ./minishell 입력
-    또는
-    생성된 실행파일 더블클릭
+   
+### 4. 프로그램 실행
+    설치폴더 경로에서 ./minishell 입력 혹은 ./minishell 실행파일 더블클릭
 
-### 4. 파일 삭제
+### 5. 파일 삭제
     make clean(실행파일만 남겨두고 오브젝트 파일 삭제)
     또는
     make fclean(실행파일 및 오브젝트 파일 삭제)
