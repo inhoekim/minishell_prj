@@ -96,8 +96,6 @@
     3. cat   FORK
     4. ls    FORK (args:-al)
 
-
-<br/>
         
 #### 문법
 
@@ -140,7 +138,6 @@
     io_file ::= DGREAT WORD
     ​
     io_here ::= DLESS WORD
-
 
 ***
 
