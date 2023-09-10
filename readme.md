@@ -44,7 +44,7 @@
 
 <img width="235" alt="스크린샷 2023-09-10 오후 4 08 50" src="https://github.com/inhoekim/minishell_prj/assets/90288195/a7962a52-bbfa-470e-a873-f572795385cb">
 
-<br/><br/>
+<br/>
 
 **[parser](#parser---문법검사-및-트리생성), grammar** : 입력받은 Command의 문법을 검사하고 실행트리를 생성
 
@@ -70,7 +70,7 @@
 
   - 적용 가능한 Rule이 여러 개인 상황(비결정적인 상황)을 피하기 위해 적절하게 문법을 수정 (left factoring, left recursion elimination하여 모호성을 제거)
 
-  - Syntax Error -> 1. 파싱 진행중 토큰에 적용할 알맞은 Rule이 없는 경우, 2. 파싱이 끝났으나 아직 검사해야할 토큰이 남은 경우
+  - Syntax Error -> 파싱 진행중 토큰에 적용할 알맞은 Rule이 없는 경우, 또는 파싱이 끝났으나 아직 검사해야할 토큰이 남은 경우
 
 
 - 트리 생성
@@ -97,9 +97,9 @@
 
 - 단, 오른쪽 자식이 파일인 경우에만 오른쪽 자식을 먼저 방문(입출력 재지정시에만)
 
-- 쉘의 메타문자별로 노드의 타입이 구분됨 (ex, pipe_type(|), input_type(<), heredoc_type(<<), etc.. )
+- 쉘 메타문자별로 노드의 타입을 구분함 (ex. pipe_type(|),  input_type(<),  heredoc_type(<<),  etc.. )
 
-- 쉘 메타문자 타입을 제외한 모든 것은 특정 파일과 혹은 명령어와 관련된 문자 -> word_type
+- 쉘 메타문자 타입을 제외한 모든 것은 특정 파일 혹은 명령어와 관련된 문자 -> word_type
 
 ***
 
@@ -114,7 +114,7 @@
 
 # 사용 가능 쉘 메타문자 목록
 
-**$(Shell Environment Variables)** : 시스템 환경변수 및 쉘 환경변수를 등록하고 참조가 가능 (시스템 환경변수는 참조만 가능, 추가적인 등록 X)
+**$ (Shell Environment Variables)** : 시스템 환경변수 및 쉘 환경변수를 등록하고 참조가 가능 (시스템 환경변수는 참조만 가능, 추가적인 등록 X)
 
 **| (Pipe)** : 병렬적인 프로세스 실행 및 파이프를 이용한 프로세스간 통신이 가능
 
@@ -168,7 +168,7 @@
     또는
     make fclean(실행파일 및 오브젝트 파일 삭제)
 
-<br/><br/>
+<br/>
 
 # Members Github Link
 
