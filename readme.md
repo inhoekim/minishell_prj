@@ -1,7 +1,8 @@
 # Minishell 팀 프로젝트
 <div align=center>
-<img width="495" alt="asdasda" src="https://github.com/inhoekim/minishell_prj/assets/92151066/79126220-8e59-4522-aa98-c74def69eef6">
 
+![ezgif com-gif-maker](https://github.com/inhoekim/minishell_prj/assets/90288195/a0293eb6-e34f-424a-94a5-014b892f39cb)
+    
 <br/>
 
 해당 프로젝트의 목표는 유닉스 쉘을 직접 구현해보는 것입니다!
