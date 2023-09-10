@@ -94,16 +94,52 @@
     1. b.txt OPEN
     2. a.txt OPEN
     3. cat   FORK
-    4. ls    FORK (arvs : -al)
+    4. ls    FORK (args:-al)
 
 
+<br/>
         
 #### 문법
-<div align=center>
 
-![image](https://github.com/inhoekim/minishell_prj/assets/90288195/b08ab349-f187-45a6-9a84-4821e7e3b78f)
+    msh_grammar ::= pipeline conditional
 
-</div>
+    conditional ::= AND pipeline conditional
+    conditional ::= OR pipeline conditional
+    conditional ::= empty
+    ​
+    pipeline ::= command piped_command
+    ​
+    command ::= simple_cmd
+    command ::= ssh io_redirect_star
+    ​
+    piped_command ::= PIPE pipeline
+    piped_command ::= empty
+    ​
+    ssh ::= LBRACE msh_grammar RBRACE
+    ​
+    simple_cmd ::= WORD io_redirect_or_word_star
+    simple_cmd ::= io_redirect_dagger io_redirect_dg_after_simple_cmd
+    ​
+    io_redirect_dg_after_simple_cmd ::= WORD io_redirect_or_word_star
+    io_redirect_dg_after_simple_cmd ::= empty
+
+    io_redirect_or_word_star ::= io_redirect io_redirect_or_word_star
+    io_redirect_or_word_star ::= WORD io_redirect_or_word_star
+    io_redirect_or_word_star ::= empty
+    ​
+    io_redirect_dagger ::= io_redirect io_redirect_star
+    ​
+    io_redirect_star ::= io_redirect io_redirect_star
+    io_redirect_star ::= empty
+    ​
+    io_redirect ::= io_file
+    io_redirect ::= io_here
+    ​
+    io_file ::= LESS WORD
+    io_file ::= GREAT WORD
+    io_file ::= DGREAT WORD
+    ​
+    io_here ::= DLESS WORD
 
 
 ***
