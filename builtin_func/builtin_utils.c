@@ -93,6 +93,8 @@ void	set_envp(char *pos, char *pwd)
 	size_t	pos_len;
 	char	*newpwd;
 
+	if (!pwd)
+		return ;
 	pos_len = ft_strlen(pos);
 	temp = getenv_list(pos, pos_len, get_envp());
 	if (!temp)

@@ -1,14 +1,14 @@
 ## minishell
 NAME = minishell
 
-# ANSI escape code
+## ANSI escape code
 CYAN  := \033[1;36;40m
 RESET := \033[0m
 LOG   := printf "[$(CYAN)INFO$(RESET)] %s\n"
 
 ## directory
 INC_DIRS = $(shell brew --prefix readline)/include
-INC_DIRS += include # libft
+INC_DIRS += include
 LIB_DIRS = $(shell brew --prefix readline)/lib libft
 SRC_DIRS = src builtin_func execute parser signal expansion grammar
 
@@ -24,14 +24,14 @@ SRCS += merge_tree.c rule1.c tokenizer.c tree.c parser.c rule2.c tokenizer_scan.
 SRCS += builtin_cd.c builtin_utils.c echo_pwd.c env_exit.c export_unset.c order_make_utils.c heredoc.c wait_process.c
 SRCS += signal_default.c signal_fork.c signal_heredoc.c parameter_expansion.c exec_redirect.c exec_subshell.c exec_redirect_util.c
 SRCS += exec_fork.c exec_builtin.c exec_word.c wildcard.c wait_process_util.c heredoc_util.c heredoc_static.c
-SRCS += signal_util.c
+SRCS += signal_util.c export_util.c
 
 OBJS = $(SRCS:.c=.o)
 
 ## compile
 CC=	gcc
 CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
-LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft  # -g3  # -fsanitize=leak # export MallocStackLogging=1
+LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft
 
 .PHONY: clean, fclean, re, all
 

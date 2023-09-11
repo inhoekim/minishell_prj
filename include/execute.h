@@ -6,6 +6,8 @@
 # include "signal.h"
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <stdio.h>
+# include <errno.h>
 # include "util.h"
 # define STDIN 0
 # define STDOUT 1
@@ -70,4 +72,5 @@ void		set_last_exit_status(int exit_status);
 void		forked_builtin(t_context *p_ctx, \
 t_builtin builtin_func, char **argv);
 int			*get_exit_status(void);
+t_bool		check_permission(char *filename, t_context *p_ctx, int mode_bit);
 #endif

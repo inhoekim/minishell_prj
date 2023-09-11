@@ -1,5 +1,4 @@
 #include "../include/execute.h"
-#include <stdio.h>
 
 void	cir_lstadd(pid_t pid, t_context *p_ctx);
 
@@ -15,21 +14,6 @@ void	free_argv(char **argv)
 	free(argv);
 }
 
-void	set_exit_status(int exit_status)
-{
-	int	*p_exit_status;
-
-	p_exit_status = get_exit_status();
-	*p_exit_status = exit_status;
-}
-
-int	*get_exit_status(void)
-{
-	static int	exit_status;
-
-	return (&exit_status);
-}
-
 void	fork_error(t_context *p_ctx)
 {
 	int	pid;
@@ -37,6 +21,10 @@ void	fork_error(t_context *p_ctx)
 	pid = fork();
 	if (pid == 0)
 		exit(p_ctx->exit_status);
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	cir_lstadd(pid, p_ctx);
 }
 

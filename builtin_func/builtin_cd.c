@@ -2,6 +2,7 @@
 
 static char	*vaild_env(char **temp);
 static char	*special_case(char **temp);
+static void	cd_util(char *newpwd);
 
 t_bool	ft_cd(char **argv)
 {
@@ -12,20 +13,60 @@ t_bool	ft_cd(char **argv)
 	can_env = vaild_env(argv);
 	if (!can_env)
 	{
-		write(STDERR_FILENO, "cd: Too many arguments\n", 24);
+		ft_putendl_fd("cd : HOME not set", STDERR_FILENO);
 		return (1);
 	}
 	newpwd = getcwd(path, PATH_MAX);
 	if (chdir(can_env) != 0)
 	{
-		write(STDERR_FILENO, "cd : No such file or directory\n", 32);
+		ft_putstr_fd("cd : ", STDERR_FILENO);
+		ft_putstr_fd(can_env, STDERR_FILENO);
+		ft_putendl_fd(" : No such directory", STDERR_FILENO);
+		free(can_env);
 		return (1);
 	}
-	set_envp("OLDPWD", newpwd);
-	newpwd = getcwd(path, PATH_MAX);
-	set_envp("PWD", newpwd);
+	cd_util(newpwd);
 	free(can_env);
 	return (0);
+}
+
+static void	cd_util(char *newpwd)
+{
+	char	*temp;
+	char	path[PATH_MAX];
+
+	if (newpwd)
+		set_envp("OLDPWD", newpwd);
+	// unset으로 PWD, OLDPWD를 지웠을 경우
+	// PWD= / OLDPWD= 를 출력하는 부분
+	else
+	{
+		newpwd = ft_getenv("PWD");
+		temp = ft_getenv("OLDPWD");
+		if (!newpwd)
+			set_envp("OLDPWD", "\"\"");
+		else
+			set_envp("OLDPWD", newpwd);
+		if (!temp)
+			set_envp("PWD", "\"\"");
+		else
+			set_envp("PWD", temp);
+		free(temp);
+		free(newpwd);
+	}
+	// 안지우고 경로 업데이트하는 방식
+	// else
+	// {
+	// 	newpwd = ft_getenv("PWD");
+	// 	temp = ft_getenv("OLDPWD");
+	// 	set_envp("OLDPWD", newpwd);
+	// 	set_envp("PWD", temp);
+	// 	free(temp);
+	// 	free(newpwd);
+	// }
+	newpwd = getcwd(path, PATH_MAX);
+	if (newpwd)
+		set_envp("PWD", newpwd);
 }
 
 static char	*vaild_env(char **temp)
@@ -37,9 +78,7 @@ static char	*vaild_env(char **temp)
 	parameter = 0;
 	while (temp[size])
 		size++;
-	if (size > 2)
-		return (NULL);
-	else if (size == 1)
+	if (size == 1)
 		return (ft_getenv("HOME"));
 	parameter = special_case(temp);
 	if (!parameter)

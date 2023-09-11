@@ -1,6 +1,4 @@
-
 #include "../include/execute.h"
-#include <errno.h>
 
 t_bool	*get_redirect_ambiguity(void)
 {
@@ -43,6 +41,17 @@ t_bool	is_not_directory(char *filename, t_context *p_ctx)
 	{
 		msh_error(filename, NULL, EISDIR);
 		p_ctx->exit_status = 126;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+t_bool	check_permission(char *filename, t_context *p_ctx, int mode_bit)
+{
+	if (access(filename, mode_bit) != 0)
+	{
+		msh_error(filename, NULL, EACCES);
+		p_ctx->exit_status = 1;
 		return (FALSE);
 	}
 	return (TRUE);

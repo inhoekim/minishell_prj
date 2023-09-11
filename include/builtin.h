@@ -25,7 +25,7 @@ char	*ft_strnjoin(char const *s1, char const *s2);
 void	set_envp(char *pos, char *pwd);
 void	delete_node(t_list **head, t_list *node_to_delete);
 void	exit_utils(char **temp);
-void	check_env(char **argv, t_list **env);
+int		check_env(char *argv, t_list **env);
 int		check_argv(char *argv);
 
 #endif
