@@ -29,7 +29,7 @@ SRCS += signal_util.c export_util.c
 OBJS = $(SRCS:.c=.o)
 
 ## compile
-CC=	gcc
+CC=	cc
 CFLAGS = -Wall -Wextra -Werror $(addprefix -I,$(INC_DIRS))
 LDFLAGS= $(addprefix -L,$(LIB_DIRS)) -lreadline -lft
 
