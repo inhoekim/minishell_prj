@@ -35,10 +35,13 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		sigact_modeoff();
 		dup2(p_ctx->fd[STDIN], STDIN);
 		dup2(p_ctx->fd[STDOUT], STDOUT);
-		if (p_ctx->fd_close >= 0)
+		if (p_ctx->fd_close > 0)
 			close(p_ctx->fd_close);
+		if (p_ctx->fd[STDIN] != STDIN)
+			close(p_ctx->fd[STDIN]);
+		if (p_ctx->fd[STDOUT] != STDOUT)
+			close(p_ctx->fd[STDOUT]);
 		execve(argv[0], argv, list_to_arr(envl));
-		exit(1);
 	}
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
