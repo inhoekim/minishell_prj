@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:11:38 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/12 16:57:23 by seykim           ###   ########.fr       */
+/*   Created: 2023/09/18 13:27:32 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/18 14:04:55 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
-	if (p_ctx->fd[STDOUT] != STDOUT)
-		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_regular_file(filename[0], p_ctx) || \
@@ -46,19 +44,19 @@ void	exec_output(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-	if (p_ctx->fd[STDIN] != STDIN)
-		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
-	p_ctx->fd[STDOUT] = open(filename[0], \
-		O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (!is_not_directory(filename[0], p_ctx) || \
 	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], \
+		O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		exec_node(lhs, p_ctx);
+	}
 	free_argv(filename);
 	return ;
 }
@@ -71,19 +69,19 @@ void	exec_append(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
-	if (p_ctx->fd[STDIN] != STDIN)
-		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
-	p_ctx->fd[STDOUT] = open(filename[0], \
-		O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (!is_not_directory(filename[0], p_ctx) || \
 	!check_permission(filename[0], p_ctx, W_OK))
 		fork_error(p_ctx);
 	else
+	{
+		p_ctx->fd[STDOUT] = open(filename[0], \
+		O_CREAT | O_APPEND | O_WRONLY, 0644);
 		exec_node(lhs, p_ctx);
+	}
 	free_argv(filename);
 	return ;
 }

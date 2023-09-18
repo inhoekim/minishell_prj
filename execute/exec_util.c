@@ -5,12 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:11:45 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/05 16:33:42 by seykim           ###   ########.fr       */
+/*   Created: 2023/09/18 13:27:38 by seykim            #+#    #+#             */
+/*   Updated: 2023/09/18 13:27:39 by seykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
+
+void	cir_lstadd(pid_t pid, t_context *p_ctx);
 
 void	free_argv(char **argv)
 {
