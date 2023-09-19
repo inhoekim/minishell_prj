@@ -1,10 +1,6 @@
 #include "../include/execute.h"
 
-char	**alloc_heredoc_name(void);
-void	sigact_default_mode(void);
-void	set_is_subshell(t_bool flag);
-void	wait_list(t_context *p_ctx);
-void	set_last_pid(int pid);
+static void	redirect_clear(t_context *p_ctx);
 
 void	execute(t_node *root)
 {
@@ -30,7 +26,10 @@ void	execute(t_node *root)
 void	exec_node(t_node *node, t_context *p_ctx)
 {
 	if (node == NULL)
+	{
+		redirect_clear(p_ctx);
 		return ;
+	}
 	else if (node->type == WORD)
 		exec_word(node, p_ctx);
 	else if (node->type == LESS)
@@ -50,6 +49,14 @@ void	exec_node(t_node *node, t_context *p_ctx)
 	else if (node->type == SUBSHELL)
 		exec_subshell(node, p_ctx);
 	return ;
+}
+
+static void	redirect_clear(t_context *p_ctx)
+{
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 }
 
 void	find_last_pid(t_context	*p_ctx)

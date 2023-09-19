@@ -4,13 +4,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	printf("\n\
-                    ____________   ____  ___   _____ __  __ \n\
-                   / ____/_  __/  / __ )/   | / ___// / / / \n\
-                  / /_    / /    / __  / /| | \\__ \\/ /_/ /  \n\
-                 / __/   / /    / /_/ / ___ |___/ / __  /   \n\
-                /_/     /_/    /_____/_/  |_/____/_/ /_/    \n\
-\n");
 	init_envp(envp);
 	minishell_loop();
 }
