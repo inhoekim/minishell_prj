@@ -1,18 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export_unset.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/09 17:42:49 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 19:03:04 by seykim           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/builtin.h"
 
 static t_bool	export_error(char *argv);
+static void		export_excp(char **argv, int idx, t_list **env);
 
 t_bool	ft_export(char **argv)
 {
@@ -45,7 +34,7 @@ static t_bool	export_error(char *argv)
 	{
 		ft_putstr_fd("export: '", 2);
 		ft_putstr_fd(argv, 2);
-		ft_putendl_fd("': not a valid identifier",1);
+		ft_putendl_fd("': not a valid identifier", 1);
 		return (FALSE);
 	}
 	while (argv[idx] && argv[idx] != '=')
@@ -54,7 +43,7 @@ static t_bool	export_error(char *argv)
 		{
 			ft_putstr_fd("export: '", 2);
 			ft_putstr_fd(argv, 2);
-			ft_putendl_fd("': not a valid identifier",1);
+			ft_putendl_fd("': not a valid identifier", 1);
 			return (FALSE);
 		}
 		idx++;
@@ -62,7 +51,7 @@ static t_bool	export_error(char *argv)
 	return (TRUE);
 }
 
-void	export_excp(char **argv, int idx, t_list **env)
+static void	export_excp(char **argv, int idx, t_list **env)
 {
 	int		cnt;
 	int		ret;
@@ -72,7 +61,7 @@ void	export_excp(char **argv, int idx, t_list **env)
 	while (argv[++idx])
 	{
 		if (export_error(argv[idx]) == FALSE)
-			continue;
+			continue ;
 		ret = check_argv(argv[idx]);
 		if (ret == 2)
 		{
@@ -83,11 +72,11 @@ void	export_excp(char **argv, int idx, t_list **env)
 		if (!(ret == 0 && cnt > 0))
 		{
 			if (check_env(argv[idx], env) == 0)
-			{
 				ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
-				cnt++;
-			}
+			cnt++;
 		}
+		if (ret == 0 && getenv_list(argv[idx], ft_strlen(argv[idx]), env) == 0)
+			ft_lstadd_back(env, ft_lstnew(ft_strdup(argv[idx])));
 	}
 }
 

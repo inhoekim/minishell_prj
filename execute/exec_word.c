@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_word.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:12:03 by seykim            #+#    #+#             */
-/*   Updated: 2023/08/30 19:12:04 by seykim           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/execute.h"
 #include <errno.h>
 
@@ -49,8 +37,11 @@ void	fork_exec(char **argv, t_context *p_ctx)
 		dup2(p_ctx->fd[STDOUT], STDOUT);
 		if (p_ctx->fd_close >= 0)
 			close(p_ctx->fd_close);
+		if (p_ctx->fd[STDIN] != STDIN)
+			close(p_ctx->fd[STDIN]);
+		if (p_ctx->fd[STDOUT] != STDOUT)
+			close(p_ctx->fd[STDOUT]);
 		execve(argv[0], argv, list_to_arr(envl));
-		exit(1);
 	}
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);

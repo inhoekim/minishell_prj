@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_redirect.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dasong <dasong@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:11:38 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 15:21:09 by dasong           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/execute.h"
 
 void	exec_input(t_node *node, t_context *p_ctx)
@@ -22,6 +10,8 @@ void	exec_input(t_node *node, t_context *p_ctx)
 	rhs = node->right;
 	if (p_ctx->fd[STDIN] != STDIN)
 		close(p_ctx->fd[STDIN]);
+	if (p_ctx->fd[STDOUT] != STDOUT)
+		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))
 		return ;
 	if (!is_regular_file(filename[0], p_ctx) || \
@@ -44,6 +34,8 @@ void	exec_output(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))
@@ -69,6 +61,9 @@ void	exec_append(t_node *node, t_context *p_ctx)
 
 	lhs = node->left;
 	rhs = node->right;
+
+	if (p_ctx->fd[STDIN] != STDIN)
+		close(p_ctx->fd[STDIN]);
 	if (p_ctx->fd[STDOUT] != STDOUT)
 		close(p_ctx->fd[STDOUT]);
 	if (ambiguity_check(&filename, p_ctx, rhs))

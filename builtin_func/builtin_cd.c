@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_cd.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seykim <seykim@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 19:11:03 by seykim            #+#    #+#             */
-/*   Updated: 2023/09/04 20:09:18 by seykim           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/builtin.h"
 
 static char	*vaild_env(char **temp);
@@ -49,33 +37,15 @@ static void	cd_util(char *newpwd)
 
 	if (newpwd)
 		set_envp("OLDPWD", newpwd);
-	// unset으로 PWD, OLDPWD를 지웠을 경우
-	// PWD= / OLDPWD= 를 출력하는 부분
 	else
 	{
 		newpwd = ft_getenv("PWD");
 		temp = ft_getenv("OLDPWD");
-		if (!newpwd)
-			set_envp("OLDPWD", "\"\"");
-		else
-			set_envp("OLDPWD", newpwd);
-		if (!temp)
-			set_envp("PWD", "\"\"");
-		else
-			set_envp("PWD", temp);
+		set_envp("OLDPWD", newpwd);
+		set_envp("PWD", temp);
 		free(temp);
 		free(newpwd);
 	}
-	// 안지우고 경로 업데이트하는 방식
-	// else
-	// {
-	// 	newpwd = ft_getenv("PWD");
-	// 	temp = ft_getenv("OLDPWD");
-	// 	set_envp("OLDPWD", newpwd);
-	// 	set_envp("PWD", temp);
-	// 	free(temp);
-	// 	free(newpwd);
-	// }
 	newpwd = getcwd(path, PATH_MAX);
 	if (newpwd)
 		set_envp("PWD", newpwd);
